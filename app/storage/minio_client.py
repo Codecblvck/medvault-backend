@@ -7,7 +7,11 @@ changing only the config values, not this file.
 """
 
 import boto3
-from botocore.exceptions import ClientError
+from botocore.exceptions import (
+    ClientError,
+    EndpointConnectionError,
+    ConnectionError as BotoConnectionError,
+)
 from flask import current_app
 from app.config import Config
 
@@ -39,12 +43,17 @@ def upload_file(file_obj, object_key):
     Returns True on success, raises on failure so the caller's route
     can decide how to respond (and can choose not to write a DB row
     if this fails).
+
+    Catches both API-level errors (ClientError, e.g. bad bucket name,
+    permission denied) and connection-level errors (EndpointConnectionError,
+    e.g. MinIO/S3 unreachable), so a storage outage is never misreported
+    as a database failure by the caller.
     """
     client = get_s3_client()
 
     try:
         client.upload_fileobj(file_obj, Config.S3_BUCKET_NAME, object_key)
-    except ClientError as e:
+    except (ClientError, EndpointConnectionError, BotoConnectionError) as e:
         raise RuntimeError(f"File upload to storage failed: {e}")
 
     return True
@@ -65,7 +74,7 @@ def get_file_url(object_key, expires_in=3600):
             Params={"Bucket": Config.S3_BUCKET_NAME, "Key": object_key},
             ExpiresIn=expires_in,
         )
-    except ClientError as e:
+    except (ClientError, EndpointConnectionError, BotoConnectionError) as e:
         raise RuntimeError(f"Could not generate file access link: {e}")
 
     return url
@@ -79,11 +88,11 @@ def delete_file(object_key):
     """
     client = get_s3_client()
 
-    bucket_name = current_app.config.get("S3_BUCKET_NAME")
+    bucket_name = Config.S3_BUCKET_NAME
 
     try:
         client.delete_object(Bucket=bucket_name, Key=object_key)
-    except ClientError as e:
+    except (ClientError, EndpointConnectionError, BotoConnectionError) as e:
         raise RuntimeError(f"File deletion failed: {e}")
 
     return True

@@ -39,3 +39,17 @@ def has_permission(role_name, action):
 
 def can_upload_record_type(role_name, record_type):
     return record_type in UPLOAD_TYPE_PERMISSIONS.get(role_name, [])
+
+
+def can_view_record(user, record):
+    """
+    Returns True if the given user is permitted to view the given record.
+
+    Staff roles are already gated by the permission_required decorator
+    at the route level (view_records action) before this is ever called,
+    so this function's only job is the patient-specific ownership check:
+    a patient may only view a record linked to their own patient_id.
+    """
+    if user.role.role_name != RoleName.patient:
+        return True
+    return user.patient_id is not None and record.patient_id == user.patient_id

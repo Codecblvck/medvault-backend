@@ -5,7 +5,7 @@ Re-export common symbols so callers can import from
 """
 
 from .models import Role, RoleName
-from .permissions import has_permission, PermissionAction, can_upload_record_type
+from .permissions import has_permission, PermissionAction, can_upload_record_type,  can_view_record
 from .decorators import role_required, permission_required
 
 __all__ = [
@@ -15,5 +15,6 @@ __all__ = [
     "role_required",
     "PermissionAction",
     "can_upload_record_type",
-    "permission_required"
+    "permission_required",
+    "can_view_record",
 ]

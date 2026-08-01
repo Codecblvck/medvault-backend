@@ -5,11 +5,11 @@ import sqlalchemy as sa
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required, current_user
-
+from sqlalchemy.exc import IntegrityError
 
 from app.extensions import db, bcrypt
 from app.access_control import (
-    can_upload_record_type,
+    can_upload_record_type, can_view_record,
     permission_required,
     role_required,
     PermissionAction,
@@ -87,15 +87,18 @@ def create_patient():
     portal_email = payload.get("portal_email")
     portal_password = payload.get("portal_password")
 
-    if portal_email and not is_valid_email(portal_email):
+    is_valid, email_result = is_valid_email(portal_email)
+    if not is_valid:
         log_access(
-            action=AuditAction.patient_created,
+            action=AuditAction.user_created.value,
             status="Failed",
             request=request,
             user=current_user,
-            details=f"Rejected patient creation, invalid portal_email format: {portal_email}",
+            details=f"Rejected portal account creation, invalid portal_email format: {portal_email}",
         )
         return jsonify({"error": "Invalid email format provided."}), 400
+
+    portal_email = email_result  # normalized form, e.g. lowercased/canonicalized
 
     patient = Patient()
     patient.first_name = first_name
@@ -203,113 +206,150 @@ def create_patient():
     return jsonify(response), 201
 
 
-@records_bp.route("/patients/<uuid:patient_id>/link", methods=["PATCH"])
+@records_bp.route("/patients/<uuid:patient_id>/portal-account", methods=["POST"])
 @jwt_required()
-@role_required([RoleName.admin, RoleName.records_officer])
-def link_patient_account(patient_id):
+@role_required(
+    [RoleName.admin, RoleName.doctor, RoleName.nurse, RoleName.records_officer]
+)
+def create_portal_account(patient_id):
     payload = request.get_json()
-    if not payload or "user_id" not in payload:
+    if not payload or "portal_email" not in payload or "portal_password" not in payload:
         log_access(
-            action=AuditAction.user_updated.value,
+            action=AuditAction.user_created.value,
             status="Failed",
             request=request,
             user=current_user,
-            details="Rejected patient account link, missing user_id in payload.",
+            details="Rejected portal account creation, missing portal_email or portal_password.",
         )
-        return jsonify({"error": "Missing payload: user_id is required."}), 400
+        return (
+            jsonify(
+                {
+                    "error": "Missing payload: portal_email and portal_password are required."
+                }
+            ),
+            400,
+        )
 
     patient = Patient.query.get(patient_id)
     if not patient:
         log_access(
-            action=AuditAction.user_updated.value,
+            action=AuditAction.user_created.value,
             status="Failed",
             request=request,
             user=current_user,
-            details=f"Rejected patient account link, patient {patient_id} not found.",
+            details=f"Rejected portal account creation, patient {patient_id} not found.",
         )
         return jsonify({"error": "Patient record not found."}), 404
-
-    user = User.query.get(payload["user_id"])
-    if not user:
-        log_access(
-            action=AuditAction.user_updated.value,
-            status="Failed",
-            request=request,
-            user=current_user,
-            details=f"Rejected patient account link, user {payload['user_id']} not found.",
-        )
-        return jsonify({"error": "User account not found."}), 404
-
-    if user.role.role_name != RoleName.patient:
-        log_access(
-            action=AuditAction.user_updated.value,
-            status="Failed",
-            request=request,
-            user=current_user,
-            details=f"Rejected patient account link, user {user.id} is not a patient role account.",
-        )
-        return (
-            jsonify(
-                {"error": "Only patient accounts can be linked to a patient record."}
-            ),
-            400,
-        )
-
-    if user.patient_id is not None:
-        log_access(
-            action=AuditAction.user_updated.value,
-            status="Failed",
-            request=request,
-            user=current_user,
-            details=f"Rejected patient account link, user {user.id} already linked to a patient record.",
-        )
-        return (
-            jsonify(
-                {"error": "This user account is already linked to a patient record."}
-            ),
-            400,
-        )
 
     existing_link = User.query.filter_by(patient_id=patient_id).first()
     if existing_link:
         log_access(
-            action=AuditAction.user_updated.value,
+            action=AuditAction.user_created.value,
             status="Failed",
             request=request,
             user=current_user,
-            details=f"Rejected patient account link, patient {patient_id} already linked to another account.",
+            details=f"Rejected portal account creation, patient {patient_id} already has a linked account.",
         )
         return (
-            jsonify(
-                {"error": "This patient record is already linked to another account."}
-            ),
+            jsonify({"error": "This patient already has a linked portal account."}),
             400,
         )
 
-    user.patient_id = patient.id
-    db.session.commit()
+    portal_email = payload["portal_email"]
+    portal_password = payload["portal_password"]
+
+    is_valid, email_result = is_valid_email(portal_email)
+    if not is_valid:
+        log_access(
+            action=AuditAction.user_created.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            details=f"Rejected portal account creation, invalid portal_email format: {portal_email}",
+        )
+        return jsonify({"error": "Invalid email format provided."}), 400
+
+    portal_email = email_result  # normalized form, e.g. lowercased/canonicalized
+
+    email_exists = User.query.filter_by(email=portal_email).first()
+    if email_exists:
+        log_access(
+            action=AuditAction.user_created.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            details=f"Rejected portal account creation, portal_email already registered: {portal_email}",
+        )
+        return (
+            jsonify({"error": "This email is already registered to another account."}),
+            400,
+        )
+
+    stmt = sa.select(Role.id).filter_by(role_name=RoleName.patient)
+    patient_role_id = db.session.scalar(stmt)
+    if patient_role_id is None:
+        log_access(
+            action=AuditAction.user_created.value,
+            status="Error",
+            request=request,
+            user=current_user,
+            details="Patient role is not configured in the roles table.",
+        )
+        return jsonify({"error": "Patient role is not configured."}), 500
+
+    portal_user = User()
+    portal_user.first_name = patient.first_name
+    portal_user.last_name = patient.last_name
+    portal_user.email = portal_email
+    portal_user.password_hash = bcrypt.generate_password_hash(portal_password).decode(
+        "utf-8"
+    )
+    portal_user.role_id = patient_role_id
+    portal_user.patient_id = patient.id
+
+    db.session.add(portal_user)
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        log_access(
+            action=AuditAction.user_created.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            details=f"Rejected portal account creation, concurrent link detected for patient {patient_id}.",
+        )
+        return (
+            jsonify(
+                {
+                    "error": "This patient was just linked to an account by another request. Please retry."
+                }
+            ),
+            409,
+        )
 
     log_access(
         user=current_user,
-        action=AuditAction.user_updated.value,
+        action=AuditAction.user_created.value,
         status="Success",
         request=request,
         record_id=None,
-        details=f"Linked user {user.id} to patient {patient.id}",
+        details=f"Portal account created and linked for patient {patient.hospital_id}",
     )
 
     return (
         jsonify(
             {
-                "user_id": user.id,
+                "user_id": portal_user.id,
                 "patient_id": str(patient.id),
-                "message": "Patient account linked successfully",
+                "message": "Portal account created and linked",
             }
         ),
-        200,
+        201,
     )
 
-
+# RECORD
 @records_bp.route("", methods=["GET"])
 @jwt_required()
 @permission_required(PermissionAction.view_records)
@@ -537,8 +577,6 @@ def upload_records():
         file_size = uploaded_file.stream.tell()
         uploaded_file.stream.seek(0)
 
-        
-
     record = Record()
     record.id = record_id
     record.patient_id = patient_uuid
@@ -550,11 +588,10 @@ def upload_records():
     record.file_path = object_key
     record.file_size = file_size
 
-
     try:
         db.session.add(record)
         db.session.flush()
-        
+
         if uploaded_file:
             upload_file(uploaded_file, object_key)
         db.session.commit()  
@@ -571,7 +608,7 @@ def upload_records():
             jsonify({"error": f"File upload failed, record was not saved: {minio_error}"}),
                             502,
         )
-      
+
     except Exception as db_error:
         db.session.rollback()
         if uploaded_file and object_key:
@@ -616,6 +653,120 @@ def upload_records():
     )
 
 
+@records_bp.route("/<uuid:record_id>/attach-file", methods=["PATCH"])
+@jwt_required()
+@permission_required(PermissionAction.upload_records)
+def attach_file_to_record(record_id):
+    record = Record.query.get(record_id)
+    if not record:
+        log_access(
+            action=AuditAction.record_uploaded.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            details=f"Rejected file attach, record {record_id} not found.",
+        )
+        return jsonify({"error": "Record not found."}), 404
+
+    if record.file_path is not None:
+        log_access(
+            action=AuditAction.record_uploaded.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details="Rejected file attach, record already has an attached file.",
+        )
+        return jsonify({"error": "This record already has a file attached."}), 400
+
+    if not can_upload_record_type(current_user.role.role_name, record.record_type):
+        log_access(
+            action=AuditAction.record_uploaded.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details="Access denied: insufficient role permissions for this record type.",
+        )
+        return (
+            jsonify(
+                {
+                    "error": "Access denied: insufficient role permissions for this record type."
+                }
+            ),
+            403,
+        )
+
+    uploaded_file = request.files.get("file")
+    if not uploaded_file:
+        return jsonify({"error": "Missing payload: file is required."}), 400
+
+    object_key = f"records/{record.patient_id}/{record.id}_{uploaded_file.filename}"
+
+    uploaded_file.stream.seek(0, 2)
+    file_size = uploaded_file.stream.tell()
+    uploaded_file.stream.seek(0)
+
+    try:
+        upload_file(uploaded_file, object_key)
+    except RuntimeError as minio_error:
+        log_access(
+            action=AuditAction.record_uploaded.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details=f"File attach failed, storage unreachable: {minio_error}",
+        )
+        return jsonify({"error": f"File upload failed: {minio_error}"}), 502
+
+    record.file_path = object_key
+    record.file_size = file_size
+
+    try:
+        db.session.commit()
+    except Exception as db_error:
+        db.session.rollback()
+        try:
+            delete_file(object_key)
+        except Exception:
+            pass
+        log_access(
+            action=AuditAction.record_uploaded.value,
+            status="Error",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details=f"Database commit failure during file attach: {db_error}",
+        )
+        return (
+            jsonify(
+                {"error": "Database persistence failure occurred. Attachment reverted."}
+            ),
+            500,
+        )
+
+    log_access(
+        action=AuditAction.record_uploaded.value,
+        status="Success",
+        request=request,
+        user=current_user,
+        record_id=record.id,
+        details="File attached to existing record.",
+    )
+
+    return (
+        jsonify(
+            {
+                "record_id": str(record.id),
+                "file_path": record.file_path,
+                "message": "File attached successfully.",
+            }
+        ),
+        200,
+    )
+
+
 @records_bp.route("/<uuid:record_id>", methods=["GET"])
 @jwt_required()
 @permission_required(PermissionAction.view_records)
@@ -631,21 +782,16 @@ def view_record(record_id):
         )
         return jsonify({"error": "Patient record not found."}), 404
 
-    if current_user.role.role_name == RoleName.patient:
-        if (
-            current_user.patient_id is None
-            or record.patient_id != current_user.patient_id
-        ):
-            log_access(
-                action=AuditAction.record_viewed.value,
-                status="Blocked",
-                request=request,
-                user=current_user,
-                record_id=record.id,
-                details="Patient attempted to view a record outside their own linked patient identity.",
-            )
-            return jsonify({"error": "You are not permitted to view this record."}), 403
-
+    if not can_view_record(current_user, record):
+        log_access(
+            action=AuditAction.record_viewed.value,
+            status="Blocked",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details="Patient attempted to view a record outside their own linked patient identity.",
+        )
+        return jsonify({"error": "You are not permitted to view this record."}), 403
     decrypted_data = decrypt_data(record.encrypted_data, record.encrypted_aes_key)
     json_bytes = json.dumps(decrypted_data).encode("utf-8")
     computed_checksum = hashlib.sha256(json_bytes).hexdigest()

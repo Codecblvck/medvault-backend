@@ -30,6 +30,9 @@ def log_access(
     changed, for example "role changed to doctor", used on routes where
     the action label alone does not say enough for an audit review.
     """
+    if hasattr(action, "value"):
+        action = action.value
+
     if record_id is not None:
         try:
             record_id = uuid.UUID(str(record_id))
@@ -77,5 +80,3 @@ def log_access(
     db.session.commit()
 
     return audit
-
-

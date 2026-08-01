@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
-from sqlalchemy import ForeignKey, String, func, Uuid
+from sqlalchemy import ForeignKey, String, func, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db, jwt
 
@@ -21,8 +21,8 @@ class User(db.Model):
         ForeignKey("roles.id"), nullable=False
     )
     role: Mapped["Role"] = relationship("Role", back_populates="users")
-    patient_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid, ForeignKey("patients.id")
+    patient_id = db.Column(
+        UUID(as_uuid=True), ForeignKey("patients.id"), nullable=True, unique=True
     )
     phone: Mapped[str | None] = mapped_column(String(32))
     department: Mapped[str | None] = mapped_column(String(32))
