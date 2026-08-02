@@ -1,2 +1,1 @@
-FLASK_ENV=run.py
-FLASK_DEBUG=1
+FLASK_APP=run.py

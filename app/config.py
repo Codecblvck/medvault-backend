@@ -10,9 +10,6 @@ class Config:
 
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
-    
-
-    AES_SECRET_KEY = os.environ.get("AES_SECRET_KEY")
 
     RSA_PUBLIC_KEY_PATH = os.environ.get("RSA_PUBLIC_KEY_PATH")
     RSA_PRIVATE_KEY_PATH = os.environ.get("RSA_PRIVATE_KEY_PATH")
