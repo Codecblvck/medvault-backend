@@ -9,6 +9,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
     
 
     AES_SECRET_KEY = os.environ.get("AES_SECRET_KEY")
@@ -28,7 +29,6 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
     # Bypasses internet check and allows @hospital.test locally
     EMAIL_CHECK_DELIVERABILITY = False
     EMAIL_ALLOW_TEST_DOMAINS = True
@@ -36,6 +36,5 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
     EMAIL_CHECK_DELIVERABILITY = False
     EMAIL_ALLOW_TEST_DOMAINS = True
