@@ -296,8 +296,11 @@ def create_staff_user():
             400,
         )
 
-    if not is_valid_email(new_staff_payload["email"]):
+    is_valid, email_result = is_valid_email(new_staff_payload["email"])
+    if not is_valid:
         return jsonify({"error": "Invalid email format provided."}), 400
+
+    new_staff_payload["email"] = email_result  # normalized form
 
     requested_role = new_staff_payload["role"]
     if requested_role == RoleName.patient.value:
@@ -372,8 +375,10 @@ def list_staff_users():
     role_stmt = sa.select(Role.id).filter_by(role_name=RoleName.patient)
     patient_role_id = db.session.scalar(role_stmt)
 
-    where_clause = User.role_id != patient_role_id
+    if patient_role_id is None:
+        return jsonify({"error": "Patient role is not configured."}), 500
 
+    where_clause = User.role_id != patient_role_id
     count_stmt = sa.select(sa.func.count()).select_from(User).where(where_clause)
     total_users = db.session.scalar(count_stmt) or 0
 

@@ -87,18 +87,19 @@ def create_patient():
     portal_email = payload.get("portal_email")
     portal_password = payload.get("portal_password")
 
-    is_valid, email_result = is_valid_email(portal_email)
-    if not is_valid:
-        log_access(
-            action=AuditAction.user_created.value,
-            status="Failed",
-            request=request,
-            user=current_user,
-            details=f"Rejected portal account creation, invalid portal_email format: {portal_email}",
-        )
-        return jsonify({"error": "Invalid email format provided."}), 400
+    if portal_email:
+        is_valid, email_result = is_valid_email(portal_email)
+        if not is_valid:
+            log_access(
+                action=AuditAction.user_created.value,
+                status="Failed",
+                request=request,
+                user=current_user,
+                details=f"Rejected portal account creation, invalid portal_email format: {portal_email}",
+            )
+            return jsonify({"error": "Invalid email format provided."}), 400
 
-    portal_email = email_result  # normalized form, e.g. lowercased/canonicalized
+        portal_email = email_result  # normalized form, e.g. lowercased/canonicalized
 
     patient = Patient()
     patient.first_name = first_name
@@ -792,7 +793,20 @@ def view_record(record_id):
             details="Patient attempted to view a record outside their own linked patient identity.",
         )
         return jsonify({"error": "You are not permitted to view this record."}), 403
-    decrypted_data = decrypt_data(record.encrypted_data, record.encrypted_aes_key)
+
+    try:
+        decrypted_data = decrypt_data(record.encrypted_data, record.encrypted_aes_key)
+    except Exception:
+        log_access(
+            action=AuditAction.record_viewed.value,
+            status="Error",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details="Decryption failed, possible key mismatch or data corruption.",
+        )
+        return jsonify({"error": "Data integrity verification failed."}), 500
+
     json_bytes = json.dumps(decrypted_data).encode("utf-8")
     computed_checksum = hashlib.sha256(json_bytes).hexdigest()
 
