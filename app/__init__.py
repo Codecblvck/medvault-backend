@@ -21,7 +21,12 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
-    cors.init_app(app, resources={"/*": {"origins": "https://medvault-two.vercel.app"}})
+    cors.init_app(
+        app,
+        resources={
+            "/*": {"origins": ["https://medvault-two.vercel.app", "http://localhost:5173"]}
+        },
+    )
 
     from app.access_control import jwt_handlers
     from app.model_registry import (
@@ -30,6 +35,7 @@ def create_app():
         audit_models,
         records_models,
     )
+
     register_blueprints(app)
 
     return app
