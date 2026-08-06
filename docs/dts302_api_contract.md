@@ -1,4 +1,5 @@
 # DTS 302, API Contract Documentation
+
 ## Secure Cloud Based Big Data Storage System, Hospital Patient Records, MedVault, Group 4
 
 This document defines every backend route currently implemented, with exact request and response shapes. This is the agreement between backend and frontend, both sides build against this document, not against assumptions.
@@ -10,9 +11,11 @@ There is no patient self-registration route. Every account in this system, staff
 ## Auth routes, prefix /auth
 
 ### POST /auth/login
+
 Purpose, login for all roles, staff and patient. This is the only entry point into the system for an existing account.
 
 Request body
+
 ```json
 {
   "email": "string",
@@ -21,6 +24,7 @@ Request body
 ```
 
 Response, 200 OK
+
 ```json
 {
   "token": "jwt string",
@@ -39,9 +43,11 @@ Response, 401, invalid credentials, or account is deactivated. Both cases return
 Response, 423, account locked after five consecutive failed login attempts
 
 ### GET /auth/me
+
 Purpose, fetch the logged in user's own profile.
 
 Response, 200 OK
+
 ```json
 {
   "id": "integer",
@@ -56,9 +62,11 @@ Response, 200 OK
 ```
 
 ### PATCH /auth/me
+
 Purpose, self profile update. A user can only edit their own row, and only two fields.
 
 Request body, at least one of the two fields required
+
 ```json
 {
   "phone": "string",
@@ -69,6 +77,7 @@ Request body, at least one of the two fields required
 Note, role, is_active, is_locked, and license_number are not editable through this route under any circumstance, admin only, through the user management routes below.
 
 Response, 200 OK
+
 ```json
 {
   "id": "integer",
@@ -83,9 +92,11 @@ Response, 400, neither phone nor department provided
 ## Admin user management routes, prefix /auth, admin only
 
 ### POST /auth/users
+
 Purpose, admin creates a staff account and assigns a role.
 
 Request body
+
 ```json
 {
   "first_name": "string",
@@ -101,6 +112,7 @@ Request body
 Note, submitting "patient" as the role here is explicitly rejected, patient-role accounts are only ever created through the patient routes below, never through this staff route, since patient accounts always carry a linked patient_id and staff accounts never do.
 
 Response, 201 Created
+
 ```json
 {
   "user_id": "integer",
@@ -110,10 +122,12 @@ Response, 201 Created
 
 Response, 400, missing fields, invalid email format, invalid role, patient role submitted, or email already registered
 
-### PATCH /auth/users/<id>
+### PATCH /auth/users/{id}
+
 Purpose, admin edits any user, including role, active status, and lock status.
 
 Request body, all fields optional, at least one required
+
 ```json
 {
   "role": "string",
@@ -127,6 +141,7 @@ Request body, all fields optional, at least one required
 Note, setting is_locked to false also resets the user's failed login counter to zero in the same operation, so an admin unlocking an account does not leave a stale failed count sitting behind it.
 
 Response, 200 OK
+
 ```json
 {
   "id": "integer",
@@ -139,15 +154,18 @@ Response, 404, user not found
 Response, 400, invalid role specified, or no recognized fields provided
 
 ### GET /auth/users
+
 Purpose, admin lists all staff accounts. Patient-role accounts are excluded from this listing entirely, this route is for staff management only.
 
 Query parameters, optional
-```
+
+```text
 page, integer, default 1
 limit, integer, default 10
 ```
 
 Response, 200 OK
+
 ```json
 {
   "total": "integer",
@@ -170,58 +188,149 @@ Response, 200 OK
 }
 ```
 
-## Patient routes, prefix /records
+## Patients routes, prefix /patients
 
-### POST /records/patients
-Purpose, create a new patient record, and optionally, in the same call, create and link a portal account for that patient. Restricted to admin, doctor, nurse, and records officer.
+### POST /patients
+
+Purpose, create a new patient record. Staff-initiated only, no patient self-registration.
+
+Access, admin, doctor, nurse, records officer.
 
 Request body
+
 ```json
 {
   "first_name": "string",
   "last_name": "string",
-  "full_name": "string, optional alternative to first_name and last_name, split on the first space",
-  "age": "integer, required",
+  "age": "integer",
   "gender": "string, optional",
   "phone": "string, optional",
   "address": "string, optional",
-  "national_id": "string, optional, must be unique if provided",
-  "assigned_doctor_id": "integer, optional, the id of the user this patient is primarily assigned to",
+  "national_id": "string, optional",
+  "assigned_doctor_id": "integer, optional",
   "portal_email": "string, optional",
-  "portal_password": "string, optional, only meaningful if portal_email is also present"
+  "portal_password": "string, optional"
 }
 ```
 
-Note, if portal_email is present without portal_password, or portal_password without portal_email, no account is created and no error is raised, the patient record alone is still created successfully. Both fields must be present together for an account to be created.
-
-Note, if national_id is provided and already exists on another patient, the request is rejected outright with a 409, since national_id is treated as a hard, non-negotiable duplicate signal. Separately, if first_name, last_name, age, and phone together match an existing patient, the record is still created, but the response carries a soft duplicate_warning for staff to review manually, since this kind of match is common enough in real intake scenarios that it should not block the action outright.
+Note, portal_email and portal_password are only used if creating a linked patient portal account at the same time. Both must be provided together, or omitted together.
 
 Response, 201 Created
+
 ```json
 {
   "patient_id": "uuid",
-  "hospital_id": "string, format MR-000001",
+  "hospital_id": "string, MR-000001 format",
   "message": "Patient record created",
-  "portal_account": "string, only present if an account was created",
-  "duplicate_warning": "string, only present if a soft demographic match was found"
+  "portal_account": "string, present only if a portal account was created",
+  "duplicate_warning": "string, present only if a possible duplicate was detected"
 }
 ```
 
-Response, 400, missing required fields, or invalid portal_email format
-Response, 409, national_id already exists on another patient
+Response, 400, missing required fields or invalid portal_email format
+Response, 409, a patient with this national_id already exists
 
-### POST /records/patients/<id>/portal-account
-Purpose, create and link a portal account for a patient who does not currently have one. This is the route to use when a patient's record was created without an account initially, and staff later decides to grant portal access. Restricted to the same roles as patient creation.
+### GET /patients
 
-Request body
+Purpose, list or search patients.
+
+Access, admin, doctor, nurse, records officer.
+
+Query parameters, optional
+
+```text
+hospital_id   exact match
+search        fuzzy match against first_name, last_name, national_id
+```
+
+Response, 200 OK
+
 ```json
 {
-  "portal_email": "string, required",
-  "portal_password": "string, required"
+  "total": "integer",
+  "patients": [
+    {
+      "id": "uuid",
+      "hospital_id": "string",
+      "first_name": "string",
+      "last_name": "string",
+      "age": "integer",
+      "phone": "string or null"
+    }
+  ]
+}
+```
+
+### GET /patients/{id}
+
+Purpose, view one patient's full demographic record.
+
+Access, admin, doctor, nurse, records officer.
+
+Response, 200 OK
+
+```json
+{
+  "id": "uuid",
+  "hospital_id": "string",
+  "first_name": "string",
+  "last_name": "string",
+  "full_name": "string",
+  "age": "integer",
+  "gender": "string or null",
+  "phone": "string or null",
+  "address": "string or null",
+  "national_id": "string or null",
+  "assigned_doctor_id": "integer or null",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+```
+
+Response, 404, patient not found
+
+### PATCH /patients/{id}
+
+Purpose, edit patient demographic info after intake.
+
+Access, admin, doctor, nurse, records officer.
+
+Request body, all fields optional, at least one required
+
+```json
+{
+  "first_name": "string",
+  "last_name": "string",
+  "age": "integer",
+  "gender": "string",
+  "phone": "string",
+  "address": "string",
+  "assigned_doctor_id": "integer"
+}
+```
+
+Response, 200 OK, returns the full updated patient object, same shape as `GET /patients/{id}`
+
+Response, 400, no valid fields provided
+Response, 404, patient not found
+
+### POST /patients/{id}/portal-account
+
+Purpose, create and link a patient portal account to an existing patient record, for a patient created without one initially.
+
+Access, admin, doctor, nurse, records officer.
+
+Request body
+
+```json
+{
+  "portal_email": "string",
+  "portal_password": "string"
 }
 ```
 
 Response, 201 Created
+
 ```json
 {
   "user_id": "integer",
@@ -230,17 +339,25 @@ Response, 201 Created
 }
 ```
 
-Response, 400, missing fields, patient already has a linked account, invalid email format, or email already registered to another account
+Response, 400, missing fields, invalid email format, or email already registered
 Response, 404, patient not found
-Response, 409, a concurrent request linked this patient to an account first. This is a genuine race condition guard, not a generic conflict, if two requests attempt to link the same patient at nearly the same moment, the database's own unique constraint on the link is what ultimately decides which one wins, and the loser receives this response rather than silently corrupting the link.
+Response, 409, patient already has a linked portal account, or concurrent link detected
+
+---
+
+## Note for whoever maintains the full contract doc
+
+The original contract document referenced `/patients` and `/patients/<id>/link` under an assumed prefix that didn't match the actual implementation. The real prefix is `/patients`, and the link route is named `/patients/<id>/portal-account`, not `/link`. This block supersedes those references.
 
 ## Record routes, prefix /records
 
 ### GET /records
+
 Purpose, list records visible to the logged in user, filtered server side by role before any client-supplied filter is even read. A patient account only ever sees records linked to their own patient_id, and this scoping cannot be widened by any combination of query parameters supplied by that same patient.
 
 Query parameters, optional
-```
+
+```text
 page, integer, default 1
 limit, integer, default 10
 patient_id, uuid
@@ -250,6 +367,7 @@ date_to, date
 ```
 
 Response, 200 OK
+
 ```json
 {
   "total": "integer",
@@ -276,10 +394,12 @@ Response, 403, patient account with no linked patient_id attempted to list recor
 Response, 400, malformed patient_id or invalid record_type supplied as a filter
 
 ### POST /records/upload
+
 Purpose, upload a new patient record. A record may optionally include an attached file at the point of upload, or the file may be added afterward through the attach-file route below. Access is restricted in two layers, first by a general permission check confirming the role may upload records at all, second by a specific check confirming that role may upload this particular record_type.
 
 Request, multipart form data
-```
+
+```text
 patient_id: uuid, required
 record_type: string, required, see valid values below
 data: json object as a string, required, the clinical content, encrypted before storage
@@ -287,7 +407,8 @@ file: binary file, optional
 ```
 
 Valid record_type values, current
-```
+
+```text
 Lab Report
 Imaging
 Prescription
@@ -297,7 +418,8 @@ Clinical Notes
 ```
 
 Note, record_type upload permission by role, current
-```
+
+```text
 Doctor: Lab Report, Imaging, Prescription, Discharge Summary
 Nurse: Vitals, Clinical Notes
 Lab technician: Lab Report
@@ -305,6 +427,7 @@ Records officer: none, read only for all record types
 ```
 
 Response, 201 Created
+
 ```json
 {
   "record_id": "uuid",
@@ -318,15 +441,18 @@ Response, 403, role not permitted to upload this specific record_type
 Response, 502, the storage layer could not be reached, the record was not saved. This is distinct from a 500 deliberately, a 502 here specifically means the file storage backend itself was unreachable, not a database problem, and no partial record is left behind in either case.
 Response, 500, a database failure occurred after a successful file upload, the uploaded file is automatically removed to avoid an orphaned file with no corresponding record
 
-### PATCH /records/<id>/attach-file
+### PATCH /records/{id}/attach-file
+
 Purpose, attach a file to an existing record that does not yet have one. This route intentionally cannot be used to replace a file already attached to a record, and it never modifies a record's encrypted_data or checksum under any circumstance. If the wrong file was attached, or if a record was uploaded with an error, this route is not the way to correct it, since correcting an existing entry in place would break the integrity guarantee the checksum exists to provide. The current design also has no separate correction workflow yet, this is flagged as an open item for the team below.
 
 Request, multipart form data
-```
+
+```text
 file: binary file, required
 ```
 
 Response, 200 OK
+
 ```json
 {
   "record_id": "uuid",
@@ -341,10 +467,12 @@ Response, 404, record not found
 Response, 502, storage layer unreachable, no change was made
 Response, 500, database failure after a successful file upload, the uploaded file is automatically removed
 
-### GET /records/<id>
+### GET /records/{id}
+
 Purpose, view one specific record, decrypted for an authorized viewer only.
 
 Response, 200 OK
+
 ```json
 {
   "id": "uuid",
@@ -368,10 +496,12 @@ Response, 500, either a checksum mismatch was detected on retrieval, meaning the
 ## Audit routes, prefix /audit, admin and auditor only
 
 ### GET /audit/logs
+
 Purpose, view access logs.
 
 Query parameters, optional
-```
+
+```text
 page, integer, default 1
 limit, integer, default 10
 user_id, integer
@@ -382,6 +512,7 @@ date_to, date
 ```
 
 Response, 200 OK
+
 ```json
 {
   "total": "integer",
@@ -404,9 +535,11 @@ Response, 200 OK
 ```
 
 ### GET /audit/report/<record_id>
+
 Purpose, generate a full access history for one specific patient record on demand.
 
 Response, 200 OK
+
 ```json
 {
   "record_id": "uuid",
@@ -428,7 +561,7 @@ Response, 404, record not found
 
 These are the exact string values stored in the action column and returned by the audit routes above, useful for building any filter dropdown on the frontend.
 
-```
+```text
 Login Success
 Login Failed
 Account Locked

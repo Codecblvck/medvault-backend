@@ -5,9 +5,9 @@ Safe to run more than once, exits early if an admin already exists.
 """
 
 from app import create_app
+from app import system as core
 from app.extensions import db, bcrypt
 from app.auth.models import User
-from app.access_control.models import Role
 import sqlalchemy as sa
 
 
@@ -18,8 +18,8 @@ def seed_admin():
         # Check whether an admin already exists, avoid creating a duplicate
         existing_admin_stmt = (
             sa.select(User)
-            .join(Role, User.role_id == Role.id)
-            .filter(Role.role_name == "admin")
+            .join(core.Role, User.role_id == core.Role.id)
+            .filter(core.Role.role_name == "admin")
         )
         existing_admin = db.session.scalar(existing_admin_stmt)
 
@@ -28,7 +28,7 @@ def seed_admin():
             return
 
         # Look up the admin role's id, never hardcode this number
-        role_stmt = sa.select(Role).filter_by(role_name="admin")
+        role_stmt = sa.select(core.Role).filter_by(role_name="admin")
         admin_role = db.session.scalar(role_stmt)
 
         if not admin_role:
