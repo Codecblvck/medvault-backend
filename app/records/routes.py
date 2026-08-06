@@ -18,7 +18,8 @@ from app.access_control import (
 )
 from app.audit import log_access, AuditAction
 from app.auth import User, is_valid_email
-from app.records import Record, RecordType, Patient
+from app.patients import Patient
+from app.records import Record, RecordType
 from app.encryption.aes_utils import encrypt_data, decrypt_data
 from app.storage.minio_client import upload_file, get_file_url, delete_file
 
