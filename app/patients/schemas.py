@@ -15,6 +15,7 @@ class PatientCreateSchema(ma.SQLAlchemyAutoSchema):
 class PatientResponseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Patient
+        include_fk = True
 
     full_name = fields.Method("get_full_name")
 
@@ -25,6 +26,7 @@ class PatientResponseSchema(ma.SQLAlchemyAutoSchema):
 class PatientUpdateSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Patient
+        include_fk = True
         fields = (
             "first_name",
             "last_name",
