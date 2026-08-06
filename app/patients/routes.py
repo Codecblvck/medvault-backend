@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import get_jwt_identity, jwt_required, current_user
+from flask_jwt_extended import jwt_required, current_user
 import sqlalchemy as sa
 from sqlalchemy.exc import IntegrityError
 
@@ -7,6 +7,13 @@ from app import system as core
 from app.extensions import db, bcrypt
 from app.auth import User
 from app.patients import Patient
+
+from app.patients.schemas import (
+    PatientResponseSchema,
+    PatientUpdateSchema,
+    PatientListItemSchema,
+)
+
 
 bp = Blueprint("patient", __name__)
 
@@ -367,20 +374,11 @@ def list_patients():
         status="Success",
         request=request,
     )
+    patient_list_schema = PatientListItemSchema(many=True)
 
     return jsonify({
         "total": len(patients),
-        "patients": [
-            {
-                "id": str(p.id),
-                "hospital_id": p.hospital_id,
-                "first_name": p.first_name,
-                "last_name": p.last_name,
-                "age": p.age,
-                "phone": p.phone,
-            }
-            for p in patients
-        ],
+        "patients": patient_list_schema.dump(patients),
     }), 200
 
 
@@ -408,20 +406,9 @@ def get_patient(patient_id):
         status="Success",
         request=request,
     )
-
-    return jsonify({
-        "id": str(patient.id),
-        "hospital_id": patient.hospital_id,
-        "first_name": patient.first_name,
-        "last_name": patient.last_name,
-        "age": patient.age,
-        "gender": patient.gender,
-        "phone": patient.phone,
-        "address": patient.address,
-        "national_id": patient.national_id,
-        "assigned_doctor_id": patient.assigned_doctor_id,
-        "created_at": patient.created_at.isoformat() + "Z",
-    }), 200
+    
+    patient_response_schema = PatientResponseSchema()
+    return jsonify(patient_response_schema.dump(patient)), 200
 
 
 @bp.route("/<uuid:patient_id>", methods=["PATCH"])
@@ -431,7 +418,6 @@ def get_patient(patient_id):
 )
 def update_patient(patient_id):
     patient = db.session.get(Patient, patient_id)
-
     if not patient:
         return jsonify({"error": "Patient record not found."}), 404
 
@@ -439,19 +425,21 @@ def update_patient(patient_id):
     if not payload:
         return jsonify({"error": "No fields provided."}), 400
 
-    allowed_fields = {"first_name", "last_name", "age", "gender", "phone", "address", "assigned_doctor_id"}
-    changed_fields = []
+    patient_update_schema = PatientUpdateSchema()
+    errors = patient_update_schema.validate(payload, partial=True)
+    if errors:
+        return jsonify({"error": errors}), 400
 
-    for field in allowed_fields:
-        if field in payload:
-            setattr(patient, field, payload[field])
+    changed_fields = []
+    for field, value in payload.items():
+        if field in patient_update_schema.fields:
+            setattr(patient, field, value)
             changed_fields.append(field)
 
     if not changed_fields:
         return jsonify({"error": "No valid fields provided."}), 400
 
     db.session.commit()
-
     core.log_access(
         user=current_user,
         action=core.AuditAction.patient_updated,
@@ -460,4 +448,5 @@ def update_patient(patient_id):
         details=f"Fields updated: {', '.join(changed_fields)}",
     )
 
-    return jsonify({"id": str(patient.id), "message": "Patient updated"}), 200
+    patient_response_schema = PatientResponseSchema()
+    return jsonify(patient_response_schema.dump(patient)), 200

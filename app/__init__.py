@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_migrate import migrate
 from app.config import Config, TestingConfig, DevelopmentConfig
-from app.extensions import db, jwt, migrate, bcrypt, cors
+from app.extensions import db, jwt, migrate, bcrypt, cors, ma
 from app.blueprint_registry import register_blueprints
 
 
@@ -21,6 +21,7 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
+    ma.init_app(app)
     cors.init_app(
         app,
         resources={
