@@ -10,7 +10,7 @@ def is_valid_email(email):
 
     check_deliverability defaults to True in email-validator, which
     performs a DNS lookup confirming the domain can actually receive
-    mail, e.g. catches typos like "gmial.com". Set to False here since
+    mail, e.g. catches typos like "gmail.com". Set to False here since
     a DNS check on every registration adds latency and an external
     dependency, format validation alone is a reasonable bar for this
     project, worth reconsidering if genuinely deliverable emails matter
@@ -22,9 +22,7 @@ def is_valid_email(email):
         allow_test = current_app.config.get("EMAIL_ALLOW_TEST_DOMAINS", False)
 
         result = validate_email(
-            email, 
-            check_deliverability=check_dns, 
-            test_environment=allow_test
+            email, check_deliverability=check_dns, test_environment=allow_test
         )
         return True, result.normalized
     except EmailNotValidError as e:

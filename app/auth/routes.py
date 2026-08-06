@@ -1,22 +1,20 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, current_user
 import sqlalchemy as sa
-from app.access_control import role_required, Role, RoleName
+from app import system as core
 from app.extensions import bcrypt, db
 from app.auth import (
     User,
     is_account_locked,
     register_failed_attempt,
     reset_failed_attempts,
-    is_valid_email
 )
-from app.audit import AuditAction, log_access
 
-auth_bp = Blueprint("auth", __name__)
+bp = Blueprint("auth", __name__)
 
 
 # auth/routes.py
-@auth_bp.route("/login", methods=["POST"])
+@bp.route("/login", methods=["POST"])
 def login():
     user_payload = request.get_json()
  
@@ -43,7 +41,7 @@ def login():
  
     submitted_email = user_payload["email"]
  
-    valid, result = is_valid_email(submitted_email)
+    valid, result = core.is_valid_email(submitted_email)
     if not valid:
         return jsonify({"error": "Invalid email format."}), 400
  
@@ -53,8 +51,8 @@ def login():
     user = db.session.scalar(stmt)
  
     if not user:
-        log_access(
-            action=AuditAction.login_failed.value,
+        core.log_access(
+            action=core.AuditAction.login_failed.value,
             status="Blocked",
             request=request,
             attempted_email=normalized_email,
@@ -62,8 +60,8 @@ def login():
         return jsonify({"error": "Invalid email or password."}), 401
  
     if is_account_locked(user):
-        log_access(
-            action=AuditAction.account_locked.value,
+        core.log_access(
+            action=core.AuditAction.account_locked.value,
             status="Blocked",
             request=request,
             user=user,
@@ -80,8 +78,8 @@ def login():
  
     if not validate_pswd:
         register_failed_attempt(user)
-        log_access(
-            action=AuditAction.login_failed.value,
+        core.log_access(
+            action=core.AuditAction.login_failed.value,
             status="Blocked",
             request=request,
             user=user,
@@ -89,8 +87,8 @@ def login():
         return jsonify({"error": "Invalid email or password."}), 401
  
     if not user.is_active:
-        log_access(
-            action=AuditAction.login_failed.value,
+        core.log_access(
+            action=core.AuditAction.login_failed.value,
             status="Blocked",
             request=request,
             user=user,
@@ -100,11 +98,11 @@ def login():
     reset_failed_attempts(user)
     access_token = create_access_token(identity=user.email)
  
-    role = db.session.get(Role, user.role_id)
+    role = db.session.get(core.Role, user.role_id)
     role_name = role.role_name.value if role is not None else None
  
-    log_access(
-        action=AuditAction.login_success.value,
+    core.log_access(
+        action=core.AuditAction.login_success.value,
         status="Success",
         request=request,
         user=user,
@@ -123,7 +121,7 @@ def login():
         }
     )
 
-@auth_bp.route("/me", methods=["GET"])
+@bp.route("/me", methods=["GET"])
 @jwt_required()
 def get_own_profile():
     return (
@@ -143,7 +141,7 @@ def get_own_profile():
     )
 
 
-@auth_bp.route("/me", methods=["PATCH"])
+@bp.route("/me", methods=["PATCH"])
 @jwt_required()
 def update_own_profile():
     data = request.get_json() or {}
@@ -177,9 +175,9 @@ def update_own_profile():
 
 
 # ADMIN USER MANAGEMENT ROUTES
-@auth_bp.route("/users/<int:user_id>", methods=["PATCH"])
+@bp.route("/users/<int:user_id>", methods=["PATCH"])
 @jwt_required()
-@role_required([RoleName.admin])
+@core.role_required([core.RoleName.admin])
 def update_staff_user(user_id):
     payload = request.get_json() or {}
 
@@ -197,11 +195,11 @@ def update_staff_user(user_id):
 
     if "role" in payload:
         try:
-            role_enum = RoleName(payload["role"])
+            role_enum = core.RoleName(payload["role"])
         except ValueError:
             return jsonify({"error": "Invalid role specified."}), 400
 
-        role_stmt = sa.select(Role).filter_by(role_name=role_enum)
+        role_stmt = sa.select(core.Role).filter_by(role_name=role_enum)
         role = db.session.scalar(role_stmt)
 
         if not role:
@@ -239,9 +237,9 @@ def update_staff_user(user_id):
     # Role changes get their own specific audit action, since privilege
     # escalation is the most sensitive thing this route can do. Every
     # other field change is logged under the generic user_updated action.
-    action = AuditAction.role_changed if role_was_changed else AuditAction.user_updated
+    action = core.AuditAction.role_changed if role_was_changed else core.AuditAction.user_updated
 
-    log_access(
+    core.log_access(
         user=current_user,
         action=action.value,
         status="Success",
@@ -262,9 +260,9 @@ def update_staff_user(user_id):
     )
 
 
-@auth_bp.route("/users", methods=["POST"])
+@bp.route("/users", methods=["POST"])
 @jwt_required()
-@role_required([RoleName.admin])
+@core.role_required([core.RoleName.admin])
 def create_staff_user():
     new_staff_payload = request.get_json()
 
@@ -296,14 +294,14 @@ def create_staff_user():
             400,
         )
 
-    is_valid, email_result = is_valid_email(new_staff_payload["email"])
+    is_valid, email_result = core.is_valid_email(new_staff_payload["email"])
     if not is_valid:
         return jsonify({"error": "Invalid email format provided."}), 400
 
     new_staff_payload["email"] = email_result  # normalized form
 
     requested_role = new_staff_payload["role"]
-    if requested_role == RoleName.patient.value:
+    if requested_role == core.RoleName.patient.value:
         return (
             jsonify(
                 {"error": "Patient accounts must self register through /auth/register."}
@@ -312,7 +310,7 @@ def create_staff_user():
         )
 
     try:
-        role_enum = RoleName(requested_role)
+        role_enum = core.RoleName(requested_role)
     except ValueError:
         return jsonify({"error": "Invalid role provided."}), 400
 
@@ -327,7 +325,7 @@ def create_staff_user():
         new_staff_payload["password"]
     ).decode("utf-8")
 
-    stmt = sa.select(Role.id).filter_by(role_name=role_enum)
+    stmt = sa.select(core.Role.id).filter_by(role_name=role_enum)
     staff_role_id = db.session.scalar(stmt)
     if staff_role_id is None:
         return jsonify({"error": "Invalid role provided."}), 400
@@ -346,9 +344,9 @@ def create_staff_user():
     db.session.add(staff)
     db.session.commit()
 
-    log_access(
+    core.log_access(
         user=current_user,
-        action=AuditAction.user_created.value,
+        action=core.AuditAction.user_created.value,
         status="Success",
         request=request,
         record_id=None,
@@ -358,9 +356,9 @@ def create_staff_user():
     return jsonify({"user_id": staff.id, "message": "Staff account created"}), 201
 
 
-@auth_bp.route("/users", methods=["GET"])
+@bp.route("/users", methods=["GET"])
 @jwt_required()
-@role_required([RoleName.admin])
+@core.role_required([core.RoleName.admin])
 def list_staff_users():
     page = request.args.get("page", default=1, type=int)
     limit = request.args.get("limit", default=10, type=int)
@@ -372,7 +370,7 @@ def list_staff_users():
 
     offset = (page - 1) * limit
 
-    role_stmt = sa.select(Role.id).filter_by(role_name=RoleName.patient)
+    role_stmt = sa.select(core.Role.id).filter_by(role_name=core.RoleName.patient)
     patient_role_id = db.session.scalar(role_stmt)
 
     if patient_role_id is None:

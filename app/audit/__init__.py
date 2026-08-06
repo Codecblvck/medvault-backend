@@ -5,7 +5,5 @@ Re-export common symbols so callers can import from
 """
 
 from .models import AuditLog
-from .logger import log_access
-from .actions import AuditAction
 
-__all__ = ["AuditLog", "log_access", "AuditAction"]
+__all__ = ["AuditLog"]

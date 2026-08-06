@@ -28,10 +28,8 @@ def create_app():
         },
     )
 
-    from app.access_control import jwt_handlers
     from app.model_registry import (
         auth_models,
-        access_control_models,
         audit_models,
         records_models,
     )

@@ -4,18 +4,19 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, current_user
 
 
+from app import system as core
+from app.audit import AuditLog
 from app.extensions import db
-from app.access_control.decorators import role_required
-from app.access_control.models import RoleName
-from app.audit import AuditLog, log_access, AuditAction
 from app.records import Record
 
-audit_bp = Blueprint("audit", __name__)
 
 
-@audit_bp.route("/logs", methods=["GET"])
+bp = Blueprint("audit", __name__)
+
+
+@bp.route("/logs", methods=["GET"])
 @jwt_required()
-@role_required([RoleName.admin, RoleName.auditor])
+@core.role_required([core.RoleName.admin, core.RoleName.auditor])
 def view_logs():
     page = request.args.get("page", default=1, type=int)
     limit = request.args.get("limit", default=10, type=int)
@@ -60,8 +61,8 @@ def view_logs():
 
     has_more = (offset + len(logs)) < total
 
-    log_access(
-        action=AuditAction.audit_logs_viewed.value,
+    core.log_access(
+        action=core.AuditAction.audit_logs_viewed.value,
         status="Success",
         request=request,
         user=current_user,
@@ -96,14 +97,14 @@ def view_logs():
     )
 
 
-@audit_bp.route("/report/<uuid:record_id>", methods=["GET"])
+@bp.route("/report/<uuid:record_id>", methods=["GET"])
 @jwt_required()
-@role_required([RoleName.admin, RoleName.auditor])
+@core.role_required([core.RoleName.admin, core.RoleName.auditor])
 def view_report(record_id):
     record = Record.query.get(record_id)
     if not record:
-        log_access(
-            action=AuditAction.audit_report_viewed.value,
+        core.log_access(
+            action=core.AuditAction.audit_report_viewed.value,
             status="Failed",
             request=request,
             user=current_user,
@@ -128,8 +129,8 @@ def view_report(record_id):
         for log in logs
     ]
 
-    log_access(
-        action=AuditAction.audit_report_viewed.value,
+    core.log_access(
+        action=core.AuditAction.audit_report_viewed.value,
         status="Success",
         request=request,
         user=current_user,

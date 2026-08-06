@@ -13,7 +13,8 @@ def get_rsa_public_key():
 
     with open(path, "rb") as f:
         return RSA.import_key(f.read())
-    
+
+
 def get_rsa_private_key():
     path = Config.RSA_PRIVATE_KEY_PATH
     if path is None:

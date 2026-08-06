@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db, jwt
 
 if TYPE_CHECKING:
-    from app.access_control.models import Role
+    from app.system.access import Role
 
 
 class User(db.Model):

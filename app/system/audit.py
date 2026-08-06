@@ -1,11 +1,45 @@
 import hashlib
 import json
 import uuid
+import enum 
 
-import sqlalchemy as sa
-
+from sqlalchemy import select
 from app.extensions import db
-from app.audit.models import AuditLog
+from app.audit import AuditLog
+
+
+
+# ===== AUDIT ACTIONS =====
+class AuditAction(enum.Enum):
+    # Authentication
+    login_success = "Login Success"
+    login_failed = "Login Failed"
+    account_locked = "Account Locked"
+    account_unlocked = "Account Unlocked"
+
+    # Records
+    record_viewed = "Record Viewed"
+    record_uploaded = "Record Uploaded"
+
+    # Access control
+    permission_denied = "Permission Denied"
+
+    # Admin / user management
+    user_created = "User Created"
+    user_updated = "User Updated"
+    role_changed = "Role Changed"
+
+    # Patients
+    patient_created = "Patient Created"
+    patient_viewed = "Patient Viewed"
+    patient_updated = "Patient Updated"
+    duplicate_patient_warning = "Duplicate Patient Warning"
+    patient_list_viewed = "Patient List Viewed"
+
+
+    # Audit
+    audit_logs_viewed = "Audit Logs Viewed"
+    audit_report_viewed = "Audit Report Viewed"
 
 
 def log_access(
@@ -39,7 +73,7 @@ def log_access(
         except ValueError:
             raise ValueError("Invalid record_id provided to log_access.")
 
-    stmt = sa.select(AuditLog).order_by(AuditLog.timestamp.desc())
+    stmt = select(AuditLog).order_by(AuditLog.timestamp.desc())
     recent_log = db.session.scalar(stmt)
 
     audit = AuditLog()
