@@ -1,5 +1,10 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required, current_user
+from flask_jwt_extended import (
+    create_access_token,
+    jwt_required,
+    current_user,
+    decode_token,
+)
 import sqlalchemy as sa
 from app import system as core
 from app.extensions import bcrypt, db
@@ -17,7 +22,7 @@ bp = Blueprint("auth", __name__)
 @bp.route("/login", methods=["POST"])
 def login():
     user_payload = request.get_json()
- 
+
     if not user_payload:
         return (
             jsonify(
@@ -27,7 +32,7 @@ def login():
             ),
             400,
         )
- 
+
     columns_required = "email" not in user_payload or "password" not in user_payload
     if columns_required:
         return (
@@ -38,18 +43,18 @@ def login():
             ),
             400,
         )
- 
+
     submitted_email = user_payload["email"]
- 
+
     valid, result = core.is_valid_email(submitted_email)
     if not valid:
         return jsonify({"error": "Invalid email format."}), 400
- 
+
     normalized_email = result
- 
+
     stmt = sa.select(User).filter_by(email=normalized_email)
     user = db.session.scalar(stmt)
- 
+
     if not user:
         core.log_access(
             action=core.AuditAction.login_failed.value,
@@ -58,7 +63,7 @@ def login():
             attempted_email=normalized_email,
         )
         return jsonify({"error": "Invalid email or password."}), 401
- 
+
     if is_account_locked(user):
         core.log_access(
             action=core.AuditAction.account_locked.value,
@@ -72,10 +77,10 @@ def login():
             ),
             423,
         )
- 
+
     user_pswd = user_payload["password"]
     validate_pswd = bcrypt.check_password_hash(user.password_hash, user_pswd)
- 
+
     if not validate_pswd:
         register_failed_attempt(user)
         core.log_access(
@@ -85,7 +90,7 @@ def login():
             user=user,
         )
         return jsonify({"error": "Invalid email or password."}), 401
- 
+
     if not user.is_active:
         core.log_access(
             action=core.AuditAction.login_failed.value,
@@ -94,20 +99,23 @@ def login():
             user=user,
         )
         return jsonify({"error": "Invalid email or password."}), 401
- 
+
     reset_failed_attempts(user)
     access_token = create_access_token(identity=user.email)
- 
+    decoded = decode_token(access_token)
+    user.current_jti = decoded["jti"]
+    db.session.commit()
+
     role = db.session.get(core.Role, user.role_id)
     role_name = role.role_name.value if role is not None else None
- 
+
     core.log_access(
         action=core.AuditAction.login_success.value,
         status="Success",
         request=request,
         user=user,
     )
- 
+
     return jsonify(
         {
             "token": access_token,
@@ -120,6 +128,23 @@ def login():
             },
         }
     )
+
+
+@bp.route("/logout", methods=["POST"])
+@jwt_required()
+def logout():
+    current_user.current_jti = None
+    db.session.commit()
+
+    core.log_access(
+        action=core.AuditAction.logout_success.value,
+        status="Success",
+        request=request,
+        user=current_user,
+    )
+
+    return jsonify({"message": "Logged out successfully."}), 200
+
 
 @bp.route("/me", methods=["GET"])
 @jwt_required()
@@ -237,7 +262,11 @@ def update_staff_user(user_id):
     # Role changes get their own specific audit action, since privilege
     # escalation is the most sensitive thing this route can do. Every
     # other field change is logged under the generic user_updated action.
-    action = core.AuditAction.role_changed if role_was_changed else core.AuditAction.user_updated
+    action = (
+        core.AuditAction.role_changed
+        if role_was_changed
+        else core.AuditAction.user_updated
+    )
 
     core.log_access(
         user=current_user,
@@ -304,11 +333,12 @@ def create_staff_user():
     if requested_role == core.RoleName.patient.value:
         return (
             jsonify(
-                {"error": "Patient accounts must self register through /auth/register."}
+                {
+                    "error": "Patient accounts are created via POST /patients with portal_email and portal_password, not through staff creation."
+                }
             ),
             400,
         )
-
     try:
         role_enum = core.RoleName(requested_role)
     except ValueError:

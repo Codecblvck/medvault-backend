@@ -35,10 +35,21 @@ class PatientUpdateSchema(ma.SQLAlchemyAutoSchema):
             "phone",
             "address",
             "assigned_doctor_id",
+            "blood_group",
+            "ward",
+            "status",
         )
 
 
 class PatientListItemSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Patient
-        fields = ("id", "hospital_id", "first_name", "last_name", "age", "phone")
+        fields = (
+            "id",
+            "hospital_id",
+            "first_name",
+            "last_name",
+            "age",
+            "phone",
+            "status",
+        )

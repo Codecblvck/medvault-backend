@@ -20,7 +20,7 @@ Full pinned versions are in `requirements.txt`, which is the authoritative refer
 
 ## Project structure
 
-```
+```text
 app/
     __init__.py            create_app factory, extension wiring
     config.py               environment-driven configuration
@@ -69,7 +69,7 @@ Keep both files somewhere outside the repo. Note their absolute paths, needed in
 
 4. **Create a `.env` file** at the project root with the following variables. None of the actual values below are real, replace every one.
 
-```
+```text
 FLASK_ENV=development
 
 DATABASE_URL=postgresql://user:password@localhost:5432/medvault

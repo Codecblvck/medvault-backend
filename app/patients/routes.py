@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from app import system as core
 from app.extensions import db, bcrypt
 from app.auth import User
-from app.patients import Patient
+from app.patients import Patient, PatientStatus
 
 from app.patients.schemas import (
     PatientResponseSchema,
@@ -21,7 +21,12 @@ bp = Blueprint("patient", __name__)
 @bp.route("/", methods=["POST"])
 @jwt_required()
 @core.role_required(
-    [core.RoleName.admin, core.RoleName.doctor, core.RoleName.nurse, core.RoleName.records_officer]
+    [
+        core.RoleName.admin,
+        core.RoleName.doctor,
+        core.RoleName.nurse,
+        core.RoleName.records_officer,
+    ]
 )
 def create_patient():
     payload = request.get_json()
@@ -103,6 +108,8 @@ def create_patient():
     patient.address = payload.get("address")
     patient.national_id = national_id
     patient.assigned_doctor_id = payload.get("assigned_doctor_id")
+    patient.blood_group = payload.get("blood_group")
+    patient.ward = payload.get("ward")
 
     db.session.add(patient)
     db.session.flush()
@@ -203,7 +210,12 @@ def create_patient():
 @bp.route("/<uuid:patient_id>/portal-account", methods=["POST"])
 @jwt_required()
 @core.role_required(
-    [core.RoleName.admin, core.RoleName.doctor, core.RoleName.nurse, core.RoleName.records_officer]
+    [
+        core.RoleName.admin,
+        core.RoleName.doctor,
+        core.RoleName.nurse,
+        core.RoleName.records_officer,
+    ]
 )
 def create_portal_account(patient_id):
     payload = request.get_json()
@@ -343,10 +355,16 @@ def create_portal_account(patient_id):
         201,
     )
 
+
 @bp.route("/", methods=["GET"])
 @jwt_required()
 @core.role_required(
-    [core.RoleName.admin, core.RoleName.doctor, core.RoleName.nurse, core.RoleName.records_officer]
+    [
+        core.RoleName.admin,
+        core.RoleName.doctor,
+        core.RoleName.nurse,
+        core.RoleName.records_officer,
+    ]
 )
 def list_patients():
     search = request.args.get("search", "").strip()
@@ -366,7 +384,9 @@ def list_patients():
             )
         )
 
-    patients = db.session.execute(stmt.order_by(Patient.created_at.desc())).scalars().all()
+    patients = (
+        db.session.execute(stmt.order_by(Patient.created_at.desc())).scalars().all()
+    )
 
     core.log_access(
         user=current_user,
@@ -376,16 +396,23 @@ def list_patients():
     )
     patient_list_schema = PatientListItemSchema(many=True)
 
-    return jsonify({
-        "total": len(patients),
-        "patients": patient_list_schema.dump(patients),
-    }), 200
+    return jsonify(
+        {
+            "total": len(patients),
+            "patients": patient_list_schema.dump(patients),
+        }
+    ), 200
 
 
 @bp.route("/<uuid:patient_id>", methods=["GET"])
 @jwt_required()
 @core.role_required(
-    [core.RoleName.admin, core.RoleName.doctor, core.RoleName.nurse, core.RoleName.records_officer]
+    [
+        core.RoleName.admin,
+        core.RoleName.doctor,
+        core.RoleName.nurse,
+        core.RoleName.records_officer,
+    ]
 )
 def get_patient(patient_id):
     patient = db.session.get(Patient, patient_id)
@@ -406,7 +433,7 @@ def get_patient(patient_id):
         status="Success",
         request=request,
     )
-    
+
     patient_response_schema = PatientResponseSchema()
     return jsonify(patient_response_schema.dump(patient)), 200
 
@@ -414,7 +441,12 @@ def get_patient(patient_id):
 @bp.route("/<uuid:patient_id>", methods=["PATCH"])
 @jwt_required()
 @core.role_required(
-    [core.RoleName.admin, core.RoleName.doctor, core.RoleName.nurse, core.RoleName.records_officer]
+    [
+        core.RoleName.admin,
+        core.RoleName.doctor,
+        core.RoleName.nurse,
+        core.RoleName.records_officer,
+    ]
 )
 def update_patient(patient_id):
     patient = db.session.get(Patient, patient_id)
@@ -424,6 +456,21 @@ def update_patient(patient_id):
     payload = request.get_json()
     if not payload:
         return jsonify({"error": "No fields provided."}), 400
+
+    if "status" in payload:
+        try:
+            payload["status"] = PatientStatus(payload["status"]).value
+        except ValueError:
+            core.log_access(
+                action=core.AuditAction.patient_updated,
+                status="failed",
+                request=request,
+                user=current_user,
+                details=f"Invalid status value submitted: {payload['status']}",
+            )
+            return jsonify(
+                {"error": f"Invalid status value submitted: {payload['status']}"}
+            ), 400
 
     patient_update_schema = PatientUpdateSchema()
     errors = patient_update_schema.validate(payload, partial=True)

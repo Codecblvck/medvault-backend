@@ -1,12 +1,11 @@
 import hashlib
 import json
 import uuid
-import enum 
+import enum
 
 from sqlalchemy import select
 from app.extensions import db
 from app.audit import AuditLog
-
 
 
 # ===== AUDIT ACTIONS =====
@@ -14,6 +13,7 @@ class AuditAction(enum.Enum):
     # Authentication
     login_success = "Login Success"
     login_failed = "Login Failed"
+    logout_success = "Logout Success"
     account_locked = "Account Locked"
     account_unlocked = "Account Unlocked"
 
@@ -35,7 +35,6 @@ class AuditAction(enum.Enum):
     patient_updated = "Patient Updated"
     duplicate_patient_warning = "Duplicate Patient Warning"
     patient_list_viewed = "Patient List Viewed"
-
 
     # Audit
     audit_logs_viewed = "Audit Logs Viewed"

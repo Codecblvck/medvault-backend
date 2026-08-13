@@ -15,13 +15,11 @@ class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     first_name: Mapped[str] = mapped_column(String(100), nullable=False)
     last_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    email: Mapped[str] = mapped_column(String(255),unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(256), nullable=False)
-    role_id: Mapped[int] = mapped_column(
-        ForeignKey("roles.id"), nullable=False
-    )
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), nullable=False)
     role: Mapped["Role"] = relationship("Role", back_populates="users")
-    patient_id = db.Column(
+    patient_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("patients.id"), nullable=True, unique=True
     )
     phone: Mapped[str | None] = mapped_column(String(32))
@@ -30,6 +28,7 @@ class User(db.Model):
     failed_login_count: Mapped[int] = mapped_column(default=0)
     is_locked: Mapped[bool] = mapped_column(default=False)
     is_active: Mapped[bool] = mapped_column(default=True)
+    current_jti: Mapped[str | None] = mapped_column(String(36), nullable=True)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         server_default=func.now(), onupdate=func.now()
@@ -68,6 +67,9 @@ def user_lookup_callback(_jwt_header, jwt_data):
     user = User.query.filter_by(email=identity).first()
 
     if user is None or not user.is_active:
+        return None
+
+    if user.current_jti != jwt_data["data"]:
         return None
 
     return user

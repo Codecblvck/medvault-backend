@@ -1,3 +1,3 @@
-from .models import Patient
+from .models import Patient, PatientStatus
 
-__all__ = ["Patient"]
+__all__ = ["Patient", "PatientStatus"]

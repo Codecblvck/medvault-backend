@@ -13,7 +13,6 @@ from app.records import Record, RecordType
 records_bp = Blueprint("record", __name__)
 
 
-
 # RECORD
 @records_bp.route("/", methods=["GET"])
 @jwt_required()
@@ -116,6 +115,7 @@ def read_records():
                 "records": [
                     {
                         "id": str(r.id),
+                        "patient_id": str(r.patient_id),
                         "patient_name": r.patient.full_name,
                         "record_type": r.record_type.value,
                         "uploaded_by_name": r.uploader.full_name,
@@ -140,6 +140,7 @@ def upload_records():
     patient_id = request.form.get("patient_id")
     record_type_str = request.form.get("record_type")
     data_str = request.form.get("data")
+    department = request.form.get("department")
 
     if not patient_id or not record_type_str or not data_str:
         core.log_access(
@@ -190,7 +191,9 @@ def upload_records():
             400,
         )
 
-    if not user or not core.can_upload_record_type(user.role.role_name, record_type_enum):
+    if not user or not core.can_upload_record_type(
+        user.role.role_name, record_type_enum
+    ):
         core.log_access(
             action=core.AuditAction.record_uploaded.value,
             status="Failed",
@@ -246,6 +249,7 @@ def upload_records():
     record.id = record_id
     record.patient_id = patient_uuid
     record.uploaded_by = user.id
+    record.department = department
     record.record_type = record_type_enum
     record.checksum = checksum
     record.encrypted_data = encrypted_str
@@ -259,7 +263,7 @@ def upload_records():
 
         if uploaded_file:
             core.upload_file(uploaded_file, object_key)
-        db.session.commit()  
+        db.session.commit()
     except RuntimeError as minio_error:
         db.session.rollback()
         core.log_access(
@@ -270,8 +274,10 @@ def upload_records():
             details=f"File upload failed, record was not saved: {minio_error}",
         )
         return (
-            jsonify({"error": f"File upload failed, record was not saved: {minio_error}"}),
-                            502,
+            jsonify(
+                {"error": f"File upload failed, record was not saved: {minio_error}"}
+            ),
+            502,
         )
 
     except Exception as db_error:
@@ -459,7 +465,9 @@ def view_record(record_id):
         return jsonify({"error": "You are not permitted to view this record."}), 403
 
     try:
-        decrypted_data = core.decrypt_data(record.encrypted_data, record.encrypted_aes_key)
+        decrypted_data = core.decrypt_data(
+            record.encrypted_data, record.encrypted_aes_key
+        )
     except Exception:
         core.log_access(
             action=core.AuditAction.record_viewed.value,
