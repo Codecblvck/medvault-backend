@@ -137,7 +137,7 @@ def logout():
     db.session.commit()
 
     core.log_access(
-        action=core.AuditAction.logout_success.value,
+        action=core.AuditAction.logout.value,
         status="Success",
         request=request,
         user=current_user,

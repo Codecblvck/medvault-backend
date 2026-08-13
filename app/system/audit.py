@@ -13,7 +13,7 @@ class AuditAction(enum.Enum):
     # Authentication
     login_success = "Login Success"
     login_failed = "Login Failed"
-    logout_success = "Logout Success"
+    logout = "Logout"
     account_locked = "Account Locked"
     account_unlocked = "Account Unlocked"
 
