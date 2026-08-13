@@ -69,7 +69,7 @@ def user_lookup_callback(_jwt_header, jwt_data):
     if user is None or not user.is_active:
         return None
 
-    if user.current_jti != jwt_data["data"]:
+    if user.current_jti != jwt_data["jti"]:
         return None
 
     return user
