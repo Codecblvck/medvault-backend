@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
+from flask import jsonify
 from sqlalchemy import ForeignKey, String, func, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db, jwt
@@ -73,3 +74,13 @@ def user_lookup_callback(_jwt_header, jwt_data):
         return None
 
     return user
+
+
+@jwt.user_lookup_error_loader
+def user_lookup_error_callback(_jwt_header, _jwt_data):
+    return jsonify({"error": "Your session has expired. Please log in again."}), 401
+
+
+@jwt.expired_token_loader
+def expired_token_callback(_jwt_header, _jwt_data):
+    return jsonify({"error": "Your session has expired. Please log in again."}), 401

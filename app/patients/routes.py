@@ -364,6 +364,7 @@ def create_portal_account(patient_id):
         core.RoleName.doctor,
         core.RoleName.nurse,
         core.RoleName.records_officer,
+        core.RoleName.lab_technician,
     ]
 )
 def list_patients():
@@ -412,6 +413,7 @@ def list_patients():
         core.RoleName.doctor,
         core.RoleName.nurse,
         core.RoleName.records_officer,
+        core.RoleName.lab_technician,
     ]
 )
 def get_patient(patient_id):
