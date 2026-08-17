@@ -17,7 +17,7 @@ from .access import (
 
 from .audit import AuditLog, log_access, AuditAction
 from .crypto import encrypt_data, decrypt_data
-from .storage import upload_file, get_file_url, delete_file
+from .storage import upload_file, get_file_url, delete_file, get_storage_provider, get_s3_client
 from .validators import is_valid_email
 
 __all__ = [

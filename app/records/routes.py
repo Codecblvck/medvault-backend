@@ -10,11 +10,11 @@ from app.extensions import db, bcrypt
 from app import system as core
 from app.records import Record, RecordType
 
-records_bp = Blueprint("record", __name__)
+bp = Blueprint("record", __name__)
 
 
 # RECORD
-@records_bp.route("/", methods=["GET"])
+@bp.route("/", methods=["GET"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.view_records)
 def read_records():
@@ -131,7 +131,58 @@ def read_records():
     )
 
 
-@records_bp.route("/upload", methods=["POST"])
+@bp.route("/stats", methods=["GET"])
+@jwt_required()
+@core.permission_required(core.PermissionAction.view_records)
+def record_stats():
+    total_records = (
+        db.session.scalar(sa.select(sa.func.count()).select_from(Record)) or 0
+    )
+
+    attachment_count = (
+        db.session.scalar(
+            sa.select(sa.func.count())
+            .select_from(Record)
+            .where(Record.file_path.is_not(None))
+        )
+        or 0
+    )
+
+    total_file_size = (
+        db.session.scalar(
+            sa.select(sa.func.coalesce(sa.func.sum(Record.file_size), 0)).select_from(
+                Record
+            )
+        )
+        or 0
+    )
+
+    record_type_stmt = sa.select(
+        Record.record_type,
+        sa.func.count(Record.id),
+    ).group_by(Record.record_type)
+
+    record_type_counts = {
+        record_type.value: count
+        for record_type, count in db.session.execute(record_type_stmt)
+    }
+
+    return (
+        jsonify(
+            {
+                "total": total_records,
+                "by_type": record_type_counts,
+                "attachments": attachment_count,
+                "storage": {
+                    "used_bytes": total_file_size,
+                },
+            }
+        ),
+        200,
+    )
+
+
+@bp.route("/upload", methods=["POST"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.upload_records)
 def upload_records():
@@ -324,7 +375,7 @@ def upload_records():
     )
 
 
-@records_bp.route("/<uuid:record_id>/attach-file", methods=["PATCH"])
+@bp.route("/<uuid:record_id>/attach-file", methods=["PATCH"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.upload_records)
 def attach_file_to_record(record_id):
@@ -438,7 +489,7 @@ def attach_file_to_record(record_id):
     )
 
 
-@records_bp.route("/<uuid:record_id>", methods=["GET"])
+@bp.route("/<uuid:record_id>", methods=["GET"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.view_records)
 def view_record(record_id):

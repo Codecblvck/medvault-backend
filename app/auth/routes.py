@@ -200,99 +200,10 @@ def update_own_profile():
 
 
 # ADMIN USER MANAGEMENT ROUTES
-@bp.route("/users/<int:user_id>", methods=["PATCH"])
-@jwt_required()
-@core.role_required([core.RoleName.admin])
-def update_staff_user(user_id):
-    payload = request.get_json() or {}
-
-    if not payload:
-        return jsonify({"error": "No fields provided to update."}), 400
-
-    stmt = sa.select(User).filter_by(id=user_id)
-    user = db.session.scalar(stmt)
-
-    if not user:
-        return jsonify({"error": "User not found."}), 404
-
-    changed_fields = []
-    role_was_changed = False
-
-    if "role" in payload:
-        try:
-            role_enum = core.RoleName(payload["role"])
-        except ValueError:
-            return jsonify({"error": "Invalid role specified."}), 400
-
-        role_stmt = sa.select(core.Role).filter_by(role_name=role_enum)
-        role = db.session.scalar(role_stmt)
-
-        if not role:
-            return jsonify({"error": "Invalid role specified."}), 400
-
-        user.role_id = role.id
-        changed_fields.append("role")
-        role_was_changed = True
-
-    if "is_active" in payload:
-        user.is_active = payload["is_active"]
-        changed_fields.append("is_active")
-
-    if "is_locked" in payload:
-        user.is_locked = payload["is_locked"]
-
-        if payload["is_locked"] is False:
-            user.failed_login_count = 0
-
-        changed_fields.append("is_locked")
-
-    if "department" in payload:
-        user.department = payload["department"]
-        changed_fields.append("department")
-
-    if "license_number" in payload:
-        user.license_number = payload["license_number"]
-        changed_fields.append("license_number")
-
-    if not changed_fields:
-        return jsonify({"error": "No recognized fields provided to update."}), 400
-
-    db.session.commit()
-
-    # Role changes get their own specific audit action, since privilege
-    # escalation is the most sensitive thing this route can do. Every
-    # other field change is logged under the generic user_updated action.
-    action = (
-        core.AuditAction.role_changed
-        if role_was_changed
-        else core.AuditAction.user_updated
-    )
-
-    core.log_access(
-        user=current_user,
-        action=action.value,
-        status="Success",
-        request=request,
-        record_id=None,
-        details=f"Fields updated: {', '.join(changed_fields)}",
-    )
-
-    return (
-        jsonify(
-            {
-                "id": user.id,
-                "message": "User updated",
-                "fields_updated": changed_fields,
-            }
-        ),
-        200,
-    )
-
-
 @bp.route("/users", methods=["POST"])
 @jwt_required()
 @core.role_required([core.RoleName.admin])
-def create_staff_user():
+def create_staff():
     new_staff_payload = request.get_json()
 
     if not new_staff_payload:
@@ -389,7 +300,7 @@ def create_staff_user():
 @bp.route("/users", methods=["GET"])
 @jwt_required()
 @core.role_required([core.RoleName.admin])
-def list_staff_users():
+def read_staff():
     page = request.args.get("page", default=1, type=int)
     limit = request.args.get("limit", default=10, type=int)
 
@@ -429,6 +340,168 @@ def list_staff_users():
                 "limit": limit,
                 "has_more": has_more,
                 "users": [user.to_dict() for user in staff_users],
+            }
+        ),
+        200,
+    )
+
+
+@bp.route("/users/stats", methods=["GET"])
+@jwt_required()
+@core.role_required([core.RoleName.admin])
+def staff_stats():
+    patient_role_stmt = sa.select(core.Role.id).filter_by(
+        role_name=core.RoleName.patient
+    )
+    patient_role_id = db.session.scalar(patient_role_stmt)
+
+    if patient_role_id is None:
+        return jsonify({"error": "Patient role is not configured."}), 500
+
+    staff_filter = User.role_id != patient_role_id
+
+    total_staff = (
+        db.session.scalar(
+            sa.select(sa.func.count()).select_from(User).where(staff_filter)
+        )
+        or 0
+    )
+
+    active_staff = (
+        db.session.scalar(
+            sa.select(sa.func.count())
+            .select_from(User)
+            .where(
+                staff_filter,
+                User.is_active.is_(True),
+            )
+        )
+        or 0
+    )
+
+    locked_staff = (
+        db.session.scalar(
+            sa.select(sa.func.count())
+            .select_from(User)
+            .where(
+                staff_filter,
+                User.is_locked.is_(True),
+            )
+        )
+        or 0
+    )
+
+    role_counts_stmt = (
+        sa.select(
+            core.Role.role_name,
+            sa.func.count(User.id),
+        )
+        .join(User, User.role_id == core.Role.id)
+        .where(staff_filter)
+        .group_by(core.Role.role_name)
+    )
+
+    role_counts = {
+        role_name.value: count
+        for role_name, count in db.session.execute(role_counts_stmt)
+    }
+
+    return (
+        jsonify(
+            {
+                "total": total_staff,
+                "active": active_staff,
+                "locked": locked_staff,
+                "by_role": role_counts,
+            }
+        ),
+        200,
+    )
+
+
+@bp.route("/users/<int:user_id>", methods=["PATCH"])
+@jwt_required()
+@core.role_required([core.RoleName.admin])
+def update_staff(user_id):
+    payload = request.get_json() or {}
+
+    if not payload:
+        return jsonify({"error": "No fields provided to update."}), 400
+
+    stmt = sa.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+
+    if not user:
+        return jsonify({"error": "User not found."}), 404
+
+    changed_fields = []
+    role_was_changed = False
+
+    if "role" in payload:
+        try:
+            role_enum = core.RoleName(payload["role"])
+        except ValueError:
+            return jsonify({"error": "Invalid role specified."}), 400
+
+        role_stmt = sa.select(core.Role).filter_by(role_name=role_enum)
+        role = db.session.scalar(role_stmt)
+
+        if not role:
+            return jsonify({"error": "Invalid role specified."}), 400
+
+        user.role_id = role.id
+        changed_fields.append("role")
+        role_was_changed = True
+
+    if "is_active" in payload:
+        user.is_active = payload["is_active"]
+        changed_fields.append("is_active")
+
+    if "is_locked" in payload:
+        user.is_locked = payload["is_locked"]
+
+        if payload["is_locked"] is False:
+            user.failed_login_count = 0
+
+        changed_fields.append("is_locked")
+
+    if "department" in payload:
+        user.department = payload["department"]
+        changed_fields.append("department")
+
+    if "license_number" in payload:
+        user.license_number = payload["license_number"]
+        changed_fields.append("license_number")
+
+    if not changed_fields:
+        return jsonify({"error": "No recognized fields provided to update."}), 400
+
+    db.session.commit()
+
+    # Role changes get their own specific audit action, since privilege
+    # escalation is the most sensitive thing this route can do. Every
+    # other field change is logged under the generic user_updated action.
+    action = (
+        core.AuditAction.role_changed
+        if role_was_changed
+        else core.AuditAction.user_updated
+    )
+
+    core.log_access(
+        user=current_user,
+        action=action.value,
+        status="Success",
+        request=request,
+        record_id=None,
+        details=f"Fields updated: {', '.join(changed_fields)}",
+    )
+
+    return (
+        jsonify(
+            {
+                "id": user.id,
+                "message": "User updated",
+                "fields_updated": changed_fields,
             }
         ),
         200,

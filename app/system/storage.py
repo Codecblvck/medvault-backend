@@ -96,3 +96,19 @@ def delete_file(object_key):
         raise RuntimeError(f"File deletion failed: {e}")
 
     return True
+
+
+def get_storage_provider():
+    """
+    Identify the configured S3-compatible storage provider.
+    """
+
+    endpoint = (Config.S3_ENDPOINT or "").lower()
+
+    if "r2.cloudflarestorage.com" in endpoint:
+        return "cloudflare_r2"
+
+    if "minio" in endpoint or "localhost" in endpoint or "127.0.0.1" in endpoint:
+        return "minio"
+
+    return "s3_compatible"
