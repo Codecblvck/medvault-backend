@@ -27,10 +27,11 @@ class PermissionAction(enum.Enum):
     manage_users = "manage_users"
     upload_records = "upload_records"
     view_records = "view_records"
+    view_record_detail = "view_record_detail"
     view_logs = "view_logs"
     edit_own_records = "edit_own_records"
     link_patient_identity = "link_patient_identity"
-
+    
 class Role(db.Model):
     __tablename__ = "roles"
 
@@ -116,19 +117,31 @@ def permission_required(action: PermissionAction):
 
 
 ROLE_PERMISSIONS = {
-    RoleName.admin: [PermissionAction.manage_users],
+    RoleName.admin: [PermissionAction.manage_users, PermissionAction.view_records],
     RoleName.doctor: [
         PermissionAction.upload_records,
         PermissionAction.view_records,
+        PermissionAction.view_record_detail,
         PermissionAction.edit_own_records,
     ],
-    RoleName.nurse: [PermissionAction.upload_records, PermissionAction.view_records],
+    RoleName.nurse: [
+        PermissionAction.upload_records,
+        PermissionAction.view_records,
+        PermissionAction.view_record_detail,
+    ],
     RoleName.lab_technician: [
         PermissionAction.upload_records,
         PermissionAction.view_records,
+        PermissionAction.view_record_detail,
     ],
-    RoleName.records_officer: [PermissionAction.view_records],
-    RoleName.patient: [PermissionAction.view_records],
+    RoleName.records_officer: [
+        PermissionAction.view_records,
+        PermissionAction.view_record_detail,
+    ],
+    RoleName.patient: [
+        PermissionAction.view_records,
+        PermissionAction.view_record_detail,
+    ],
     RoleName.auditor: [PermissionAction.view_logs],
 }
 

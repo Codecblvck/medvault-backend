@@ -8,6 +8,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required, current_user
 
 from app.extensions import db, bcrypt
 from app import system as core
+from app.patients import Patient
 from app.records import Record, RecordType
 
 bp = Blueprint("record", __name__)
@@ -133,38 +134,70 @@ def read_records():
 
 @bp.route("/stats", methods=["GET"])
 @jwt_required()
-@core.permission_required(core.PermissionAction.view_records)
+@core.role_required(
+    [
+        core.RoleName.admin,
+        core.RoleName.records_officer,
+        core.RoleName.doctor,
+        core.RoleName.lab_technician,
+        core.RoleName.patient,
+    ]
+)
 def record_stats():
-    total_records = (
-        db.session.scalar(sa.select(sa.func.count()).select_from(Record)) or 0
+    role = current_user.role.role_name
+
+    # Base statements, scope narrowed per role below before execution
+    total_stmt = sa.select(sa.func.count()).select_from(Record)
+    attachment_stmt = (
+        sa.select(sa.func.count())
+        .select_from(Record)
+        .where(Record.file_path.is_not(None))
+    )
+    size_stmt = sa.select(
+        sa.func.coalesce(sa.func.sum(Record.file_size), 0)
+    ).select_from(Record)
+    type_stmt = sa.select(Record.record_type, sa.func.count(Record.id)).group_by(
+        Record.record_type
     )
 
-    attachment_count = (
-        db.session.scalar(
-            sa.select(sa.func.count())
-            .select_from(Record)
-            .where(Record.file_path.is_not(None))
+    if role in (core.RoleName.admin, core.RoleName.records_officer):
+        # Hospital-wide, unscoped, matches their explicit permission
+        pass
+
+    elif role == core.RoleName.patient:
+        if current_user.patient_id is None:
+            return jsonify({"error": "No linked patient record found."}), 403
+        scope = Record.patient_id == current_user.patient_id
+        total_stmt = total_stmt.where(scope)
+        attachment_stmt = attachment_stmt.where(scope)
+        size_stmt = size_stmt.where(scope)
+        type_stmt = type_stmt.where(scope)
+
+    elif role == core.RoleName.doctor:
+        # Scoped to records belonging to this doctor's assigned patients,
+        # not records they personally uploaded, per FR-2.2 (assigned patients).
+        scope = Record.patient_id.in_(
+            sa.select(Patient.id).where(Patient.assigned_doctor_id == current_user.id)
         )
-        or 0
-    )
+        total_stmt = total_stmt.where(scope)
+        attachment_stmt = attachment_stmt.where(scope)
+        size_stmt = size_stmt.where(scope)
+        type_stmt = type_stmt.where(scope)
 
-    total_file_size = (
-        db.session.scalar(
-            sa.select(sa.func.coalesce(sa.func.sum(Record.file_size), 0)).select_from(
-                Record
-            )
-        )
-        or 0
-    )
+    elif role == core.RoleName.lab_technician:
+        # Scoped to records this lab technician personally uploaded,
+        # the only implementable reading of "linked records" today.
+        scope = Record.uploaded_by == current_user.id
+        total_stmt = total_stmt.where(scope)
+        attachment_stmt = attachment_stmt.where(scope)
+        size_stmt = size_stmt.where(scope)
+        type_stmt = type_stmt.where(scope)
 
-    record_type_stmt = sa.select(
-        Record.record_type,
-        sa.func.count(Record.id),
-    ).group_by(Record.record_type)
-
+    total_records = db.session.scalar(total_stmt) or 0
+    attachment_count = db.session.scalar(attachment_stmt) or 0
+    total_file_size = db.session.scalar(size_stmt) or 0
     record_type_counts = {
-        record_type.value: count
-        for record_type, count in db.session.execute(record_type_stmt)
+        record_type.value: count for record_type, count in db.session.execute(type_stmt)
     }
 
     return (
@@ -179,6 +212,94 @@ def record_stats():
             }
         ),
         200,
+    )
+
+
+@bp.route("/<uuid:record_id>", methods=["GET"])
+@jwt_required()
+@core.permission_required(core.PermissionAction.view_record_detail)
+def read_record_detail(record_id):
+    record = Record.query.get(record_id)
+    if not record:
+        core.log_access(
+            action=core.AuditAction.record_viewed.value,
+            status="Failed",
+            request=request,
+            user=current_user,
+            details=f"Requested record {record_id} does not exist.",
+        )
+        return jsonify({"error": "Patient record not found."}), 404
+
+    if not core.can_view_record(current_user, record):
+        core.log_access(
+            action=core.AuditAction.record_viewed.value,
+            status="Blocked",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details="Patient attempted to view a record outside their own linked patient identity.",
+        )
+        return jsonify({"error": "You are not permitted to view this record."}), 403
+
+    try:
+        decrypted_data = core.decrypt_data(
+            record.encrypted_data, record.encrypted_aes_key
+        )
+    except Exception:
+        core.log_access(
+            action=core.AuditAction.record_viewed.value,
+            status="Error",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details="Decryption failed, possible key mismatch or data corruption.",
+        )
+        return jsonify({"error": "Data integrity verification failed."}), 500
+
+    json_bytes = json.dumps(decrypted_data).encode("utf-8")
+    computed_checksum = hashlib.sha256(json_bytes).hexdigest()
+
+    if computed_checksum != record.checksum:
+        core.log_access(
+            action=core.AuditAction.record_viewed.value,
+            status="Error",
+            request=request,
+            user=current_user,
+            record_id=record.id,
+            details="Checksum mismatch on retrieval, possible data corruption or tampering.",
+        )
+        return jsonify({"error": "Data integrity verification failed."}), 500
+
+    file_url = None
+    if record.file_path:
+        try:
+            file_url = core.get_file_url(record.file_path)
+        except RuntimeError:
+            file_url = None
+
+    core.log_access(
+        action=core.AuditAction.record_viewed.value,
+        status="Success",
+        request=request,
+        user=current_user,
+        record_id=record.id,
+        details="Record decrypted and viewed successfully.",
+    )
+
+    return jsonify(
+        {
+            "id": str(record.id),
+            "patient_id": str(record.patient_id),
+            "patient_name": record.patient.full_name,
+            "record_type": record.record_type.value,
+            "uploaded_by_name": record.uploader.full_name,
+            "department": record.department,
+            "data": decrypted_data,
+            "checksum": record.checksum,
+            "file_path": record.file_path,
+            "file_url": file_url,
+            "created_at": str(record.created_at),
+        }
     )
 
 
@@ -486,92 +607,4 @@ def attach_file_to_record(record_id):
             }
         ),
         200,
-    )
-
-
-@bp.route("/<uuid:record_id>", methods=["GET"])
-@jwt_required()
-@core.permission_required(core.PermissionAction.view_records)
-def view_record(record_id):
-    record = Record.query.get(record_id)
-    if not record:
-        core.log_access(
-            action=core.AuditAction.record_viewed.value,
-            status="Failed",
-            request=request,
-            user=current_user,
-            details=f"Requested record {record_id} does not exist.",
-        )
-        return jsonify({"error": "Patient record not found."}), 404
-
-    if not core.can_view_record(current_user, record):
-        core.log_access(
-            action=core.AuditAction.record_viewed.value,
-            status="Blocked",
-            request=request,
-            user=current_user,
-            record_id=record.id,
-            details="Patient attempted to view a record outside their own linked patient identity.",
-        )
-        return jsonify({"error": "You are not permitted to view this record."}), 403
-
-    try:
-        decrypted_data = core.decrypt_data(
-            record.encrypted_data, record.encrypted_aes_key
-        )
-    except Exception:
-        core.log_access(
-            action=core.AuditAction.record_viewed.value,
-            status="Error",
-            request=request,
-            user=current_user,
-            record_id=record.id,
-            details="Decryption failed, possible key mismatch or data corruption.",
-        )
-        return jsonify({"error": "Data integrity verification failed."}), 500
-
-    json_bytes = json.dumps(decrypted_data).encode("utf-8")
-    computed_checksum = hashlib.sha256(json_bytes).hexdigest()
-
-    if computed_checksum != record.checksum:
-        core.log_access(
-            action=core.AuditAction.record_viewed.value,
-            status="Error",
-            request=request,
-            user=current_user,
-            record_id=record.id,
-            details="Checksum mismatch on retrieval, possible data corruption or tampering.",
-        )
-        return jsonify({"error": "Data integrity verification failed."}), 500
-
-    file_url = None
-    if record.file_path:
-        try:
-            file_url = core.get_file_url(record.file_path)
-        except RuntimeError:
-            file_url = None
-
-    core.log_access(
-        action=core.AuditAction.record_viewed.value,
-        status="Success",
-        request=request,
-        user=current_user,
-        record_id=record.id,
-        details="Record decrypted and viewed successfully.",
-    )
-
-    return jsonify(
-        {
-            "id": str(record.id),
-            "patient_id": str(record.patient_id),
-            "patient_name": record.patient.full_name,
-            "record_type": record.record_type.value,
-            "uploaded_by_name": record.uploader.full_name,
-            "department": record.department,
-            "data": decrypted_data,
-            "checksum": record.checksum,
-            "file_path": record.file_path,
-            "file_url": file_url,
-            "created_at": str(record.created_at),
-        }
     )

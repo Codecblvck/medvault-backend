@@ -10,7 +10,6 @@ from app.extensions import db
 from app.records import Record
 
 
-
 bp = Blueprint("audit", __name__)
 
 
@@ -91,6 +90,69 @@ def view_logs():
                     }
                     for l in logs
                 ],
+            }
+        ),
+        200,
+    )
+
+
+@bp.route("/logs/stats", methods=["GET"])
+@jwt_required()
+@core.role_required([core.RoleName.admin, core.RoleName.auditor])
+def audit_log_stats():
+    total_logs = (
+        db.session.scalar(sa.select(sa.func.count()).select_from(AuditLog)) or 0
+    )
+
+    failed_events = (
+        db.session.scalar(
+            sa.select(sa.func.count())
+            .select_from(AuditLog)
+            .where(AuditLog.status == "Failed")
+        )
+        or 0
+    )
+
+    successful_events = (
+        db.session.scalar(
+            sa.select(sa.func.count())
+            .select_from(AuditLog)
+            .where(AuditLog.status == "Success")
+        )
+        or 0
+    )
+
+    blocked_events = (
+        db.session.scalar(
+            sa.select(sa.func.count())
+            .select_from(AuditLog)
+            .where(AuditLog.status == "Blocked")
+        )
+        or 0
+    )
+
+    recent_activity_stmt = (
+        sa.select(
+            AuditLog.action,
+            sa.func.count(AuditLog.id),
+        )
+        .group_by(AuditLog.action)
+        .order_by(sa.func.count(AuditLog.id).desc())
+    )
+
+    recent_activity = {
+        action: count for action, count in db.session.execute(recent_activity_stmt)
+    }
+
+    return (
+        jsonify(
+            {
+                "total": total_logs,
+                "successful": successful_events,
+                "failed": failed_events,
+                "blocked": blocked_events,
+                "recent_activity": recent_activity,
+                
             }
         ),
         200,

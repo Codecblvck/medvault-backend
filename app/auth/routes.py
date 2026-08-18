@@ -125,6 +125,11 @@ def login():
                 "last_name": user.last_name,
                 "email": user.email,
                 "role": role_name,
+                "permissions": (
+                    [p.value for p in core.ROLE_PERMISSIONS.get(role.role_name, [])]
+                    if role is not None
+                    else []
+                ),
             },
         }
     )
@@ -157,6 +162,10 @@ def get_own_profile():
                 "last_name": current_user.last_name,
                 "email": current_user.email,
                 "role": current_user.role.role_name.value,
+                "permissions": [
+                    p.value
+                    for p in core.ROLE_PERMISSIONS.get(current_user.role.role_name, [])
+                ],
                 "phone": current_user.phone,
                 "department": current_user.department,
                 "license_number": current_user.license_number,
