@@ -5,6 +5,7 @@ from flask import jsonify
 from sqlalchemy import ForeignKey, String, func, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db, jwt
+from app import system as core
 
 if TYPE_CHECKING:
     from app.system.access import Role
@@ -51,6 +52,9 @@ class User(db.Model):
                 if hasattr(self.role, "role_name")
                 else str(self.role)
             ),
+            "permissions": [
+                p.value for p in core.ROLE_PERMISSIONS.get(self.role.role_name, [])
+            ] if hasattr(self.role, "role_name") else [],
             "department": self.department if self.department else None,
             "is_active": bool(self.is_active),
             "is_locked": bool(self.is_locked),
@@ -59,8 +63,7 @@ class User(db.Model):
                 if isinstance(self.created_at, datetime)
                 else None
             ),
-        }
-
+    }
 
 @jwt.user_lookup_loader
 def user_lookup_callback(_jwt_header, jwt_data):
