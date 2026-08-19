@@ -14,20 +14,12 @@ from app.patients.schemas import (
     PatientListItemSchema,
 )
 
-
 bp = Blueprint("patient", __name__)
 
 
 @bp.route("/", methods=["POST"])
 @jwt_required()
-@core.role_required(
-    [
-        core.RoleName.admin,
-        core.RoleName.doctor,
-        core.RoleName.nurse,
-        core.RoleName.records_officer,
-    ]
-)
+@core.permission_required(core.PermissionAction.register_patient)
 def create_patient():
     payload = request.get_json()
     if not payload:
@@ -89,7 +81,7 @@ def create_patient():
         is_valid, email_result = core.is_valid_email(portal_email)
         if not is_valid:
             core.log_access(
-                action=core.AuditAction.user_created.value,
+                action=core.AuditAction.patient_portal_linked.value,
                 status="Failed",
                 request=request,
                 user=current_user,
@@ -176,6 +168,16 @@ def create_patient():
         details=f"Patient {patient.hospital_id} created",
     )
 
+    if account_message:
+        core.log_access(
+            user=current_user,
+            action=core.AuditAction.patient_portal_linked,
+            status="Success",
+            request=request,
+            record_id=None,
+            details=f"Portal account linked at creation time for patient {patient.hospital_id}",
+        )
+        
     if possible_match:
         core.log_access(
             user=current_user,
@@ -209,19 +211,12 @@ def create_patient():
 
 @bp.route("/<uuid:patient_id>/portal-account", methods=["POST"])
 @jwt_required()
-@core.role_required(
-    [
-        core.RoleName.admin,
-        core.RoleName.doctor,
-        core.RoleName.nurse,
-        core.RoleName.records_officer,
-    ]
-)
+@core.permission_required(core.PermissionAction.link_patient_identity)
 def create_portal_account(patient_id):
     payload = request.get_json()
     if not payload or "portal_email" not in payload or "portal_password" not in payload:
         core.log_access(
-            action=core.AuditAction.user_created.value,
+            action=core.AuditAction.patient_portal_linked.value,
             status="Failed",
             request=request,
             user=current_user,
@@ -239,7 +234,7 @@ def create_portal_account(patient_id):
     patient = Patient.query.get(patient_id)
     if not patient:
         core.log_access(
-            action=core.AuditAction.user_created.value,
+            action=core.AuditAction.patient_portal_linked.value,
             status="Failed",
             request=request,
             user=current_user,
@@ -250,7 +245,7 @@ def create_portal_account(patient_id):
     existing_link = User.query.filter_by(patient_id=patient_id).first()
     if existing_link:
         core.log_access(
-            action=core.AuditAction.user_created.value,
+            action=core.AuditAction.patient_portal_linked.value,
             status="Failed",
             request=request,
             user=current_user,
@@ -267,7 +262,7 @@ def create_portal_account(patient_id):
     is_valid, email_result = core.is_valid_email(portal_email)
     if not is_valid:
         core.log_access(
-            action=core.AuditAction.user_created.value,
+            action=core.AuditAction.patient_portal_linked.value,
             status="Failed",
             request=request,
             user=current_user,
@@ -280,7 +275,7 @@ def create_portal_account(patient_id):
     email_exists = User.query.filter_by(email=portal_email).first()
     if email_exists:
         core.log_access(
-            action=core.AuditAction.user_created.value,
+            action=core.AuditAction.patient_portal_linked.value,
             status="Failed",
             request=request,
             user=current_user,
@@ -295,7 +290,7 @@ def create_portal_account(patient_id):
     patient_role_id = db.session.scalar(stmt)
     if patient_role_id is None:
         core.log_access(
-            action=core.AuditAction.user_created.value,
+            action=core.AuditAction.patient_portal_linked.value,
             status="Error",
             request=request,
             user=current_user,
@@ -320,7 +315,7 @@ def create_portal_account(patient_id):
     except IntegrityError:
         db.session.rollback()
         core.log_access(
-            action=core.AuditAction.user_created.value,
+            action=core.AuditAction.patient_portal_linked.value,
             status="Failed",
             request=request,
             user=current_user,
@@ -337,7 +332,7 @@ def create_portal_account(patient_id):
 
     core.log_access(
         user=current_user,
-        action=core.AuditAction.user_created.value,
+        action=core.AuditAction.patient_portal_linked.value,
         status="Success",
         request=request,
         record_id=None,
@@ -384,7 +379,27 @@ def list_patients():
                 Patient.national_id.ilike(like),
             )
         )
-
+    unlinked = request.args.get("unlinked", "").lower() == "true"
+    if unlinked:
+        if current_user.role.role_name not in (
+            core.RoleName.admin,
+            core.RoleName.records_officer,
+        ):
+            core.log_access(
+                action=core.AuditAction.permission_denied,
+                status="Failed",
+                request=request,
+                user=current_user,
+                details="Role rejected for unlinked-patients filter on list_patients.",
+            )
+            return (
+                jsonify({"error": "Access denied: insufficient role permissions."}),
+                403,
+            )
+        stmt = stmt.where(
+            ~sa.select(User.id).where(User.patient_id == Patient.id).exists()
+        )
+        
     patients = (
         db.session.execute(stmt.order_by(Patient.created_at.desc())).scalars().all()
     )
@@ -397,12 +412,15 @@ def list_patients():
     )
     patient_list_schema = PatientListItemSchema(many=True)
 
-    return jsonify(
-        {
-            "total": len(patients),
-            "patients": patient_list_schema.dump(patients),
-        }
-    ), 200
+    return (
+        jsonify(
+            {
+                "total": len(patients),
+                "patients": patient_list_schema.dump(patients),
+            }
+        ),
+        200,
+    )
 
 
 @bp.route("/<uuid:patient_id>", methods=["GET"])
@@ -470,9 +488,12 @@ def update_patient(patient_id):
                 user=current_user,
                 details=f"Invalid status value submitted: {payload['status']}",
             )
-            return jsonify(
-                {"error": f"Invalid status value submitted: {payload['status']}"}
-            ), 400
+            return (
+                jsonify(
+                    {"error": f"Invalid status value submitted: {payload['status']}"}
+                ),
+                400,
+            )
 
     patient_update_schema = PatientUpdateSchema()
     errors = patient_update_schema.validate(payload, partial=True)

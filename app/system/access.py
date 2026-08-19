@@ -31,6 +31,7 @@ class PermissionAction(enum.Enum):
     view_logs = "view_logs"
     edit_own_records = "edit_own_records"
     link_patient_identity = "link_patient_identity"
+    register_patient = "register_patient"
 
 class Role(db.Model):
     __tablename__ = "roles"
@@ -131,6 +132,7 @@ ROLE_PERMISSIONS = {
         PermissionAction.upload_records,
         PermissionAction.view_records,
         PermissionAction.view_record_detail,
+        PermissionAction.register_patient,
     ],
     RoleName.lab_technician: [
         PermissionAction.upload_records,
@@ -140,6 +142,8 @@ ROLE_PERMISSIONS = {
     RoleName.records_officer: [
         PermissionAction.view_records,
         PermissionAction.view_record_detail,
+        PermissionAction.register_patient,
+        PermissionAction.link_patient_identity,
     ],
     RoleName.patient: [
         PermissionAction.view_records,

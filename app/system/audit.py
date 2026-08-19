@@ -30,6 +30,7 @@ class AuditAction(enum.Enum):
     role_changed = "Role Changed"
 
     # Patients
+    patient_portal_linked = "Patient Portal Linked"
     patient_created = "Patient Created"
     patient_viewed = "Patient Viewed"
     patient_updated = "Patient Updated"
