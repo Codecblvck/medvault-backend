@@ -9,7 +9,6 @@ from app.audit import AuditLog
 from app.extensions import db
 from app.records import Record
 
-
 bp = Blueprint("audit", __name__)
 
 
@@ -131,6 +130,15 @@ def audit_log_stats():
         or 0
     )
 
+    error_events = (
+        db.session.scalar(
+            sa.select(sa.func.count())
+            .select_from(AuditLog)
+            .where(AuditLog.status == "Error")
+        )
+        or 0
+    )
+
     recent_activity_stmt = (
         sa.select(
             AuditLog.action,
@@ -151,8 +159,8 @@ def audit_log_stats():
                 "successful": successful_events,
                 "failed": failed_events,
                 "blocked": blocked_events,
+                "error_events": error_events,
                 "recent_activity": recent_activity,
-                
             }
         ),
         200,

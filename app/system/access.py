@@ -31,7 +31,7 @@ class PermissionAction(enum.Enum):
     view_logs = "view_logs"
     edit_own_records = "edit_own_records"
     link_patient_identity = "link_patient_identity"
-    
+
 class Role(db.Model):
     __tablename__ = "roles"
 
@@ -42,7 +42,6 @@ class Role(db.Model):
         nullable=False,
     )
     users: Mapped[list["User"]] = relationship("User", back_populates="role")
-
 
 
 def role_required(allowed_roles):
@@ -117,7 +116,11 @@ def permission_required(action: PermissionAction):
 
 
 ROLE_PERMISSIONS = {
-    RoleName.admin: [PermissionAction.manage_users, PermissionAction.view_records],
+    RoleName.admin: [
+        PermissionAction.manage_users,
+        PermissionAction.view_records,
+        PermissionAction.view_logs,
+    ],
     RoleName.doctor: [
         PermissionAction.upload_records,
         PermissionAction.view_records,
