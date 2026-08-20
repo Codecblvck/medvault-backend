@@ -62,10 +62,11 @@ class PatientListItemSchema(ma.SQLAlchemyAutoSchema):
             "status",
             "has_portal_account",
             "portal_email",
+            "assigned_doctor_name",
         )
 
-    full_name = fields.Method("get_full_name")
     has_portal_account = fields.Method("get_has_portal_account")
+    portal_email = fields.Method("get_portal_email")
     assigned_doctor_name = fields.Method("get_assigned_doctor_name")
 
     def get_has_portal_account(self, obj):
@@ -73,7 +74,7 @@ class PatientListItemSchema(ma.SQLAlchemyAutoSchema):
 
     def get_portal_email(self, obj):
         return obj.portal_user.email if obj.portal_user else None
-    
+
     def get_assigned_doctor_name(self, obj):
         if not obj.assigned_doctor:
             return None
