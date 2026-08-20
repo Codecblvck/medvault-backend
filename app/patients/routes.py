@@ -290,7 +290,7 @@ def list_patients():
                 sa.func.concat(Patient.first_name, " ", Patient.last_name).ilike(like),
             )
         )
-        
+
     unlinked = request.args.get("unlinked", "").lower() == "true"
     if unlinked:
         if current_user.role.role_name not in (
@@ -312,9 +312,17 @@ def list_patients():
             ~sa.select(User.id).where(User.patient_id == Patient.id).exists()
         )
 
-    patients = (
-        db.session.execute(stmt.order_by(Patient.created_at.desc())).scalars().all()
+    total = db.session.scalar(
+            sa.select(sa.func.count()).select_from(stmt.subquery())
+        )
+
+    page = max(request.args.get("page", 1, type=int), 1)
+    limit = min(max(request.args.get("limit", 20, type=int), 1), 100)
+
+    stmt = (
+        stmt.order_by(Patient.created_at.desc()).limit(limit).offset((page - 1) * limit)
     )
+    patients = db.session.execute(stmt).scalars().all()
 
     core.log_access(
         user=current_user,
@@ -327,13 +335,15 @@ def list_patients():
     return (
         jsonify(
             {
-                "total": len(patients),
+                "total": total,
+                "page": page,
+                "limit": limit,
+                "pages": (total + limit - 1) // limit if total else 1,
                 "patients": patient_list_schema.dump(patients),
             }
         ),
         200,
     )
-
 
 @bp.route("/<uuid:patient_id>", methods=["GET"])
 @jwt_required()
