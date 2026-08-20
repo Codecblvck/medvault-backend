@@ -134,15 +134,7 @@ def read_records():
 
 @bp.route("/stats", methods=["GET"])
 @jwt_required()
-@core.role_required(
-    [
-        core.RoleName.admin,
-        core.RoleName.records_officer,
-        core.RoleName.doctor,
-        core.RoleName.lab_technician,
-        core.RoleName.patient,
-    ]
-)
+@core.permission_required(core.PermissionAction.view_records)
 def record_stats():
     role = current_user.role.role_name
 
@@ -164,6 +156,13 @@ def record_stats():
         # Hospital-wide, unscoped, matches their explicit permission
         pass
 
+    elif role == core.RoleName.nurse:
+        scope = Record.uploaded_by == current_user.id
+        total_stmt = total_stmt.where(scope)
+        attachment_stmt = attachment_stmt.where(scope)
+        size_stmt = size_stmt.where(scope)
+        type_stmt = type_stmt.where(scope)
+    
     elif role == core.RoleName.patient:
         if current_user.patient_id is None:
             return jsonify({"error": "No linked patient record found."}), 403

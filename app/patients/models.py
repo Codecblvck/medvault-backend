@@ -36,6 +36,12 @@ class Patient(db.Model):
     assigned_doctor_id: Mapped[int | None] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
+    portal_user = relationship(
+        "User",
+        primaryjoin="Patient.id == foreign(User.patient_id)",
+        uselist=False,
+        viewonly=True,
+    )
     status: Mapped[PatientStatus] = mapped_column(
         Enum(
             PatientStatus,

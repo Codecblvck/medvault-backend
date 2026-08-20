@@ -32,6 +32,8 @@ class PermissionAction(enum.Enum):
     edit_own_records = "edit_own_records"
     link_patient_identity = "link_patient_identity"
     register_patient = "register_patient"
+    view_patients = "view_patients"
+    edit_patients = "edit_patients"
 
 class Role(db.Model):
     __tablename__ = "roles"
@@ -114,43 +116,52 @@ def permission_required(action: PermissionAction):
 
 
 # ===== PERMISSION ALLOWLIST =====
-
-
 ROLE_PERMISSIONS = {
     RoleName.admin: [
         PermissionAction.manage_users,
-        PermissionAction.view_records,
+        # PermissionAction.view_records,
         PermissionAction.view_logs,
         PermissionAction.link_patient_identity,
+        PermissionAction.view_patients,
+        PermissionAction.edit_patients,
     ],
     RoleName.doctor: [
         PermissionAction.upload_records,
         PermissionAction.view_records,
         PermissionAction.view_record_detail,
         PermissionAction.edit_own_records,
+        PermissionAction.view_patients,
+        PermissionAction.edit_patients,
     ],
     RoleName.nurse: [
         PermissionAction.upload_records,
         PermissionAction.view_records,
         PermissionAction.view_record_detail,
         PermissionAction.register_patient,
+        PermissionAction.view_patients,
+        PermissionAction.edit_patients,
     ],
     RoleName.lab_technician: [
         PermissionAction.upload_records,
         PermissionAction.view_records,
         PermissionAction.view_record_detail,
+        PermissionAction.view_patients,
     ],
     RoleName.records_officer: [
         PermissionAction.view_records,
         PermissionAction.view_record_detail,
         PermissionAction.register_patient,
         PermissionAction.link_patient_identity,
+        PermissionAction.view_patients,
+        PermissionAction.edit_patients,
     ],
     RoleName.patient: [
         PermissionAction.view_records,
         PermissionAction.view_record_detail,
     ],
-    RoleName.auditor: [PermissionAction.view_logs],
+    RoleName.auditor: [
+        PermissionAction.view_logs,
+    ],
 }
 
 UPLOAD_TYPE_PERMISSIONS = {

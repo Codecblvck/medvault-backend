@@ -269,15 +269,7 @@ def grant_portal_access(patient_id):
 
 @bp.route("/", methods=["GET"])
 @jwt_required()
-@core.role_required(
-    [
-        core.RoleName.admin,
-        core.RoleName.doctor,
-        core.RoleName.nurse,
-        core.RoleName.records_officer,
-        core.RoleName.lab_technician,
-    ]
-)
+@core.permission_required(core.PermissionAction.view_patients)
 def list_patients():
     search = request.args.get("search", "").strip()
     hospital_id = request.args.get("hospital_id")
@@ -293,8 +285,12 @@ def list_patients():
                 Patient.first_name.ilike(like),
                 Patient.last_name.ilike(like),
                 Patient.national_id.ilike(like),
+                Patient.phone.ilike(like),
+                Patient.hospital_id.ilike(like),
+                sa.func.concat(Patient.first_name, " ", Patient.last_name).ilike(like),
             )
         )
+        
     unlinked = request.args.get("unlinked", "").lower() == "true"
     if unlinked:
         if current_user.role.role_name not in (
@@ -315,7 +311,7 @@ def list_patients():
         stmt = stmt.where(
             ~sa.select(User.id).where(User.patient_id == Patient.id).exists()
         )
-        
+
     patients = (
         db.session.execute(stmt.order_by(Patient.created_at.desc())).scalars().all()
     )
@@ -341,15 +337,7 @@ def list_patients():
 
 @bp.route("/<uuid:patient_id>", methods=["GET"])
 @jwt_required()
-@core.role_required(
-    [
-        core.RoleName.admin,
-        core.RoleName.doctor,
-        core.RoleName.nurse,
-        core.RoleName.records_officer,
-        core.RoleName.lab_technician,
-    ]
-)
+@core.permission_required(core.PermissionAction.view_patients)
 def get_patient(patient_id):
     patient = db.session.get(Patient, patient_id)
 
@@ -376,14 +364,7 @@ def get_patient(patient_id):
 
 @bp.route("/<uuid:patient_id>", methods=["PATCH"])
 @jwt_required()
-@core.role_required(
-    [
-        core.RoleName.admin,
-        core.RoleName.doctor,
-        core.RoleName.nurse,
-        core.RoleName.records_officer,
-    ]
-)
+@core.permission_required(core.PermissionAction.edit_patients)
 def update_patient(patient_id):
     patient = db.session.get(Patient, patient_id)
     if not patient:
