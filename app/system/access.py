@@ -119,7 +119,7 @@ def permission_required(action: PermissionAction):
 ROLE_PERMISSIONS = {
     RoleName.admin: [
         PermissionAction.manage_users,
-        # PermissionAction.view_records,
+        PermissionAction.view_records,
         PermissionAction.view_logs,
         PermissionAction.link_patient_identity,
         PermissionAction.view_patients,
