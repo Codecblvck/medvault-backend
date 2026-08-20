@@ -6,7 +6,7 @@ import sqlalchemy as sa
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required, current_user
 
-from app.extensions import db, bcrypt
+from app.extensions import db
 from app import system as core
 from app.patients import Patient
 from app.records import Record, RecordType

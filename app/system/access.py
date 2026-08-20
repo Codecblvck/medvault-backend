@@ -121,6 +121,7 @@ ROLE_PERMISSIONS = {
         PermissionAction.manage_users,
         PermissionAction.view_records,
         PermissionAction.view_logs,
+        PermissionAction.link_patient_identity,
     ],
     RoleName.doctor: [
         PermissionAction.upload_records,

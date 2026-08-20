@@ -20,7 +20,7 @@ bp = Blueprint("patient", __name__)
 @bp.route("/", methods=["POST"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.register_patient)
-def create_patient():
+def register_patient():
     payload = request.get_json()
     if not payload:
         return jsonify({"error": "Missing payload: patient details are required."}), 400
@@ -74,23 +74,6 @@ def create_patient():
             first_name=first_name, last_name=last_name, age=age, phone=phone
         ).first()
 
-    portal_email = payload.get("portal_email")
-    portal_password = payload.get("portal_password")
-
-    if portal_email:
-        is_valid, email_result = core.is_valid_email(portal_email)
-        if not is_valid:
-            core.log_access(
-                action=core.AuditAction.patient_portal_linked.value,
-                status="Failed",
-                request=request,
-                user=current_user,
-                details=f"Rejected portal account creation, invalid portal_email format: {portal_email}",
-            )
-            return jsonify({"error": "Invalid email format provided."}), 400
-
-        portal_email = email_result  # normalized form, e.g. lowercased/canonicalized
-
     patient = Patient()
     patient.first_name = first_name
     patient.last_name = last_name
@@ -111,54 +94,6 @@ def create_patient():
     ).scalar()
     patient.hospital_id = f"MR-{next_val:06d}"
 
-    account_message = None
-
-    if portal_email and portal_password:
-        email_exists = User.query.filter_by(email=portal_email).first()
-        if email_exists:
-            db.session.rollback()
-            core.log_access(
-                action=core.AuditAction.patient_created,
-                status="Failed",
-                request=request,
-                user=current_user,
-                details=f"Rejected patient creation, portal_email already registered: {portal_email}",
-            )
-            return (
-                jsonify(
-                    {"error": "This email is already registered to another account."}
-                ),
-                400,
-            )
-
-        stmt = sa.select(core.Role.id).filter_by(role_name=core.RoleName.patient)
-        patient_role_id = db.session.scalar(stmt)
-        if patient_role_id is None:
-            db.session.rollback()
-            core.log_access(
-                action=core.AuditAction.patient_created,
-                status="Error",
-                request=request,
-                user=current_user,
-                details="Patient role is not configured in the roles table.",
-            )
-            return jsonify({"error": "Patient role is not configured."}), 500
-
-        portal_user = User()
-        portal_user.first_name = patient.first_name
-        portal_user.last_name = patient.last_name
-        portal_user.email = portal_email
-        portal_user.password_hash = bcrypt.generate_password_hash(
-            portal_password
-        ).decode("utf-8")
-        portal_user.role_id = patient_role_id
-        portal_user.patient_id = patient.id
-
-        db.session.add(portal_user)
-        account_message = "Portal account created and linked"
-
-    db.session.commit()
-
     core.log_access(
         user=current_user,
         action=core.AuditAction.patient_created,
@@ -168,16 +103,6 @@ def create_patient():
         details=f"Patient {patient.hospital_id} created",
     )
 
-    if account_message:
-        core.log_access(
-            user=current_user,
-            action=core.AuditAction.patient_portal_linked,
-            status="Success",
-            request=request,
-            record_id=None,
-            details=f"Portal account linked at creation time for patient {patient.hospital_id}",
-        )
-        
     if possible_match:
         core.log_access(
             user=current_user,
@@ -197,8 +122,6 @@ def create_patient():
         "hospital_id": patient.hospital_id,
         "message": "Patient record created",
     }
-    if account_message:
-        response["portal_account"] = account_message
     if possible_match:
         response["duplicate_warning"] = (
             f"A similar existing patient record was found, hospital_id "
@@ -209,10 +132,10 @@ def create_patient():
     return jsonify(response), 201
 
 
-@bp.route("/<uuid:patient_id>/portal-account", methods=["POST"])
+@bp.route("/<uuid:patient_id>/portal-access", methods=["POST"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.link_patient_identity)
-def create_portal_account(patient_id):
+def grant_portal_access(patient_id):
     payload = request.get_json()
     if not payload or "portal_email" not in payload or "portal_password" not in payload:
         core.log_access(
@@ -220,7 +143,7 @@ def create_portal_account(patient_id):
             status="Failed",
             request=request,
             user=current_user,
-            details="Rejected portal account creation, missing portal_email or portal_password.",
+            details="Rejected portal access grant, missing portal_email or portal_password.",
         )
         return (
             jsonify(
@@ -242,19 +165,12 @@ def create_portal_account(patient_id):
         )
         return jsonify({"error": "Patient record not found."}), 404
 
-    existing_link = User.query.filter_by(patient_id=patient_id).first()
-    if existing_link:
-        core.log_access(
-            action=core.AuditAction.patient_portal_linked.value,
-            status="Failed",
-            request=request,
-            user=current_user,
-            details=f"Rejected portal account creation, patient {patient_id} already has a linked account.",
-        )
-        return (
-            jsonify({"error": "This patient already has a linked portal account."}),
-            400,
-        )
+    existing_portal_user = db.session.scalar(
+        sa.select(User).where(User.patient_id == patient.id)
+    )
+
+    if existing_portal_user:
+        return jsonify({"error": "This patient already has portal access."}), 409
 
     portal_email = payload["portal_email"]
     portal_password = payload["portal_password"]
@@ -283,7 +199,7 @@ def create_portal_account(patient_id):
         )
         return (
             jsonify({"error": "This email is already registered to another account."}),
-            400,
+            409,
         )
 
     stmt = sa.select(core.Role.id).filter_by(role_name=core.RoleName.patient)
@@ -336,7 +252,7 @@ def create_portal_account(patient_id):
         status="Success",
         request=request,
         record_id=None,
-        details=f"Portal account created and linked for patient {patient.hospital_id}",
+        details=f"Portal access granted for patient {patient.hospital_id}",
     )
 
     return (
@@ -344,7 +260,7 @@ def create_portal_account(patient_id):
             {
                 "user_id": portal_user.id,
                 "patient_id": str(patient.id),
-                "message": "Portal account created and linked",
+                "message": "Portal access granted successfully",
             }
         ),
         201,

@@ -18,10 +18,14 @@ class PatientResponseSchema(ma.SQLAlchemyAutoSchema):
         include_fk = True
 
     full_name = fields.Method("get_full_name")
+    has_portal_account = fields.Method("get_has_portal_account")
 
     def get_full_name(self, obj):
         return obj.full_name
 
+    def get_has_portal_account(self, obj):
+        from app.auth import User
+        return User.query.filter_by(patient_id=obj.id).first() is not None
 
 class PatientUpdateSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
