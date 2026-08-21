@@ -427,3 +427,37 @@ def update_patient(patient_id):
 
     patient_response_schema = PatientResponseSchema()
     return jsonify(patient_response_schema.dump(patient)), 200
+
+
+@bp.route("/doctors", methods=["GET"])
+@jwt_required()
+@core.permission_required(core.PermissionAction.assign_doctor)
+def list_doctors():
+    """Minimal doctor list for the assign-doctor dropdown. Deliberately
+    narrower than GET /auth/users (admin-only, full staff fields) — this
+    exposes only id + name, to roles that need to assign a doctor but
+    have no business seeing the full staff roster."""
+    role_stmt = sa.select(core.Role.id).filter_by(role_name=core.RoleName.doctor)
+    doctor_role_id = db.session.scalar(role_stmt)
+
+    if doctor_role_id is None:
+        return jsonify({"error": "Doctor role is not configured."}), 500
+
+    stmt = (
+        sa.select(User)
+        .where(User.role_id == doctor_role_id, User.is_active.is_(True))
+        .order_by(User.last_name)
+    )
+    doctors = db.session.scalars(stmt).all()
+
+    return (
+        jsonify(
+            {
+                "doctors": [
+                    {"id": d.id, "name": f"{d.first_name} {d.last_name}"}
+                    for d in doctors
+                ]
+            }
+        ),
+        200,
+    )

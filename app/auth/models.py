@@ -56,6 +56,7 @@ class User(db.Model):
                 p.value for p in core.ROLE_PERMISSIONS.get(self.role.role_name, [])
             ] if hasattr(self.role, "role_name") else [],
             "department": self.department if self.department else None,
+            "license_number": self.license_number if self.license_number else None,
             "is_active": bool(self.is_active),
             "is_locked": bool(self.is_locked),
             "created_at": (
