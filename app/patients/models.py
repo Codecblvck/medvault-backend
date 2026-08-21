@@ -46,9 +46,9 @@ class Patient(db.Model):
         Enum(
             PatientStatus,
             values_callable=lambda x: [i.value for i in x],
-            nullable=False,
-            default=PatientStatus.outpatient,
-        )
+        ),
+        nullable=False,
+        default=PatientStatus.outpatient,
     )
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

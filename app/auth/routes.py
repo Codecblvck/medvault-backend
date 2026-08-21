@@ -125,6 +125,7 @@ def login():
                 "last_name": user.last_name,
                 "email": user.email,
                 "role": role_name,
+                "department": user.department,
                 "permissions": (
                     [p.value for p in core.ROLE_PERMISSIONS.get(role.role_name, [])]
                     if role is not None

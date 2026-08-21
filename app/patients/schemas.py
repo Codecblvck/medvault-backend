@@ -8,8 +8,6 @@ class PatientCreateSchema(ma.SQLAlchemyAutoSchema):
         model = Patient
         exclude = ("id", "hospital_id", "created_at", "updated_at")
 
-    # portal_email = fields.Email(required=False)
-    # portal_password = fields.Str(required=False, load_only=True)
 
 
 class PatientResponseSchema(ma.SQLAlchemyAutoSchema):

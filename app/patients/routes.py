@@ -267,7 +267,7 @@ def grant_portal_access(patient_id):
     )
 
 
-@bp.route("/", methods=["GET"])
+@bp.route("", methods=["GET"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.view_patients)
 def list_patients():

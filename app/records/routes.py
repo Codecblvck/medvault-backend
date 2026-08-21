@@ -2,6 +2,7 @@ import json
 import hashlib
 import uuid
 import sqlalchemy as sa
+from sqlalchemy.orm import joinedload
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required, current_user
@@ -14,22 +15,22 @@ from app.records import Record, RecordType
 bp = Blueprint("record", __name__)
 
 
-# RECORD
-@bp.route("/", methods=["GET"])
+
+@bp.route("", methods=["GET"])
 @jwt_required()
 @core.permission_required(core.PermissionAction.view_records)
 def read_records():
-    page = request.args.get("page", default=1, type=int)
-    limit = request.args.get("limit", default=10, type=int)
-    if page < 1:
-        page = 1
-    if limit < 1:
-        limit = 10
+    page = max(request.args.get("page", default=1, type=int), 1)
+    limit = min(max(request.args.get("limit", default=10, type=int), 1), 100)
     offset = (page - 1) * limit
 
-    stmt = sa.select(Record)
+    # Eager load relationships to eliminate N+1 queries
+    stmt = sa.select(Record).options(
+        joinedload(Record.patient), joinedload(Record.uploader)
+    )
     count_stmt = sa.select(sa.func.count()).select_from(Record)
 
+    # 1. Scope Enforcement: Patient Accounts
     if current_user.role.role_name == core.RoleName.patient:
         if current_user.patient_id is None:
             core.log_access(
@@ -40,9 +41,11 @@ def read_records():
                 details="Patient account has no linked patient identity, cannot list records.",
             )
             return jsonify({"error": "No linked patient record found."}), 403
+
         stmt = stmt.where(Record.patient_id == current_user.patient_id)
         count_stmt = count_stmt.where(Record.patient_id == current_user.patient_id)
 
+    # 2. Patient ID Filtering (Staff Only or Matching Patient)
     patient_id_param = request.args.get("patient_id")
     if patient_id_param:
         try:
@@ -59,9 +62,52 @@ def read_records():
                 jsonify({"error": f"Malformed patient_id value: {patient_id_param}"}),
                 400,
             )
+
+        # Guard against patient attempting to filter by another patient's ID
+        if (
+            current_user.role.role_name == core.RoleName.patient
+            and patient_id_uuid != current_user.patient_id
+        ):
+            return (
+                jsonify(
+                    {
+                        "error": "Access denied: cannot filter by other patient identities."
+                    }
+                ),
+                403,
+            )
+
         stmt = stmt.where(Record.patient_id == patient_id_uuid)
         count_stmt = count_stmt.where(Record.patient_id == patient_id_uuid)
 
+    # 3. Global Search Query Parameter (?q= or ?search=)
+    search_query = request.args.get("q") or request.args.get("search")
+    if search_query:
+        like_term = f"%{search_query.strip()}%"
+        stmt = stmt.join(Record.patient).where(
+            sa.or_(
+                Record.department.ilike(like_term),
+                Patient.first_name.ilike(like_term),
+                Patient.last_name.ilike(like_term),
+                Patient.hospital_id.ilike(like_term),
+                sa.func.concat(Patient.first_name, " ", Patient.last_name).ilike(
+                    like_term
+                ),
+            )
+        )
+        count_stmt = count_stmt.join(Record.patient).where(
+            sa.or_(
+                Record.department.ilike(like_term),
+                Patient.first_name.ilike(like_term),
+                Patient.last_name.ilike(like_term),
+                Patient.hospital_id.ilike(like_term),
+                sa.func.concat(Patient.first_name, " ", Patient.last_name).ilike(
+                    like_term
+                ),
+            )
+        )
+
+    # 4. Record Type Filter
     record_type_param = request.args.get("record_type")
     if record_type_param:
         try:
@@ -78,9 +124,11 @@ def read_records():
                 jsonify({"error": f"Invalid record_type value: {record_type_param}"}),
                 400,
             )
+
         stmt = stmt.where(Record.record_type == record_type_enum)
         count_stmt = count_stmt.where(Record.record_type == record_type_enum)
 
+    # 5. Date Range Filtering
     date_from = request.args.get("date_from")
     if date_from:
         stmt = stmt.where(Record.created_at >= date_from)
@@ -91,8 +139,8 @@ def read_records():
         stmt = stmt.where(Record.created_at <= date_to)
         count_stmt = count_stmt.where(Record.created_at <= date_to)
 
+    # 6. Execute Count and Pagination
     total = db.session.scalar(count_stmt) or 0
-
     stmt = stmt.order_by(Record.created_at.desc()).limit(limit).offset(offset)
     records = db.session.execute(stmt).scalars().all()
 
@@ -112,17 +160,33 @@ def read_records():
                 "total": total,
                 "page": page,
                 "limit": limit,
+                "pages": (total + limit - 1) // limit if total else 1,
                 "has_more": has_more,
                 "records": [
                     {
                         "id": str(r.id),
                         "patient_id": str(r.patient_id),
-                        "patient_name": r.patient.full_name,
-                        "record_type": r.record_type.value,
-                        "uploaded_by_name": r.uploader.full_name,
+                        "patient_name": (
+                            f"{r.patient.first_name} {r.patient.last_name}"
+                            if r.patient
+                            else "Unknown Patient"
+                        ),
+                        "record_type": (
+                            r.record_type.value
+                            if hasattr(r.record_type, "value")
+                            else r.record_type
+                        ),
+                        "uploaded_by_name": (
+                            f"{r.uploader.first_name} {r.uploader.last_name}"
+                            if r.uploader
+                            else "System"
+                        ),
                         "department": r.department,
                         "file_size": r.file_size,
-                        "created_at": r.created_at.isoformat() + "Z",
+                        "has_attachment": bool(r.file_path),
+                        "created_at": (
+                            r.created_at.isoformat() + "Z" if r.created_at else None
+                        ),
                     }
                     for r in records
                 ],
