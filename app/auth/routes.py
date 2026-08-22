@@ -354,6 +354,23 @@ def read_staff():
         ),
         200,
     )
+    
+@bp.route("/users/<int:user_id>", methods=["GET"])
+@jwt_required()
+@core.role_required([core.RoleName.admin])
+def read_staff_detail(user_id):
+    stmt = sa.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+
+    if not user:
+        return jsonify({"error": "User not found."}), 404
+
+    role_stmt = sa.select(core.Role.id).filter_by(role_name=core.RoleName.patient)
+    patient_role_id = db.session.scalar(role_stmt)
+    if patient_role_id is not None and user.role_id == patient_role_id:
+        return jsonify({"error": "User not found."}), 404
+
+    return jsonify(user.to_dict()), 200
 
 
 @bp.route("/users/stats", methods=["GET"])
@@ -482,6 +499,10 @@ def update_staff(user_id):
     if "license_number" in payload:
         user.license_number = payload["license_number"]
         changed_fields.append("license_number")
+        
+    if "phone" in payload:
+        user.phone = payload["phone"]
+        changed_fields.append("phone")
 
     if not changed_fields:
         return jsonify({"error": "No recognized fields provided to update."}), 400

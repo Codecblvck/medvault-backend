@@ -9,7 +9,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=45)
 
     RSA_PUBLIC_KEY_PATH = os.environ.get("RSA_PUBLIC_KEY_PATH")
     RSA_PRIVATE_KEY_PATH = os.environ.get("RSA_PRIVATE_KEY_PATH")
