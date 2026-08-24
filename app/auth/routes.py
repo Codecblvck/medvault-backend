@@ -7,7 +7,7 @@ from flask_jwt_extended import (
 )
 import sqlalchemy as sa
 from app import system as core
-from app.extensions import bcrypt, db
+from app.extensions import bcrypt, db, limiter
 from app.auth import (
     User,
     is_account_locked,
@@ -20,6 +20,7 @@ bp = Blueprint("auth", __name__)
 
 # auth/routes.py
 @bp.route("/login", methods=["POST"])
+@limiter.limit("10 per minute")
 def login():
     user_payload = request.get_json()
 

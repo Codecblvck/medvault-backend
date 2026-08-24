@@ -4,12 +4,14 @@ blinker==1.9.0
 boto3==1.43.57
 botocore==1.43.57
 click==8.4.2
+deprecated==1.3.1
 dnspython==2.8.0
 email-validator==2.3.0
 flask==3.1.3
 flask-bcrypt==1.0.1
 flask-cors==6.0.5
 flask-jwt-extended==4.7.4
+flask-limiter==4.1.1
 flask-marshmallow==1.5.0
 flask-migrate==4.1.0
 flask-sqlalchemy==3.1.1
@@ -19,10 +21,12 @@ idna==3.18
 itsdangerous==2.2.0
 jinja2==3.1.6
 jmespath==1.1.0
+limits==5.8.0
 mako==1.3.12
 markupsafe==3.0.3
 marshmallow==4.3.0
 marshmallow-sqlalchemy==1.5.0
+ordered-set==4.1.0
 packaging==26.2
 psycopg2-binary==2.9.12
 pycryptodome==3.23.0
@@ -35,3 +39,4 @@ sqlalchemy==2.0.51
 typing-extensions==4.16.0
 urllib3==2.7.0
 werkzeug==3.1.8
+wrapt==2.3.0

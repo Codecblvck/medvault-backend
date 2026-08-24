@@ -1,5 +1,5 @@
 from app.extensions import ma
-from app.patients import Patient
+from app.patients import Patient, PatientStatus
 from marshmallow import fields
 
 
@@ -7,7 +7,6 @@ class PatientCreateSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Patient
         exclude = ("id", "hospital_id", "created_at", "updated_at")
-
 
 
 class PatientResponseSchema(ma.SQLAlchemyAutoSchema):
@@ -45,6 +44,7 @@ class PatientUpdateSchema(ma.SQLAlchemyAutoSchema):
             "ward",
             "status",
         )
+    status = fields.Enum(PatientStatus, by_value=True)
 
 
 class PatientListItemSchema(ma.SQLAlchemyAutoSchema):

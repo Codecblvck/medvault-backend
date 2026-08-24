@@ -1,8 +1,8 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_migrate import migrate
 from app.config import Config, TestingConfig, DevelopmentConfig
-from app.extensions import db, jwt, migrate, bcrypt, cors, ma
+from app.extensions import db, jwt, migrate, bcrypt, cors, ma, limiter
 from app.blueprint_registry import register_blueprints
 
 
@@ -28,6 +28,7 @@ def create_app():
             "/*": {"origins": ["https://medvault-two.vercel.app", "http://localhost:5173"]}
         },
     )
+    limiter.init_app(app)
 
     from app.model_registry import (
         auth_models,
@@ -36,5 +37,8 @@ def create_app():
     )
 
     register_blueprints(app)
+    @app.errorhandler(429)
+    def ratelimit_handler(e):
+        return jsonify({"error": "Too many requests. Please try again shortly."}), 429
 
     return app

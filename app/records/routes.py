@@ -1,3 +1,5 @@
+import os
+from werkzeug.utils import secure_filename
 import json
 import hashlib
 import uuid
@@ -14,7 +16,8 @@ from app.records import Record, RecordType
 
 bp = Blueprint("record", __name__)
 
-
+MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024  # 15 MB
+ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png", ".dcm", ".doc", ".docx"}
 
 @bp.route("", methods=["GET"])
 @jwt_required()
@@ -474,12 +477,22 @@ def upload_records():
     record_id = uuid.uuid4()
 
     if uploaded_file:
-        object_key = f"records/{patient_uuid}/{record_id}_{uploaded_file.filename}"
+        safe_filename = secure_filename(uploaded_file.filename)
+        ext = os.path.splitext(safe_filename)[1].lower()
+        if ext not in ALLOWED_EXTENSIONS:
+            return jsonify({"error": "File type not permitted."}), 400
 
         uploaded_file.stream.seek(0, 2)
         file_size = uploaded_file.stream.tell()
         uploaded_file.stream.seek(0)
 
+        if file_size > MAX_FILE_SIZE_BYTES:
+            return (
+                jsonify({"error": "File exceeds the maximum allowed size (15MB)."}),
+                400,
+            )
+
+        object_key = f"records/{patient_uuid}/{record_id}_{safe_filename}"
     record = Record()
     record.id = record_id
     record.patient_id = patient_uuid
@@ -607,12 +620,23 @@ def attach_file_to_record(record_id):
     if not uploaded_file:
         return jsonify({"error": "Missing payload: file is required."}), 400
 
-    object_key = f"records/{record.patient_id}/{record.id}_{uploaded_file.filename}"
+    safe_filename = secure_filename(uploaded_file.filename)
+    ext = os.path.splitext(safe_filename)[1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        return jsonify({"error": "File type not permitted."}), 400
 
     uploaded_file.stream.seek(0, 2)
     file_size = uploaded_file.stream.tell()
     uploaded_file.stream.seek(0)
 
+    if file_size > MAX_FILE_SIZE_BYTES:
+        return (
+            jsonify({"error": "File exceeds the maximum allowed size (15MB)."}),
+            400,
+        )
+
+    object_key = f"records/{record.patient_id}/{record.id}_{safe_filename}"
+    
     try:
         core.upload_file(uploaded_file, object_key)
     except RuntimeError as minio_error:
