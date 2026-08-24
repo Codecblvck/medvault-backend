@@ -39,8 +39,8 @@ def seed_admin():
         password_hash = bcrypt.generate_password_hash("AdminPass123!").decode("utf-8")
 
         admin_user = User()
-        admin_user.first_name="System"
-        admin_user.last_name="Admin"
+        admin_user.first_name="Rafael S."
+        admin_user.last_name="Mozie"
         admin_user.email="admin@medvault.com"
         admin_user.password_hash=password_hash
         admin_user.role_id=admin_role.id
