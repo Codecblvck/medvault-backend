@@ -1,0 +1,51 @@
+staff_reference,first_name,last_name,email,role,department,phone,status,license_reference
+STF-00001,Obinna,Ezeani,obinna.ezeani.01@medvault.test,Administrator,Administration,+2348038382818,Active,
+STF-00002,Chiamaka,Ezeani,chiamaka.ezeani.02@medvault.test,Administrator,Administration,+2348041950056,Active,
+STF-00003,Amaka,Opara,amaka.opara.03@medvault.test,Administrator,Administration,+2348067688193,Active,
+STF-00004,Precious,Ezeani,precious.ezeani.04@medvault.test,Administrator,Administration,+2348025671522,Active,
+STF-00005,Ikenna,Madu,ikenna.madu.05@medvault.test,Administrator,Administration,+2348057008259,Active,
+STF-00006,Kelechi,Chukwu,kelechi.chukwu.06@medvault.test,Doctor,Obstetrics & Gynaecology,+2348053178457,Active,LIC-SYN-DOC-00006
+STF-00007,Oluchi,Agu,oluchi.agu.07@medvault.test,Doctor,General Medicine,+2348084879203,On Leave,LIC-SYN-DOC-00007
+STF-00008,Joy,Anyanwu,joy.anyanwu.08@medvault.test,Doctor,Obstetrics & Gynaecology,+2348039960266,Active,LIC-SYN-DOC-00008
+STF-00009,Obinna,Ibekwe,obinna.ibekwe.09@medvault.test,Doctor,General Medicine,+2348078591578,Active,LIC-SYN-DOC-00009
+STF-00010,Emeka,Ezeh,emeka.ezeh.10@medvault.test,Doctor,Emergency Medicine,+2348014454134,Active,LIC-SYN-DOC-00010
+STF-00011,Emeka,Okafor,emeka.okafor.11@medvault.test,Doctor,Pediatrics,+2348095078553,Active,LIC-SYN-DOC-00011
+STF-00012,Victor,Anyanwu,victor.anyanwu.12@medvault.test,Doctor,Surgery,+2348026780200,Active,LIC-SYN-DOC-00012
+STF-00013,Chinedu,Anyanwu,chinedu.anyanwu.13@medvault.test,Doctor,Pediatrics,+2348046059130,Active,LIC-SYN-DOC-00013
+STF-00014,Ikenna,Opara,ikenna.opara.14@medvault.test,Doctor,Pediatrics,+2348034389442,On Leave,LIC-SYN-DOC-00014
+STF-00015,Sarah,Nnamani,sarah.nnamani.15@medvault.test,Doctor,General Medicine,+2348037470245,On Leave,LIC-SYN-DOC-00015
+STF-00016,Ada,Obi,ada.obi.16@medvault.test,Doctor,General Medicine,+2348021678199,Active,LIC-SYN-DOC-00016
+STF-00017,David,Iloabuchi,david.iloabuchi.17@medvault.test,Doctor,Pediatrics,+2348082037524,Active,LIC-SYN-DOC-00017
+STF-00018,Joy,Agu,joy.agu.18@medvault.test,Nurse,Emergency Medicine,+2348041864193,Active,LIC-SYN-NUR-00018
+STF-00019,Chiamaka,Nnamani,chiamaka.nnamani.19@medvault.test,Nurse,Emergency Medicine,+2348084339452,Active,LIC-SYN-NUR-00019
+STF-00020,Gabriel,Ekwueme,gabriel.ekwueme.20@medvault.test,Nurse,Surgery,+2348016885285,Active,LIC-SYN-NUR-00020
+STF-00021,Grace,Obi,grace.obi.21@medvault.test,Nurse,Pediatrics,+2348060167211,Active,LIC-SYN-NUR-00021
+STF-00022,Yusuf,Chukwu,yusuf.chukwu.22@medvault.test,Nurse,Cardiology,+2348042218340,Active,LIC-SYN-NUR-00022
+STF-00023,Victor,Iloabuchi,victor.iloabuchi.23@medvault.test,Nurse,Emergency Medicine,+2348058095526,Active,LIC-SYN-NUR-00023
+STF-00024,Ngozi,Ojukwu,ngozi.ojukwu.24@medvault.test,Nurse,Surgery,+2348039537487,On Leave,LIC-SYN-NUR-00024
+STF-00025,Amaka,Eze,amaka.eze.25@medvault.test,Nurse,Obstetrics & Gynaecology,+2348094297183,Active,LIC-SYN-NUR-00025
+STF-00026,Gabriel,Chukwu,gabriel.chukwu.26@medvault.test,Nurse,Emergency Medicine,+2348098619637,Active,LIC-SYN-NUR-00026
+STF-00027,Joy,Eze,joy.eze.27@medvault.test,Nurse,Obstetrics & Gynaecology,+2348038353129,On Leave,LIC-SYN-NUR-00027
+STF-00028,Michael,Opara,michael.opara.28@medvault.test,Nurse,Obstetrics & Gynaecology,+2348072400188,Active,LIC-SYN-NUR-00028
+STF-00029,Emeka,Anyanwu,emeka.anyanwu.29@medvault.test,Nurse,Emergency Medicine,+2348082122163,On Leave,LIC-SYN-NUR-00029
+STF-00030,Amaka,Okeke,amaka.okeke.30@medvault.test,Laboratory Technician,Laboratory,+2348049091460,Active,LIC-SYN-LAB-00030
+STF-00031,Victor,Nnamani,victor.nnamani.31@medvault.test,Laboratory Technician,Laboratory,+2348055471197,Active,LIC-SYN-LAB-00031
+STF-00032,Kelechi,Nnamani,kelechi.nnamani.32@medvault.test,Laboratory Technician,Laboratory,+2348085765893,Active,LIC-SYN-LAB-00032
+STF-00033,Ikenna,Umeh,ikenna.umeh.33@medvault.test,Laboratory Technician,Laboratory,+2348074610802,Active,LIC-SYN-LAB-00033
+STF-00034,Esther,Nwosu,esther.nwosu.34@medvault.test,Laboratory Technician,Laboratory,+2348070193004,Active,LIC-SYN-LAB-00034
+STF-00035,Chinedu,Agu,chinedu.agu.35@medvault.test,Laboratory Technician,Laboratory,+2348095220301,Active,LIC-SYN-LAB-00035
+STF-00036,Obinna,Anyanwu,obinna.anyanwu.36@medvault.test,Records Officer,Medical Records,+2348054724711,On Leave,
+STF-00037,Chinedu,Madu,chinedu.madu.37@medvault.test,Records Officer,Medical Records,+2348087665347,Active,
+STF-00038,Ikenna,Nwosu,ikenna.nwosu.38@medvault.test,Records Officer,Medical Records,+2348014357952,Active,
+STF-00039,Somtochukwu,Opara,somtochukwu.opara.39@medvault.test,Records Officer,Medical Records,+2348012557787,Active,
+STF-00040,Peter,Ojukwu,peter.ojukwu.40@medvault.test,Records Officer,Medical Records,+2348096000931,Active,
+STF-00041,Zainab,Opara,zainab.opara.41@medvault.test,Records Officer,Medical Records,+2348017680097,Active,
+STF-00042,Ifeoma,Ekwueme,ifeoma.ekwueme.42@medvault.test,Records Officer,Medical Records,+2348057844428,Active,
+STF-00043,Ifeoma,Okafor,ifeoma.okafor.43@medvault.test,Auditor,Audit & Compliance,+2348032035268,Active,
+STF-00044,Joy,Ojukwu,joy.ojukwu.44@medvault.test,Auditor,Audit & Compliance,+2348013971915,Active,
+STF-00045,Michael,Madu,michael.madu.45@medvault.test,Auditor,Audit & Compliance,+2348064002140,Active,
+STF-00046,Precious,Iloabuchi,precious.iloabuchi.46@medvault.test,Auditor,Audit & Compliance,+2348029269719,Active,
+STF-00047,Chinedu,Ekwueme,chinedu.ekwueme.47@medvault.test,Auditor,Audit & Compliance,+2348090562071,Active,
+STF-00048,Kelechi,Ibekwe,kelechi.ibekwe.48@medvault.test,Auditor,Audit & Compliance,+2348071601788,Active,
+STF-00049,Samuel,Nwachukwu,samuel.nwachukwu.49@medvault.test,Auditor,Audit & Compliance,+2348077618151,Active,
+STF-00050,Michael,Ojukwu,michael.ojukwu.50@medvault.test,Auditor,Audit & Compliance,+2348045440300,Active,

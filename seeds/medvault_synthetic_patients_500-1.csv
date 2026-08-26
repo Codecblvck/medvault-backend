@@ -1,0 +1,501 @@
+first_name,last_name,age,gender,blood_group,ward,phone,address,national_id,status,hospital_id_reference
+Nneka,Madu,76,Female,O-,Outpatient Clinic,+2348015038593,"Asaba, Nigeria",SYN-6E2CFE687427,Outpatient,MV-00001
+Ikenna,Umeh,45,Female,AB-,Outpatient Clinic,+2348096185119,"Enugu, Nigeria",SYN-E5758F3FD3E7,Outpatient,MV-00002
+Precious,Madu,5,Male,B+,Outpatient Clinic,+2348017218305,"Enugu, Nigeria",SYN-D15540C97E30,Outpatient,MV-00003
+Vivian,Onyeka,85,Female,O-,Outpatient Clinic,+2348060698414,"Abuja, Nigeria",SYN-AE4932EAC591,Discharged,MV-00004
+Sarah,Okeke,13,Female,B-,Pediatrics,+2348048189555,"Asaba, Nigeria",SYN-47B38A7D5394,Discharged,MV-00005
+Peter,Nnamani,19,Male,A+,Outpatient Clinic,+2348063960876,"Enugu, Nigeria",SYN-EEF922B8736C,Admitted,MV-00006
+Ngozi,Agu,21,Male,O-,Surgical Ward,+2348036934985,"Abuja, Nigeria",SYN-5572F7DFB9A2,Discharged,MV-00007
+Chinedu,Umeh,74,Male,O-,Outpatient Clinic,+2348031690083,"Abuja, Nigeria",SYN-439250C2ADDF,Outpatient,MV-00008
+Amaka,Eze,56,Female,A+,ICU,+2348050138920,"Onitsha, Nigeria",SYN-37A0E2D20E20,Discharged,MV-00009
+Grace,Ezeh,60,Female,O+,Outpatient Clinic,+2348018688395,"Onitsha, Nigeria",SYN-9C1D5AD1D980,Outpatient,MV-00010
+Favour,Opara,32,Male,O-,Outpatient Clinic,+2348038271215,"Umuahia, Nigeria",SYN-59C27B660B67,Outpatient,MV-00011
+Uche,Onyeka,49,Male,AB-,Outpatient Clinic,+2348027168487,"Umuahia, Nigeria",SYN-2CC85D8FCA32,Outpatient,MV-00012
+Yusuf,Eze,58,Female,B-,Outpatient Clinic,+2348082521412,"Owerri, Nigeria",SYN-C6AA3E414AD9,Outpatient,MV-00013
+Yusuf,Agu,26,Female,A+,Medical Ward,+2348098482620,"Asaba, Nigeria",SYN-14199B2A7220,Discharged,MV-00014
+Chinedu,Obi,68,Male,O+,Outpatient Clinic,+2348082897250,"Abuja, Nigeria",SYN-782D1BCFD5BF,Outpatient,MV-00015
+Nneka,Obi,88,Male,B-,Outpatient Clinic,+2348078868617,"Umuahia, Nigeria",SYN-39C7C9F24D7B,Outpatient,MV-00016
+Nneka,Ezeh,23,Male,AB-,Outpatient Clinic,+2348076122094,"Enugu, Nigeria",SYN-92A108604E8A,Outpatient,MV-00017
+David,Chukwu,44,Female,AB-,Outpatient Clinic,+2348016479040,"Owerri, Nigeria",SYN-9607DD0D8332,Outpatient,MV-00018
+Chiamaka,Okafor,37,Male,AB+,Outpatient Clinic,+2348011655439,"Onitsha, Nigeria",SYN-AB71F6ACFB00,Discharged,MV-00019
+Obinna,Chukwu,78,Male,O+,Outpatient Clinic,+2348098285544,"Onitsha, Nigeria",SYN-CF9F0766B0FF,Outpatient,MV-00020
+Sarah,Madu,62,Female,AB-,ICU,+2348074352869,"Abuja, Nigeria",SYN-E7D8F5474403,Discharged,MV-00021
+Yusuf,Umeh,26,Female,AB-,Maternity,+2348056364863,"Enugu, Nigeria",SYN-A64C4B93FD51,Admitted,MV-00022
+Grace,Opara,86,Female,O-,Maternity,+2348055219671,"Nsukka, Nigeria",SYN-35A6E781EC08,Admitted,MV-00023
+Chinedu,Nnamani,27,Male,A+,Outpatient Clinic,+2348095353057,"Owerri, Nigeria",SYN-B3339A656699,Outpatient,MV-00024
+Chinedu,Obi,38,Male,O+,Surgical Ward,+2348018353565,"Owerri, Nigeria",SYN-826F4E494F59,Discharged,MV-00025
+Samuel,Okeke,54,Male,A-,Outpatient Clinic,+2348095482021,"Enugu, Nigeria",SYN-72AAEDC96CFD,Outpatient,MV-00026
+Uche,Chukwu,67,Female,AB+,Outpatient Clinic,+2348081828304,"Umuahia, Nigeria",SYN-C236A29B4CFB,Outpatient,MV-00027
+Peter,Iloabuchi,30,Female,B+,Maternity,+2348021891137,"Enugu, Nigeria",SYN-49EA0511F7CA,Discharged,MV-00028
+Precious,Nwachukwu,23,Female,O-,Outpatient Clinic,+2348090189578,"Abuja, Nigeria",SYN-BDD8067CA916,Discharged,MV-00029
+Amaka,Chukwu,25,Male,B-,Outpatient Clinic,+2348033101311,"Umuahia, Nigeria",SYN-260981594348,Outpatient,MV-00030
+Grace,Ibekwe,22,Male,AB+,Emergency,+2348047294429,"Umuahia, Nigeria",SYN-EBE25FBD6BBB,Admitted,MV-00031
+Samuel,Umeh,37,Female,B+,Outpatient Clinic,+2348087038478,"Awka, Nigeria",SYN-584E11C0C2EF,Outpatient,MV-00032
+Oluchi,Chukwu,41,Female,O-,Surgical Ward,+2348089692880,"Enugu, Nigeria",SYN-8EE6EE8E2D8C,Discharged,MV-00033
+Vivian,Onyeka,35,Female,B+,Outpatient Clinic,+2348027353943,"Nsukka, Nigeria",SYN-1ABE4E0C737D,Discharged,MV-00034
+Obinna,Ezeh,50,Female,B-,General Ward,+2348079434592,"Owerri, Nigeria",SYN-C2B15A062EA9,Admitted,MV-00035
+Vivian,Iloabuchi,20,Female,AB-,Outpatient Clinic,+2348062283250,"Abuja, Nigeria",SYN-79864A9A22E2,Outpatient,MV-00036
+Chinedu,Eze,50,Female,AB-,Outpatient Clinic,+2348055370372,"Asaba, Nigeria",SYN-504142B7C951,Outpatient,MV-00037
+Kelechi,Chukwu,3,Female,AB+,Outpatient Clinic,+2348072364021,"Abuja, Nigeria",SYN-D935442CE04E,Discharged,MV-00038
+Precious,Nwachukwu,23,Male,AB-,Outpatient Clinic,+2348083447234,"Nsukka, Nigeria",SYN-186DC00D184D,Outpatient,MV-00039
+Chinedu,Chukwu,61,Female,AB+,Outpatient Clinic,+2348078130276,"Enugu, Nigeria",SYN-A749AE4C0C5D,Outpatient,MV-00040
+Zainab,Chukwu,28,Female,O-,General Ward,+2348030633716,"Nsukka, Nigeria",SYN-455DD8B65216,Discharged,MV-00041
+Ifeoma,Ezeh,37,Female,AB-,Outpatient Clinic,+2348096115255,"Owerri, Nigeria",SYN-9D225221E8FF,Outpatient,MV-00042
+Uche,Ezeani,32,Male,A-,Outpatient Clinic,+2348023168158,"Abuja, Nigeria",SYN-C1C91512AB2A,Outpatient,MV-00043
+Nneka,Ojukwu,39,Male,B-,General Ward,+2348055853142,"Umuahia, Nigeria",SYN-6E0FA8DF4CEE,Discharged,MV-00044
+Joy,Ezeh,55,Male,A+,Outpatient Clinic,+2348042646019,"Owerri, Nigeria",SYN-F74A4A8B9E13,Outpatient,MV-00045
+Kelechi,Ojukwu,34,Male,B-,Medical Ward,+2348050848119,"Asaba, Nigeria",SYN-2FC7A11AA07E,Admitted,MV-00046
+Uche,Ibekwe,47,Female,A-,Outpatient Clinic,+2348064747494,"Awka, Nigeria",SYN-3185C9A33CED,Outpatient,MV-00047
+Joy,Chukwu,63,Female,AB+,Outpatient Clinic,+2348091302383,"Nsukka, Nigeria",SYN-FF0A7F93DC8F,Discharged,MV-00048
+Michael,Eze,12,Male,O-,Medical Ward,+2348061437630,"Awka, Nigeria",SYN-B453AB27C990,Discharged,MV-00049
+Vivian,Onyeka,39,Male,AB-,Outpatient Clinic,+2348019108777,"Enugu, Nigeria",SYN-DCABB57DD891,Outpatient,MV-00050
+Ngozi,Okafor,6,Male,A-,Medical Ward,+2348058633922,"Nsukka, Nigeria",SYN-701177CB04A0,Discharged,MV-00051
+Nneka,Nwosu,83,Female,O-,Medical Ward,+2348053656565,"Owerri, Nigeria",SYN-A4CDCC9C9D1C,Discharged,MV-00052
+Zainab,Ezeani,48,Female,B+,Outpatient Clinic,+2348055840239,"Onitsha, Nigeria",SYN-78ECBFA1AE35,Outpatient,MV-00053
+Peter,Anyanwu,54,Male,O+,Medical Ward,+2348057711862,"Awka, Nigeria",SYN-A10A07661975,Admitted,MV-00054
+Chinedu,Okeke,88,Male,O-,Outpatient Clinic,+2348028834389,"Nsukka, Nigeria",SYN-430AB119F0CE,Outpatient,MV-00055
+Esther,Ezeh,3,Female,A-,Outpatient Clinic,+2348087051142,"Asaba, Nigeria",SYN-25967C08DEF1,Outpatient,MV-00056
+Chinedu,Okafor,85,Female,O-,Outpatient Clinic,+2348029091525,"Awka, Nigeria",SYN-BAD3C97CF379,Outpatient,MV-00057
+Favour,Umeh,18,Female,O-,Outpatient Clinic,+2348044124134,"Onitsha, Nigeria",SYN-FC92636D293F,Outpatient,MV-00058
+Obinna,Anyanwu,19,Male,O-,General Ward,+2348032144536,"Nsukka, Nigeria",SYN-F4C87BCB32C0,Discharged,MV-00059
+Kelechi,Madu,50,Female,AB+,Outpatient Clinic,+2348047110924,"Asaba, Nigeria",SYN-72AC34E09055,Outpatient,MV-00060
+Victor,Iloabuchi,46,Female,A+,Emergency,+2348082363002,"Umuahia, Nigeria",SYN-5A8AE703CFC4,Discharged,MV-00061
+Amaka,Ezeh,76,Male,A+,Emergency,+2348010581286,"Umuahia, Nigeria",SYN-5517D6882BAC,Admitted,MV-00062
+Obinna,Ezeani,44,Male,A+,Outpatient Clinic,+2348020983695,"Umuahia, Nigeria",SYN-11FBCCAAD6E9,Outpatient,MV-00063
+Precious,Anyanwu,6,Female,A+,Outpatient Clinic,+2348041153352,"Enugu, Nigeria",SYN-066D7FE5B3C6,Outpatient,MV-00064
+Samuel,Opara,35,Female,O-,Outpatient Clinic,+2348048909978,"Enugu, Nigeria",SYN-EF98A730239B,Outpatient,MV-00065
+Favour,Ibekwe,7,Female,B+,General Ward,+2348095065914,"Awka, Nigeria",SYN-051D7941DED6,Discharged,MV-00066
+Ikenna,Ojukwu,35,Female,A-,Outpatient Clinic,+2348095109194,"Abuja, Nigeria",SYN-188E4698672C,Outpatient,MV-00067
+Victor,Obi,53,Female,O+,ICU,+2348090497883,"Enugu, Nigeria",SYN-9792C3BB3173,Admitted,MV-00068
+Chiamaka,Umeh,59,Male,A-,Outpatient Clinic,+2348076939049,"Nsukka, Nigeria",SYN-D97231865503,Admitted,MV-00069
+David,Agu,75,Female,AB-,ICU,+2348022593510,"Enugu, Nigeria",SYN-69AFDED950AB,Discharged,MV-00070
+Victor,Onyeka,17,Male,B-,Outpatient Clinic,+2348041380411,"Owerri, Nigeria",SYN-2457D19D7253,Outpatient,MV-00071
+Chiamaka,Ibekwe,48,Male,A-,General Ward,+2348077659473,"Awka, Nigeria",SYN-E2E0494FB6B0,Admitted,MV-00072
+Michael,Nwachukwu,17,Male,O+,Outpatient Clinic,+2348071246323,"Awka, Nigeria",SYN-4F060061D685,Outpatient,MV-00073
+Vivian,Opara,45,Male,A+,Surgical Ward,+2348038112166,"Umuahia, Nigeria",SYN-EC2CF1B0FF5E,Discharged,MV-00074
+Ngozi,Ezeani,34,Male,AB+,Outpatient Clinic,+2348029803161,"Owerri, Nigeria",SYN-4E0A041FE746,Outpatient,MV-00075
+Sarah,Opara,82,Female,AB+,Pediatrics,+2348078880311,"Umuahia, Nigeria",SYN-2A57956C0836,Admitted,MV-00076
+Oluchi,Onyeka,8,Female,B+,Outpatient Clinic,+2348064429789,"Asaba, Nigeria",SYN-14860EACF446,Outpatient,MV-00077
+Favour,Ojukwu,56,Female,A+,Outpatient Clinic,+2348062384918,"Umuahia, Nigeria",SYN-96198155BA97,Outpatient,MV-00078
+Precious,Nwosu,2,Male,AB-,Outpatient Clinic,+2348022068313,"Abuja, Nigeria",SYN-40ACBCEEB856,Outpatient,MV-00079
+Michael,Madu,42,Male,A-,Outpatient Clinic,+2348041808812,"Awka, Nigeria",SYN-B08104C289BB,Outpatient,MV-00080
+Joy,Agu,15,Male,O-,Outpatient Clinic,+2348047016086,"Abuja, Nigeria",SYN-F8BEACCB3F17,Outpatient,MV-00081
+Joy,Madu,12,Female,A-,Outpatient Clinic,+2348097763573,"Onitsha, Nigeria",SYN-5BBE59FFB5AE,Outpatient,MV-00082
+Michael,Okeke,56,Female,A-,Outpatient Clinic,+2348075601827,"Awka, Nigeria",SYN-BCC43FB50069,Admitted,MV-00083
+Ikenna,Eze,80,Female,A-,Outpatient Clinic,+2348048628889,"Abuja, Nigeria",SYN-3E4BFE797BAA,Discharged,MV-00084
+Kelechi,Anyanwu,27,Male,AB-,Outpatient Clinic,+2348059203119,"Enugu, Nigeria",SYN-5E1243AFD609,Outpatient,MV-00085
+Precious,Nwachukwu,4,Female,O+,ICU,+2348068050259,"Onitsha, Nigeria",SYN-3F8A84CE0F56,Admitted,MV-00086
+Nneka,Ojukwu,17,Female,B+,Medical Ward,+2348045384435,"Owerri, Nigeria",SYN-12898AB3C313,Discharged,MV-00087
+Peter,Ezeh,38,Male,AB-,Outpatient Clinic,+2348050504827,"Enugu, Nigeria",SYN-AF20DAB9C262,Admitted,MV-00088
+Yusuf,Iloabuchi,52,Male,O-,Outpatient Clinic,+2348035944777,"Awka, Nigeria",SYN-4BDF4838BB4C,Outpatient,MV-00089
+Precious,Chukwu,67,Female,B+,Emergency,+2348069252322,"Umuahia, Nigeria",SYN-0656CB07DD42,Discharged,MV-00090
+Obinna,Agu,81,Male,O-,Outpatient Clinic,+2348033140387,"Awka, Nigeria",SYN-4F0DDE960A45,Outpatient,MV-00091
+Ada,Umeh,87,Male,B+,Outpatient Clinic,+2348088452054,"Abuja, Nigeria",SYN-DBEB4030FDA1,Outpatient,MV-00092
+Ikenna,Okafor,32,Female,A+,Medical Ward,+2348060791061,"Enugu, Nigeria",SYN-62E73FAF53FA,Admitted,MV-00093
+Amaka,Onyeka,27,Male,A-,Medical Ward,+2348031652332,"Asaba, Nigeria",SYN-05300F9887A5,Discharged,MV-00094
+Grace,Okafor,66,Female,AB-,Outpatient Clinic,+2348054671621,"Owerri, Nigeria",SYN-3C02ABA58DE0,Outpatient,MV-00095
+Nneka,Agu,51,Male,A+,Outpatient Clinic,+2348029378741,"Umuahia, Nigeria",SYN-24A7CC4111BC,Outpatient,MV-00096
+Chiamaka,Ezeani,42,Female,O+,Outpatient Clinic,+2348036417474,"Awka, Nigeria",SYN-2A99AED0BC62,Outpatient,MV-00097
+Favour,Ekwueme,77,Female,B-,Outpatient Clinic,+2348041783638,"Enugu, Nigeria",SYN-145AD05B5A29,Outpatient,MV-00098
+Ngozi,Okafor,36,Female,O-,Outpatient Clinic,+2348065353111,"Onitsha, Nigeria",SYN-0C27EAA8346D,Discharged,MV-00099
+Uche,Madu,60,Female,A-,Surgical Ward,+2348045737568,"Nsukka, Nigeria",SYN-11295F3CD5E9,Admitted,MV-00100
+Vivian,Eze,26,Male,O+,Outpatient Clinic,+2348079895723,"Owerri, Nigeria",SYN-1304AE9E7D7B,Outpatient,MV-00101
+Chiamaka,Iloabuchi,42,Male,O+,Outpatient Clinic,+2348024874285,"Umuahia, Nigeria",SYN-08739CBF0CD8,Outpatient,MV-00102
+Yusuf,Ojukwu,76,Female,A-,ICU,+2348011247641,"Asaba, Nigeria",SYN-245ABC971602,Admitted,MV-00103
+Ikenna,Obi,64,Female,B-,Outpatient Clinic,+2348074798986,"Owerri, Nigeria",SYN-0D003C94ACAE,Outpatient,MV-00104
+Uche,Chukwu,49,Female,AB+,Outpatient Clinic,+2348072289495,"Asaba, Nigeria",SYN-7DB72E3964B9,Outpatient,MV-00105
+Peter,Chukwu,15,Female,O+,Outpatient Clinic,+2348098307702,"Owerri, Nigeria",SYN-EEEBF872B5B3,Outpatient,MV-00106
+Grace,Nnamani,22,Female,AB+,Pediatrics,+2348050569988,"Nsukka, Nigeria",SYN-BE82EC6265DE,Discharged,MV-00107
+Chiamaka,Ezeh,62,Male,AB-,Outpatient Clinic,+2348041496121,"Owerri, Nigeria",SYN-DEF70E716E24,Discharged,MV-00108
+Oluchi,Onyeka,58,Male,O-,Outpatient Clinic,+2348073352686,"Umuahia, Nigeria",SYN-0CE419A0FD31,Outpatient,MV-00109
+Joy,Okafor,78,Female,O+,Outpatient Clinic,+2348070371696,"Owerri, Nigeria",SYN-0F92C6665E9F,Outpatient,MV-00110
+Daniel,Eze,52,Male,A+,Outpatient Clinic,+2348042616960,"Asaba, Nigeria",SYN-4B7F5B3AD20B,Outpatient,MV-00111
+Ada,Ezeani,58,Female,A-,Outpatient Clinic,+2348017686971,"Owerri, Nigeria",SYN-AD05E5A4C2B1,Outpatient,MV-00112
+Ikenna,Eze,7,Male,AB+,Outpatient Clinic,+2348062569366,"Umuahia, Nigeria",SYN-348FE5D24AB0,Outpatient,MV-00113
+Ifeoma,Ibekwe,88,Male,O+,Pediatrics,+2348013058427,"Nsukka, Nigeria",SYN-97D6B71D2B5E,Discharged,MV-00114
+Kelechi,Nwosu,81,Male,AB+,Outpatient Clinic,+2348020073417,"Nsukka, Nigeria",SYN-B2173A653591,Outpatient,MV-00115
+Sarah,Okeke,12,Male,O-,General Ward,+2348015274708,"Asaba, Nigeria",SYN-88A9456C15B6,Discharged,MV-00116
+Chinedu,Madu,33,Male,O+,Medical Ward,+2348071608463,"Enugu, Nigeria",SYN-0A117DD95F62,Discharged,MV-00117
+Obinna,Ibekwe,46,Male,A+,Outpatient Clinic,+2348089161350,"Enugu, Nigeria",SYN-815F53EF4E87,Outpatient,MV-00118
+Ikenna,Nnamani,35,Male,AB+,General Ward,+2348086495567,"Owerri, Nigeria",SYN-6F0A3C50FD43,Admitted,MV-00119
+Yusuf,Anyanwu,63,Female,A-,Outpatient Clinic,+2348017231313,"Onitsha, Nigeria",SYN-1070498891DE,Outpatient,MV-00120
+Peter,Ekwueme,70,Male,AB-,Outpatient Clinic,+2348042232842,"Abuja, Nigeria",SYN-010B53D81C61,Outpatient,MV-00121
+Gabriel,Onyeka,4,Male,A+,Outpatient Clinic,+2348069682801,"Umuahia, Nigeria",SYN-88FC01BA8B2A,Outpatient,MV-00122
+Somtochukwu,Madu,81,Female,AB-,Outpatient Clinic,+2348066149591,"Umuahia, Nigeria",SYN-A2ACFE1CAC92,Discharged,MV-00123
+Esther,Ezeani,31,Male,AB-,Outpatient Clinic,+2348067584901,"Awka, Nigeria",SYN-BAF0580BE3B4,Outpatient,MV-00124
+Nneka,Ezeani,5,Female,O+,Maternity,+2348026416026,"Umuahia, Nigeria",SYN-52F9286EA084,Discharged,MV-00125
+Favour,Ibekwe,5,Male,B+,Outpatient Clinic,+2348048663484,"Asaba, Nigeria",SYN-1BC3ECE549BF,Outpatient,MV-00126
+Yusuf,Obi,35,Female,AB-,Outpatient Clinic,+2348044695571,"Asaba, Nigeria",SYN-A5B032A8A593,Admitted,MV-00127
+Ifeoma,Chukwu,50,Female,AB-,Emergency,+2348059292298,"Asaba, Nigeria",SYN-8DABEEE86CF3,Discharged,MV-00128
+Esther,Nnamani,42,Female,AB+,Outpatient Clinic,+2348089927819,"Enugu, Nigeria",SYN-4D94C0485973,Outpatient,MV-00129
+Nneka,Umeh,57,Female,AB-,Outpatient Clinic,+2348028197329,"Owerri, Nigeria",SYN-713D53A0EB5F,Outpatient,MV-00130
+Obinna,Ojukwu,25,Female,A+,Outpatient Clinic,+2348079100468,"Asaba, Nigeria",SYN-648EB9CB135A,Outpatient,MV-00131
+David,Iloabuchi,53,Female,B+,Maternity,+2348063579215,"Asaba, Nigeria",SYN-9276F076A7DF,Admitted,MV-00132
+Yusuf,Ibekwe,75,Female,A-,Surgical Ward,+2348020636542,"Enugu, Nigeria",SYN-E404DA1BE436,Discharged,MV-00133
+Yusuf,Okafor,43,Male,O+,Medical Ward,+2348017869374,"Enugu, Nigeria",SYN-CB4224C0D133,Discharged,MV-00134
+Grace,Ibekwe,87,Female,AB+,Maternity,+2348033579849,"Abuja, Nigeria",SYN-604E4B857266,Discharged,MV-00135
+Peter,Umeh,56,Female,A+,Outpatient Clinic,+2348042712407,"Enugu, Nigeria",SYN-BD082D264A7F,Outpatient,MV-00136
+Chinedu,Agu,39,Female,O+,Outpatient Clinic,+2348074353643,"Enugu, Nigeria",SYN-54BB5E0DFFF9,Outpatient,MV-00137
+David,Umeh,85,Female,B-,Outpatient Clinic,+2348065576360,"Awka, Nigeria",SYN-C880A6D341B8,Outpatient,MV-00138
+Yusuf,Nwachukwu,20,Female,B+,Emergency,+2348090746266,"Enugu, Nigeria",SYN-5AFE4F1883BD,Admitted,MV-00139
+Sarah,Nnamani,82,Male,AB+,Outpatient Clinic,+2348083083503,"Abuja, Nigeria",SYN-8E2EEDE57B38,Outpatient,MV-00140
+Amaka,Okafor,71,Male,A-,Outpatient Clinic,+2348042510812,"Umuahia, Nigeria",SYN-2D6FCDAB9A3E,Outpatient,MV-00141
+Joy,Ezeh,79,Female,B+,Outpatient Clinic,+2348051477331,"Umuahia, Nigeria",SYN-3A7FBEF1EDA3,Admitted,MV-00142
+Vivian,Ezeh,36,Male,A+,Outpatient Clinic,+2348075808657,"Awka, Nigeria",SYN-79CA3F95D641,Outpatient,MV-00143
+Ikenna,Opara,33,Male,O+,Pediatrics,+2348023849703,"Owerri, Nigeria",SYN-084C83967402,Discharged,MV-00144
+Zainab,Agu,59,Female,A+,Surgical Ward,+2348068611000,"Asaba, Nigeria",SYN-5C015D260A67,Discharged,MV-00145
+Nneka,Iloabuchi,54,Female,B-,Outpatient Clinic,+2348039923761,"Awka, Nigeria",SYN-B5E51D159814,Discharged,MV-00146
+Amaka,Onyeka,41,Male,O+,Outpatient Clinic,+2348043702848,"Abuja, Nigeria",SYN-E5D9BEF46978,Outpatient,MV-00147
+Somtochukwu,Eze,44,Female,O+,Outpatient Clinic,+2348072186199,"Umuahia, Nigeria",SYN-DBA0B67BEF5A,Outpatient,MV-00148
+Ada,Eze,25,Female,B-,Outpatient Clinic,+2348095121580,"Nsukka, Nigeria",SYN-70E07F617BF9,Outpatient,MV-00149
+Nneka,Ibekwe,45,Female,B+,Outpatient Clinic,+2348023126735,"Onitsha, Nigeria",SYN-AE10740E19CF,Discharged,MV-00150
+Ngozi,Agu,21,Male,O-,Outpatient Clinic,+2348071591781,"Onitsha, Nigeria",SYN-C255FD81CC68,Outpatient,MV-00151
+Esther,Agu,28,Female,A-,Emergency,+2348025391549,"Umuahia, Nigeria",SYN-A473ED476055,Discharged,MV-00152
+Sarah,Umeh,20,Female,O+,Emergency,+2348077022482,"Onitsha, Nigeria",SYN-6A7DB805CDFD,Admitted,MV-00153
+Grace,Ibekwe,52,Female,A+,Outpatient Clinic,+2348051847085,"Enugu, Nigeria",SYN-6F31C63F8F73,Outpatient,MV-00154
+Ngozi,Nwosu,57,Female,A-,Maternity,+2348037147233,"Awka, Nigeria",SYN-870640E092DB,Discharged,MV-00155
+Ifeoma,Umeh,65,Female,A-,Outpatient Clinic,+2348015956385,"Asaba, Nigeria",SYN-655B8615C424,Discharged,MV-00156
+Somtochukwu,Onyeka,56,Male,O-,Surgical Ward,+2348059860303,"Awka, Nigeria",SYN-FC3AF842650A,Discharged,MV-00157
+Daniel,Anyanwu,53,Female,B+,Outpatient Clinic,+2348058600655,"Enugu, Nigeria",SYN-B99B03D0AEC0,Outpatient,MV-00158
+David,Iloabuchi,2,Male,O-,Outpatient Clinic,+2348084355252,"Asaba, Nigeria",SYN-9665E280973C,Outpatient,MV-00159
+Gabriel,Okafor,80,Male,B-,Pediatrics,+2348027340660,"Enugu, Nigeria",SYN-2565787105D2,Admitted,MV-00160
+Precious,Umeh,44,Female,A+,Pediatrics,+2348028856817,"Onitsha, Nigeria",SYN-D94B2A4A9842,Admitted,MV-00161
+Michael,Onyeka,51,Male,AB-,Pediatrics,+2348029987075,"Asaba, Nigeria",SYN-5EFA61D0710F,Discharged,MV-00162
+Emeka,Okafor,52,Female,B-,Outpatient Clinic,+2348052424615,"Nsukka, Nigeria",SYN-C25A83B4077E,Outpatient,MV-00163
+Victor,Ekwueme,57,Female,O-,Outpatient Clinic,+2348050022412,"Awka, Nigeria",SYN-F4226C8C4FEB,Admitted,MV-00164
+Nneka,Eze,28,Female,O+,Outpatient Clinic,+2348027414947,"Onitsha, Nigeria",SYN-4E4CB291E02F,Outpatient,MV-00165
+Chinedu,Madu,43,Female,O-,Outpatient Clinic,+2348064320141,"Owerri, Nigeria",SYN-1E451DD5BFC8,Outpatient,MV-00166
+Ifeoma,Ezeh,44,Male,A+,Outpatient Clinic,+2348091408088,"Enugu, Nigeria",SYN-6EFB71A04916,Outpatient,MV-00167
+Uche,Ezeani,35,Female,O-,General Ward,+2348052601168,"Enugu, Nigeria",SYN-A37227F8132D,Discharged,MV-00168
+Yusuf,Agu,28,Male,A-,Medical Ward,+2348018766596,"Awka, Nigeria",SYN-89404B00F109,Discharged,MV-00169
+Samuel,Nwosu,40,Female,B-,Outpatient Clinic,+2348090030309,"Awka, Nigeria",SYN-E65D034514E7,Outpatient,MV-00170
+Samuel,Agu,68,Female,A+,Medical Ward,+2348010085578,"Enugu, Nigeria",SYN-97F4000730FB,Discharged,MV-00171
+Somtochukwu,Opara,13,Female,O-,Maternity,+2348066693380,"Owerri, Nigeria",SYN-846341B5A04C,Discharged,MV-00172
+Zainab,Madu,34,Female,O+,Maternity,+2348035416558,"Onitsha, Nigeria",SYN-F13F50475927,Discharged,MV-00173
+Oluchi,Iloabuchi,88,Female,A-,Medical Ward,+2348071601023,"Onitsha, Nigeria",SYN-1C7B0964EAA3,Discharged,MV-00174
+Victor,Nnamani,22,Male,AB-,Maternity,+2348028232878,"Enugu, Nigeria",SYN-A1EFDB1B67CB,Admitted,MV-00175
+Emeka,Madu,17,Female,A+,ICU,+2348041598992,"Enugu, Nigeria",SYN-8FAD8E71E764,Admitted,MV-00176
+David,Opara,30,Female,A-,Pediatrics,+2348075995601,"Onitsha, Nigeria",SYN-F619068A2E31,Admitted,MV-00177
+Somtochukwu,Opara,80,Male,B+,Medical Ward,+2348051684889,"Onitsha, Nigeria",SYN-028BDD182028,Admitted,MV-00178
+Amaka,Ojukwu,26,Female,AB+,Maternity,+2348062355649,"Awka, Nigeria",SYN-E409EECC2B92,Admitted,MV-00179
+Michael,Okeke,55,Female,O+,Outpatient Clinic,+2348032251981,"Awka, Nigeria",SYN-86356A08EF92,Outpatient,MV-00180
+Zainab,Agu,65,Male,AB-,Outpatient Clinic,+2348047209783,"Nsukka, Nigeria",SYN-DFA938CB70BC,Outpatient,MV-00181
+Oluchi,Opara,59,Male,AB-,Medical Ward,+2348073830109,"Umuahia, Nigeria",SYN-B610376EEAC5,Discharged,MV-00182
+Precious,Ibekwe,1,Male,A+,Outpatient Clinic,+2348080040751,"Abuja, Nigeria",SYN-3C5F3CA8EB8E,Outpatient,MV-00183
+Vivian,Madu,25,Female,A+,Pediatrics,+2348015552486,"Nsukka, Nigeria",SYN-38CD8AA54BC5,Discharged,MV-00184
+Sarah,Opara,59,Female,A-,Outpatient Clinic,+2348037102957,"Nsukka, Nigeria",SYN-6DD81AE90072,Outpatient,MV-00185
+Obinna,Okafor,74,Male,O+,ICU,+2348026665452,"Nsukka, Nigeria",SYN-8895C44DB037,Discharged,MV-00186
+Peter,Umeh,39,Male,A+,Surgical Ward,+2348079337344,"Abuja, Nigeria",SYN-DF86A1D449D7,Admitted,MV-00187
+Victor,Ojukwu,22,Female,AB+,Emergency,+2348041979453,"Onitsha, Nigeria",SYN-0CDE3F7CB9B4,Admitted,MV-00188
+Oluchi,Okeke,45,Male,A-,Outpatient Clinic,+2348037940355,"Asaba, Nigeria",SYN-29150F920620,Outpatient,MV-00189
+Gabriel,Ibekwe,26,Male,B+,Surgical Ward,+2348037844118,"Asaba, Nigeria",SYN-982128D5CB07,Discharged,MV-00190
+Precious,Nwosu,73,Male,AB+,Outpatient Clinic,+2348073254828,"Onitsha, Nigeria",SYN-04C71FC0161C,Discharged,MV-00191
+Ikenna,Iloabuchi,59,Male,O-,Medical Ward,+2348052284047,"Onitsha, Nigeria",SYN-2E978B41EC51,Discharged,MV-00192
+Somtochukwu,Onyeka,47,Male,AB+,General Ward,+2348030337388,"Nsukka, Nigeria",SYN-B2A460400859,Discharged,MV-00193
+Joy,Nwachukwu,24,Male,O-,Outpatient Clinic,+2348016893733,"Umuahia, Nigeria",SYN-73217CB2DDD0,Outpatient,MV-00194
+Gabriel,Eze,37,Female,O-,Surgical Ward,+2348024531736,"Onitsha, Nigeria",SYN-CEDFC2D8AB62,Discharged,MV-00195
+Peter,Umeh,21,Female,AB-,Maternity,+2348053313694,"Abuja, Nigeria",SYN-2D79E13C855A,Discharged,MV-00196
+Kelechi,Madu,44,Female,A-,Outpatient Clinic,+2348048078304,"Onitsha, Nigeria",SYN-7D51C25CB28B,Outpatient,MV-00197
+Amaka,Ibekwe,45,Female,B+,Outpatient Clinic,+2348015612164,"Asaba, Nigeria",SYN-7E710DF87239,Outpatient,MV-00198
+Oluchi,Eze,52,Female,O-,Outpatient Clinic,+2348098823557,"Nsukka, Nigeria",SYN-E0C989A4D725,Outpatient,MV-00199
+Victor,Nwachukwu,1,Female,O+,General Ward,+2348010792269,"Awka, Nigeria",SYN-BF53D59E20BF,Discharged,MV-00200
+Ada,Ezeani,13,Female,A+,Outpatient Clinic,+2348012313436,"Nsukka, Nigeria",SYN-67B692636E13,Outpatient,MV-00201
+Yusuf,Ezeh,45,Male,O+,Outpatient Clinic,+2348055995322,"Enugu, Nigeria",SYN-86F44DC4925B,Admitted,MV-00202
+Emeka,Nwachukwu,77,Female,O-,Outpatient Clinic,+2348065521185,"Owerri, Nigeria",SYN-2C4961D8BCDB,Outpatient,MV-00203
+Daniel,Madu,26,Female,O+,Outpatient Clinic,+2348051546424,"Asaba, Nigeria",SYN-20927FDF0FCD,Outpatient,MV-00204
+Amaka,Ekwueme,78,Female,A-,General Ward,+2348099965844,"Enugu, Nigeria",SYN-D73264EC7196,Discharged,MV-00205
+Amaka,Chukwu,45,Female,O+,Emergency,+2348086122219,"Onitsha, Nigeria",SYN-394FDF8F59CF,Discharged,MV-00206
+Obinna,Onyeka,44,Male,A+,Emergency,+2348072238414,"Abuja, Nigeria",SYN-60F8938E4318,Discharged,MV-00207
+Precious,Anyanwu,54,Male,AB-,Outpatient Clinic,+2348032836179,"Onitsha, Nigeria",SYN-232027E9DADF,Outpatient,MV-00208
+David,Ibekwe,62,Female,B+,Outpatient Clinic,+2348028564704,"Asaba, Nigeria",SYN-F180CA70621F,Outpatient,MV-00209
+Uche,Iloabuchi,79,Male,B+,Pediatrics,+2348013834370,"Nsukka, Nigeria",SYN-CE23FB22C587,Discharged,MV-00210
+Vivian,Umeh,19,Female,O+,Emergency,+2348020985682,"Owerri, Nigeria",SYN-B97F64CD534D,Discharged,MV-00211
+Amaka,Nwosu,51,Male,B-,Maternity,+2348012172680,"Onitsha, Nigeria",SYN-91011CAD69CA,Discharged,MV-00212
+Chinedu,Obi,44,Male,O+,General Ward,+2348098641189,"Onitsha, Nigeria",SYN-47DFB432C8BA,Admitted,MV-00213
+Obinna,Okafor,77,Female,O-,Emergency,+2348066054819,"Awka, Nigeria",SYN-3351721D2B6D,Discharged,MV-00214
+Amaka,Okeke,51,Female,O-,Outpatient Clinic,+2348027867630,"Abuja, Nigeria",SYN-CEBAF47D1AF9,Outpatient,MV-00215
+Chinedu,Umeh,41,Female,AB+,Outpatient Clinic,+2348012331719,"Nsukka, Nigeria",SYN-2EC4977783FE,Outpatient,MV-00216
+Uche,Ezeh,65,Female,O+,General Ward,+2348042244943,"Abuja, Nigeria",SYN-7904210E7CEB,Discharged,MV-00217
+Sarah,Madu,90,Female,AB-,Outpatient Clinic,+2348036902206,"Enugu, Nigeria",SYN-C1C0FCC8726E,Discharged,MV-00218
+Daniel,Okeke,80,Male,AB-,Outpatient Clinic,+2348098445807,"Awka, Nigeria",SYN-EBF9B2A2173C,Outpatient,MV-00219
+Favour,Ibekwe,82,Female,A+,Outpatient Clinic,+2348097772431,"Owerri, Nigeria",SYN-88CE30D64030,Outpatient,MV-00220
+Sarah,Okafor,26,Male,O+,Outpatient Clinic,+2348036333463,"Umuahia, Nigeria",SYN-E7AEBB6502B0,Discharged,MV-00221
+Uche,Obi,54,Male,B-,Outpatient Clinic,+2348052162580,"Awka, Nigeria",SYN-233763C62B0C,Outpatient,MV-00222
+Emeka,Ibekwe,33,Male,O-,Pediatrics,+2348078227419,"Awka, Nigeria",SYN-F3754AD24CFA,Discharged,MV-00223
+Vivian,Onyeka,67,Female,A+,Medical Ward,+2348019145640,"Umuahia, Nigeria",SYN-F66D0C13AD4F,Discharged,MV-00224
+Esther,Ibekwe,55,Male,AB+,Pediatrics,+2348081320907,"Nsukka, Nigeria",SYN-ECDC8B4A7418,Admitted,MV-00225
+David,Anyanwu,53,Male,B+,Emergency,+2348093535518,"Enugu, Nigeria",SYN-DDEFEE9C9D02,Discharged,MV-00226
+David,Nnamani,42,Female,AB-,Surgical Ward,+2348046813159,"Enugu, Nigeria",SYN-15DAD8759B68,Admitted,MV-00227
+Uche,Nwosu,69,Male,AB+,Outpatient Clinic,+2348052948866,"Enugu, Nigeria",SYN-D531C39DEFA9,Outpatient,MV-00228
+Oluchi,Ezeh,44,Female,O-,Maternity,+2348053375881,"Abuja, Nigeria",SYN-A58210DABBA6,Discharged,MV-00229
+Precious,Iloabuchi,17,Female,A-,General Ward,+2348073314880,"Nsukka, Nigeria",SYN-EDC7F2147CB2,Admitted,MV-00230
+Peter,Opara,52,Female,A-,Outpatient Clinic,+2348014887357,"Enugu, Nigeria",SYN-2A6C4AC6D32B,Outpatient,MV-00231
+Nneka,Ezeani,89,Female,O+,Medical Ward,+2348019121785,"Umuahia, Nigeria",SYN-55EBCEDEEF27,Admitted,MV-00232
+Nneka,Ibekwe,38,Male,B+,Outpatient Clinic,+2348044371390,"Enugu, Nigeria",SYN-175486B17989,Outpatient,MV-00233
+Ngozi,Agu,30,Male,B+,Outpatient Clinic,+2348012711854,"Owerri, Nigeria",SYN-F572EDDF5728,Outpatient,MV-00234
+Somtochukwu,Anyanwu,56,Female,AB-,Outpatient Clinic,+2348082208969,"Abuja, Nigeria",SYN-225529346C5D,Outpatient,MV-00235
+Daniel,Iloabuchi,20,Female,B+,Outpatient Clinic,+2348054023626,"Abuja, Nigeria",SYN-678E200F5AAC,Outpatient,MV-00236
+Grace,Iloabuchi,12,Female,AB+,Outpatient Clinic,+2348043332050,"Asaba, Nigeria",SYN-E861E17DC4BE,Outpatient,MV-00237
+Ada,Ojukwu,18,Female,B-,Outpatient Clinic,+2348013499807,"Onitsha, Nigeria",SYN-D05D8C5A963D,Outpatient,MV-00238
+Michael,Ojukwu,46,Male,B-,Outpatient Clinic,+2348086670565,"Asaba, Nigeria",SYN-A5427206D61E,Outpatient,MV-00239
+Nneka,Ezeh,49,Female,O-,General Ward,+2348049789176,"Awka, Nigeria",SYN-F3E07653C115,Discharged,MV-00240
+David,Okafor,38,Female,B+,Outpatient Clinic,+2348074703778,"Nsukka, Nigeria",SYN-BE387B03874D,Outpatient,MV-00241
+Favour,Nwachukwu,79,Male,AB+,General Ward,+2348028552103,"Enugu, Nigeria",SYN-F333994476E7,Discharged,MV-00242
+Zainab,Obi,46,Female,A-,Outpatient Clinic,+2348021656503,"Umuahia, Nigeria",SYN-F949AD11D4CB,Outpatient,MV-00243
+Emeka,Ezeh,60,Female,B-,Outpatient Clinic,+2348047979866,"Umuahia, Nigeria",SYN-FBDA1C3300B8,Outpatient,MV-00244
+Somtochukwu,Ekwueme,36,Male,O+,Outpatient Clinic,+2348085424284,"Nsukka, Nigeria",SYN-65C46E59D0CE,Outpatient,MV-00245
+Esther,Ibekwe,40,Female,B+,Pediatrics,+2348034747239,"Nsukka, Nigeria",SYN-C363C3DEB25D,Discharged,MV-00246
+Nneka,Nnamani,16,Male,B-,ICU,+2348078058532,"Awka, Nigeria",SYN-2D9CBE0C99AE,Discharged,MV-00247
+Obinna,Ojukwu,73,Male,B-,General Ward,+2348051710737,"Asaba, Nigeria",SYN-7269AEEA6798,Discharged,MV-00248
+Ada,Opara,27,Female,AB-,Outpatient Clinic,+2348023677307,"Asaba, Nigeria",SYN-AFE9FE3E10C2,Outpatient,MV-00249
+Vivian,Ibekwe,71,Female,AB+,Pediatrics,+2348068381715,"Umuahia, Nigeria",SYN-B7295231599E,Discharged,MV-00250
+Esther,Obi,37,Female,B+,Outpatient Clinic,+2348026463111,"Nsukka, Nigeria",SYN-27EA42E80E74,Outpatient,MV-00251
+Sarah,Iloabuchi,34,Female,AB-,Maternity,+2348055221599,"Enugu, Nigeria",SYN-84E69827D9B8,Admitted,MV-00252
+Ifeoma,Ojukwu,31,Female,O-,Outpatient Clinic,+2348037640872,"Onitsha, Nigeria",SYN-03354752680B,Admitted,MV-00253
+Favour,Chukwu,67,Male,AB+,Outpatient Clinic,+2348022650023,"Awka, Nigeria",SYN-A3AF23983A2B,Outpatient,MV-00254
+Chiamaka,Madu,71,Male,AB+,Outpatient Clinic,+2348045166208,"Abuja, Nigeria",SYN-2FED189A6245,Outpatient,MV-00255
+Favour,Ekwueme,69,Female,O-,General Ward,+2348048154880,"Onitsha, Nigeria",SYN-A41D7E24526C,Discharged,MV-00256
+Ada,Ekwueme,49,Male,O+,Surgical Ward,+2348099794169,"Nsukka, Nigeria",SYN-7D9F81073D07,Discharged,MV-00257
+Chiamaka,Ezeh,38,Female,AB-,Outpatient Clinic,+2348054872560,"Asaba, Nigeria",SYN-0CDD68247B1E,Outpatient,MV-00258
+Esther,Anyanwu,51,Female,AB-,Outpatient Clinic,+2348072208385,"Owerri, Nigeria",SYN-AA12B81D798A,Outpatient,MV-00259
+Ngozi,Ekwueme,14,Male,A+,Maternity,+2348048665657,"Abuja, Nigeria",SYN-4BA0E85C0095,Discharged,MV-00260
+Nneka,Agu,49,Female,B+,Outpatient Clinic,+2348035469375,"Nsukka, Nigeria",SYN-CC9621416BB7,Discharged,MV-00261
+Sarah,Umeh,68,Female,A-,Pediatrics,+2348096195169,"Asaba, Nigeria",SYN-6E1239987EBC,Discharged,MV-00262
+Emeka,Opara,12,Male,O+,Outpatient Clinic,+2348089895372,"Onitsha, Nigeria",SYN-59EDC8935DB2,Outpatient,MV-00263
+Oluchi,Iloabuchi,38,Female,O-,Surgical Ward,+2348097446282,"Asaba, Nigeria",SYN-6C058308F550,Discharged,MV-00264
+Sarah,Agu,55,Female,B-,Pediatrics,+2348087719774,"Onitsha, Nigeria",SYN-D0DD22E45A30,Admitted,MV-00265
+Ngozi,Onyeka,1,Female,O-,Outpatient Clinic,+2348012959844,"Owerri, Nigeria",SYN-A8D21AE03890,Outpatient,MV-00266
+Ngozi,Agu,7,Male,O-,Outpatient Clinic,+2348025774846,"Nsukka, Nigeria",SYN-8AE4AE7073A6,Outpatient,MV-00267
+Chinedu,Umeh,88,Male,A-,Outpatient Clinic,+2348092308752,"Awka, Nigeria",SYN-FC6A2EAF8936,Outpatient,MV-00268
+Obinna,Agu,22,Male,B-,Surgical Ward,+2348012004632,"Umuahia, Nigeria",SYN-5B5A82858F03,Discharged,MV-00269
+Kelechi,Eze,85,Female,AB+,Outpatient Clinic,+2348083709487,"Asaba, Nigeria",SYN-81F476C930D6,Outpatient,MV-00270
+Ikenna,Ezeh,45,Female,A+,Outpatient Clinic,+2348064502263,"Nsukka, Nigeria",SYN-B4C38C433F1A,Outpatient,MV-00271
+Peter,Anyanwu,10,Male,A+,Maternity,+2348046230412,"Asaba, Nigeria",SYN-A55D4594F7CA,Admitted,MV-00272
+Chiamaka,Okeke,32,Female,B-,Outpatient Clinic,+2348084971894,"Nsukka, Nigeria",SYN-FAAC8472D607,Outpatient,MV-00273
+Emeka,Madu,26,Male,B-,Outpatient Clinic,+2348090706466,"Asaba, Nigeria",SYN-577120C622EA,Outpatient,MV-00274
+Esther,Nwachukwu,81,Female,A+,Outpatient Clinic,+2348051703250,"Owerri, Nigeria",SYN-160AC175FDCB,Outpatient,MV-00275
+Uche,Iloabuchi,54,Female,B-,Maternity,+2348046635822,"Abuja, Nigeria",SYN-7D95609B5AC0,Discharged,MV-00276
+Amaka,Nwachukwu,85,Male,A-,Outpatient Clinic,+2348075642241,"Onitsha, Nigeria",SYN-3DC74342D2FF,Outpatient,MV-00277
+Daniel,Okafor,61,Female,O+,Outpatient Clinic,+2348084459327,"Onitsha, Nigeria",SYN-B10907E3A738,Outpatient,MV-00278
+Chiamaka,Agu,47,Male,A-,ICU,+2348024720668,"Enugu, Nigeria",SYN-418F7390273B,Discharged,MV-00279
+Somtochukwu,Nwosu,22,Female,AB+,Outpatient Clinic,+2348091418653,"Umuahia, Nigeria",SYN-DF8A6CA7E8A5,Outpatient,MV-00280
+David,Onyeka,61,Male,A+,Outpatient Clinic,+2348016211254,"Asaba, Nigeria",SYN-F4E8419D87E6,Outpatient,MV-00281
+Zainab,Okafor,7,Female,AB+,Outpatient Clinic,+2348036669353,"Owerri, Nigeria",SYN-EEA678C0EAB4,Outpatient,MV-00282
+Victor,Nwachukwu,77,Male,O+,Outpatient Clinic,+2348090776496,"Nsukka, Nigeria",SYN-300B1CFEC0CC,Outpatient,MV-00283
+Zainab,Umeh,67,Male,O+,Surgical Ward,+2348044168609,"Awka, Nigeria",SYN-1CDCAEC27ECF,Discharged,MV-00284
+Amaka,Nwachukwu,55,Female,B+,Outpatient Clinic,+2348021139817,"Owerri, Nigeria",SYN-DCA04E2C14CB,Outpatient,MV-00285
+Gabriel,Ojukwu,32,Male,O-,Outpatient Clinic,+2348042164183,"Enugu, Nigeria",SYN-DF0FF10BD545,Discharged,MV-00286
+Joy,Madu,35,Female,B+,Maternity,+2348094068452,"Abuja, Nigeria",SYN-C7D7CB9980A9,Discharged,MV-00287
+Favour,Anyanwu,78,Female,AB+,Outpatient Clinic,+2348062459496,"Asaba, Nigeria",SYN-BD2F79371600,Outpatient,MV-00288
+Sarah,Chukwu,61,Male,O+,Outpatient Clinic,+2348086173615,"Enugu, Nigeria",SYN-06E4E4539195,Outpatient,MV-00289
+Ifeoma,Agu,23,Male,AB+,Outpatient Clinic,+2348036322838,"Asaba, Nigeria",SYN-80B2129B6CC5,Outpatient,MV-00290
+Somtochukwu,Iloabuchi,18,Female,A-,Outpatient Clinic,+2348059293258,"Awka, Nigeria",SYN-E95A4FE49B59,Outpatient,MV-00291
+Ngozi,Iloabuchi,32,Male,O-,Outpatient Clinic,+2348098918628,"Onitsha, Nigeria",SYN-BB85A55BFCFA,Outpatient,MV-00292
+Ikenna,Umeh,27,Male,O-,Outpatient Clinic,+2348078360469,"Awka, Nigeria",SYN-3164C1C27D91,Outpatient,MV-00293
+Nneka,Ojukwu,26,Male,A+,General Ward,+2348026577912,"Onitsha, Nigeria",SYN-65B85FBBF8E8,Discharged,MV-00294
+Ikenna,Ezeani,83,Male,B+,Medical Ward,+2348031828123,"Umuahia, Nigeria",SYN-2DA808D42508,Discharged,MV-00295
+Ada,Chukwu,70,Female,B-,General Ward,+2348099089142,"Enugu, Nigeria",SYN-78FF2F570F61,Discharged,MV-00296
+Peter,Okeke,46,Male,A-,Outpatient Clinic,+2348039768761,"Nsukka, Nigeria",SYN-6545AEFC9FD6,Outpatient,MV-00297
+Ngozi,Onyeka,19,Female,AB+,Surgical Ward,+2348076677808,"Asaba, Nigeria",SYN-272C5D9CE880,Admitted,MV-00298
+Ngozi,Chukwu,28,Male,AB+,Outpatient Clinic,+2348028465913,"Abuja, Nigeria",SYN-A070068214C1,Outpatient,MV-00299
+Favour,Ojukwu,76,Female,B+,Emergency,+2348066595636,"Awka, Nigeria",SYN-AFEA0C900A98,Admitted,MV-00300
+Daniel,Okeke,5,Female,AB-,Outpatient Clinic,+2348013749788,"Nsukka, Nigeria",SYN-8BA683B47244,Outpatient,MV-00301
+David,Ekwueme,41,Male,A-,Outpatient Clinic,+2348029274472,"Onitsha, Nigeria",SYN-232C1A7BA062,Outpatient,MV-00302
+Sarah,Nwosu,33,Male,O-,Outpatient Clinic,+2348010725183,"Enugu, Nigeria",SYN-F7812DD99E77,Outpatient,MV-00303
+Ngozi,Umeh,43,Male,B+,Outpatient Clinic,+2348076092755,"Asaba, Nigeria",SYN-B32EF9065502,Outpatient,MV-00304
+Uche,Ojukwu,16,Female,AB-,Outpatient Clinic,+2348097800366,"Awka, Nigeria",SYN-D6C3FE02D0FF,Outpatient,MV-00305
+Uche,Ibekwe,26,Female,O-,Emergency,+2348056401943,"Abuja, Nigeria",SYN-A3439427D80C,Admitted,MV-00306
+Joy,Ojukwu,53,Male,B-,Medical Ward,+2348093454832,"Owerri, Nigeria",SYN-26AB6CC7418D,Discharged,MV-00307
+Victor,Eze,61,Female,O-,Outpatient Clinic,+2348019770507,"Awka, Nigeria",SYN-B14123E5F158,Outpatient,MV-00308
+Emeka,Okafor,45,Female,A-,ICU,+2348076856785,"Abuja, Nigeria",SYN-A73D7373D669,Admitted,MV-00309
+Favour,Onyeka,43,Female,AB+,Outpatient Clinic,+2348021512362,"Abuja, Nigeria",SYN-02CA6215A447,Outpatient,MV-00310
+Gabriel,Nwachukwu,48,Female,B+,Outpatient Clinic,+2348090226389,"Asaba, Nigeria",SYN-7E2FFB4FD76E,Outpatient,MV-00311
+Ada,Ezeani,68,Female,B-,Surgical Ward,+2348015064062,"Abuja, Nigeria",SYN-91F6CA1DE434,Discharged,MV-00312
+Ngozi,Obi,18,Female,A-,Outpatient Clinic,+2348036900923,"Umuahia, Nigeria",SYN-2E4BD2C9866C,Outpatient,MV-00313
+Victor,Obi,4,Male,A+,Outpatient Clinic,+2348036188594,"Onitsha, Nigeria",SYN-6817D9B25694,Outpatient,MV-00314
+Chiamaka,Agu,79,Female,B-,Outpatient Clinic,+2348093202178,"Owerri, Nigeria",SYN-0A2754F5F20E,Outpatient,MV-00315
+Sarah,Nwosu,32,Female,AB-,Outpatient Clinic,+2348084739436,"Umuahia, Nigeria",SYN-06E1E9BC9F9B,Outpatient,MV-00316
+Esther,Eze,66,Female,A-,Outpatient Clinic,+2348047432832,"Owerri, Nigeria",SYN-78EB49D6222B,Discharged,MV-00317
+Grace,Chukwu,46,Male,B-,Medical Ward,+2348041855136,"Owerri, Nigeria",SYN-6C1BB4E0A88E,Discharged,MV-00318
+Ngozi,Eze,31,Female,A-,General Ward,+2348099636804,"Asaba, Nigeria",SYN-18A9F0320286,Discharged,MV-00319
+Samuel,Chukwu,33,Female,A-,Outpatient Clinic,+2348075517050,"Owerri, Nigeria",SYN-0DF5326DF440,Outpatient,MV-00320
+Precious,Nwachukwu,52,Female,O-,Outpatient Clinic,+2348075164067,"Enugu, Nigeria",SYN-F47E0F01AE9E,Outpatient,MV-00321
+Victor,Ekwueme,62,Male,B+,Outpatient Clinic,+2348094464972,"Umuahia, Nigeria",SYN-870ACB94ACAD,Outpatient,MV-00322
+Samuel,Ojukwu,67,Male,AB+,Outpatient Clinic,+2348028240393,"Asaba, Nigeria",SYN-5426EA7CBB5D,Outpatient,MV-00323
+Ifeoma,Umeh,49,Female,AB+,ICU,+2348060095113,"Owerri, Nigeria",SYN-186931CBCFC3,Discharged,MV-00324
+Daniel,Okeke,35,Male,AB+,Surgical Ward,+2348048082047,"Asaba, Nigeria",SYN-E906B1566F04,Discharged,MV-00325
+Samuel,Okafor,21,Male,O-,Outpatient Clinic,+2348070488261,"Asaba, Nigeria",SYN-AA759BAD26EE,Outpatient,MV-00326
+Daniel,Ezeh,89,Male,AB-,Pediatrics,+2348094668667,"Enugu, Nigeria",SYN-409E6CD54CBC,Admitted,MV-00327
+Gabriel,Chukwu,22,Female,AB-,Medical Ward,+2348081157431,"Onitsha, Nigeria",SYN-C3A7BE7F1F3A,Admitted,MV-00328
+Sarah,Ibekwe,57,Female,AB+,Medical Ward,+2348078258381,"Umuahia, Nigeria",SYN-1AA115D58B8F,Admitted,MV-00329
+Chinedu,Ezeani,39,Male,O-,Outpatient Clinic,+2348070233698,"Asaba, Nigeria",SYN-45880E6DD5D0,Outpatient,MV-00330
+David,Nwosu,35,Male,O-,General Ward,+2348041390188,"Asaba, Nigeria",SYN-9D8622EBC012,Admitted,MV-00331
+Esther,Obi,86,Male,B+,Outpatient Clinic,+2348097092259,"Abuja, Nigeria",SYN-A96EF11A8665,Outpatient,MV-00332
+Peter,Ekwueme,69,Male,AB+,Surgical Ward,+2348079031296,"Umuahia, Nigeria",SYN-0DFB2D56ADB7,Admitted,MV-00333
+Somtochukwu,Okafor,66,Male,O+,Outpatient Clinic,+2348066163531,"Onitsha, Nigeria",SYN-299FBC64043A,Outpatient,MV-00334
+Peter,Chukwu,26,Male,B+,Outpatient Clinic,+2348066778366,"Owerri, Nigeria",SYN-FB29D7DBF9F0,Outpatient,MV-00335
+Obinna,Agu,29,Female,B-,General Ward,+2348072085919,"Nsukka, Nigeria",SYN-9154FD646BAE,Admitted,MV-00336
+Precious,Opara,12,Male,A+,Emergency,+2348071368050,"Asaba, Nigeria",SYN-373C48CD18E0,Discharged,MV-00337
+Oluchi,Opara,41,Female,B+,Outpatient Clinic,+2348052668161,"Nsukka, Nigeria",SYN-24EE3F22D26E,Outpatient,MV-00338
+Ada,Agu,27,Male,AB-,Outpatient Clinic,+2348014412278,"Enugu, Nigeria",SYN-A626A660A2C8,Outpatient,MV-00339
+Oluchi,Opara,45,Male,A+,Medical Ward,+2348043229849,"Enugu, Nigeria",SYN-01CF08BBDF72,Admitted,MV-00340
+Somtochukwu,Obi,53,Male,AB-,Outpatient Clinic,+2348038800205,"Abuja, Nigeria",SYN-AE013593B051,Outpatient,MV-00341
+Favour,Onyeka,64,Male,B+,Outpatient Clinic,+2348048304225,"Abuja, Nigeria",SYN-8DA9FD795AD8,Outpatient,MV-00342
+Ikenna,Obi,22,Male,AB-,Medical Ward,+2348092200687,"Nsukka, Nigeria",SYN-7EC4129CF026,Discharged,MV-00343
+David,Okeke,83,Male,O+,Outpatient Clinic,+2348085858826,"Awka, Nigeria",SYN-27164B675A71,Discharged,MV-00344
+Somtochukwu,Obi,43,Male,A+,Surgical Ward,+2348028836272,"Nsukka, Nigeria",SYN-80CCFBAE0767,Admitted,MV-00345
+Ikenna,Onyeka,44,Male,O-,Surgical Ward,+2348073463288,"Enugu, Nigeria",SYN-FFEA26E1AE8F,Discharged,MV-00346
+Chiamaka,Ojukwu,44,Male,O-,Outpatient Clinic,+2348035055089,"Asaba, Nigeria",SYN-802A23E6EBC6,Discharged,MV-00347
+Kelechi,Okafor,32,Female,AB-,Medical Ward,+2348011227363,"Owerri, Nigeria",SYN-C3B7E33B8056,Discharged,MV-00348
+Precious,Ekwueme,41,Female,B-,Maternity,+2348043429969,"Asaba, Nigeria",SYN-01E8547F9854,Discharged,MV-00349
+Ada,Iloabuchi,59,Female,AB+,Medical Ward,+2348033028147,"Abuja, Nigeria",SYN-3AF7007E434C,Discharged,MV-00350
+Ikenna,Onyeka,70,Female,O+,Maternity,+2348078010114,"Abuja, Nigeria",SYN-F835F14B132D,Discharged,MV-00351
+Grace,Iloabuchi,20,Male,A-,Maternity,+2348075703778,"Abuja, Nigeria",SYN-CCA8F7D868CD,Admitted,MV-00352
+Ada,Ezeh,35,Female,O-,Outpatient Clinic,+2348018679075,"Asaba, Nigeria",SYN-569C7F7CE77C,Outpatient,MV-00353
+Vivian,Eze,83,Female,B+,Outpatient Clinic,+2348099458428,"Umuahia, Nigeria",SYN-E3984E87C4E7,Outpatient,MV-00354
+Obinna,Ezeani,69,Female,O-,Outpatient Clinic,+2348019269787,"Nsukka, Nigeria",SYN-FDBD44CBDC26,Outpatient,MV-00355
+Nneka,Onyeka,26,Male,O-,Outpatient Clinic,+2348043106289,"Enugu, Nigeria",SYN-DA47EDFF6DA1,Outpatient,MV-00356
+Ngozi,Anyanwu,61,Female,A-,Outpatient Clinic,+2348073637037,"Umuahia, Nigeria",SYN-DE5EFA65D6AE,Outpatient,MV-00357
+Zainab,Obi,24,Female,B-,Medical Ward,+2348044890134,"Onitsha, Nigeria",SYN-4D635B6E776F,Discharged,MV-00358
+Joy,Chukwu,27,Female,A+,Pediatrics,+2348072411388,"Umuahia, Nigeria",SYN-543727E1127D,Admitted,MV-00359
+Ifeoma,Umeh,73,Male,O+,General Ward,+2348037477596,"Awka, Nigeria",SYN-342F51C07D15,Admitted,MV-00360
+Gabriel,Anyanwu,60,Female,A-,Pediatrics,+2348070702188,"Nsukka, Nigeria",SYN-04026BF7C7CD,Discharged,MV-00361
+Grace,Nwosu,19,Male,AB+,Outpatient Clinic,+2348070983598,"Onitsha, Nigeria",SYN-F62F007B5F6D,Outpatient,MV-00362
+Chinedu,Chukwu,46,Male,B+,General Ward,+2348076106504,"Awka, Nigeria",SYN-853DE11648F2,Discharged,MV-00363
+Oluchi,Umeh,18,Male,A-,General Ward,+2348051293010,"Asaba, Nigeria",SYN-F750CFCB5B75,Admitted,MV-00364
+Victor,Agu,62,Female,B+,Outpatient Clinic,+2348012784336,"Onitsha, Nigeria",SYN-116A31BDD4C2,Outpatient,MV-00365
+Uche,Umeh,29,Female,A-,Outpatient Clinic,+2348020834408,"Nsukka, Nigeria",SYN-7C1BC18115D9,Admitted,MV-00366
+Obinna,Ezeani,32,Female,B+,Pediatrics,+2348026006223,"Owerri, Nigeria",SYN-1CBE69476D42,Discharged,MV-00367
+Peter,Ezeani,45,Female,O+,Outpatient Clinic,+2348032905615,"Asaba, Nigeria",SYN-35FF60F09136,Outpatient,MV-00368
+Ikenna,Ezeh,9,Female,AB+,Emergency,+2348096520916,"Umuahia, Nigeria",SYN-9D18781AED0F,Discharged,MV-00369
+Emeka,Ezeh,22,Male,O-,Outpatient Clinic,+2348011691455,"Umuahia, Nigeria",SYN-4283E9077518,Outpatient,MV-00370
+Grace,Eze,49,Male,AB+,Surgical Ward,+2348065514759,"Abuja, Nigeria",SYN-72DC2C351C4E,Admitted,MV-00371
+Nneka,Chukwu,56,Female,AB+,Outpatient Clinic,+2348079495984,"Onitsha, Nigeria",SYN-E11752FF4C03,Outpatient,MV-00372
+Grace,Okeke,69,Male,A+,Maternity,+2348054973791,"Onitsha, Nigeria",SYN-F7733B8AD56B,Admitted,MV-00373
+Ifeoma,Opara,33,Male,B+,Outpatient Clinic,+2348012302836,"Umuahia, Nigeria",SYN-E23598123B4E,Outpatient,MV-00374
+Samuel,Ibekwe,55,Female,AB+,Outpatient Clinic,+2348037522287,"Owerri, Nigeria",SYN-6F321F63E92B,Outpatient,MV-00375
+Ikenna,Onyeka,89,Female,B+,Surgical Ward,+2348038334780,"Enugu, Nigeria",SYN-8A2741AA6110,Admitted,MV-00376
+David,Nnamani,39,Female,AB+,General Ward,+2348085818913,"Owerri, Nigeria",SYN-41878C5D48A8,Discharged,MV-00377
+Ifeoma,Nnamani,25,Female,O-,Medical Ward,+2348014973832,"Nsukka, Nigeria",SYN-43742A619C4C,Discharged,MV-00378
+Ngozi,Umeh,65,Male,AB-,Emergency,+2348021715423,"Abuja, Nigeria",SYN-3C92F3B863AE,Discharged,MV-00379
+David,Opara,46,Female,AB+,Outpatient Clinic,+2348069095083,"Onitsha, Nigeria",SYN-E2F4C73CEC1E,Outpatient,MV-00380
+Vivian,Nwachukwu,85,Male,O+,Outpatient Clinic,+2348038595748,"Awka, Nigeria",SYN-87B0BC68EF78,Admitted,MV-00381
+Nneka,Ojukwu,45,Male,AB-,Outpatient Clinic,+2348024093824,"Enugu, Nigeria",SYN-D7D9B147CF5C,Outpatient,MV-00382
+Peter,Nnamani,79,Male,AB-,Pediatrics,+2348062206473,"Awka, Nigeria",SYN-272B5502E77D,Discharged,MV-00383
+Peter,Obi,78,Male,B-,Outpatient Clinic,+2348076286796,"Asaba, Nigeria",SYN-B6A3D182206D,Outpatient,MV-00384
+Oluchi,Iloabuchi,16,Male,B+,Outpatient Clinic,+2348089572364,"Onitsha, Nigeria",SYN-7131FCCC953C,Outpatient,MV-00385
+Michael,Nnamani,41,Female,B+,Outpatient Clinic,+2348066066265,"Owerri, Nigeria",SYN-979F25C3D359,Outpatient,MV-00386
+Chinedu,Nwosu,37,Female,A-,Medical Ward,+2348020771154,"Umuahia, Nigeria",SYN-652249D73705,Admitted,MV-00387
+Joy,Eze,26,Female,B-,Medical Ward,+2348077647363,"Nsukka, Nigeria",SYN-18E87CFFA805,Discharged,MV-00388
+Ada,Ezeani,84,Female,O+,Emergency,+2348015132900,"Abuja, Nigeria",SYN-EAF748BB3602,Discharged,MV-00389
+Favour,Nwachukwu,16,Male,B+,Maternity,+2348058295657,"Enugu, Nigeria",SYN-EDA42DE6E142,Admitted,MV-00390
+Nneka,Nnamani,76,Female,B-,Outpatient Clinic,+2348018799620,"Awka, Nigeria",SYN-28C7DBF768E8,Outpatient,MV-00391
+Esther,Madu,47,Male,B+,Outpatient Clinic,+2348057000668,"Umuahia, Nigeria",SYN-1967C5D0A9AF,Discharged,MV-00392
+Victor,Okafor,64,Male,O+,Surgical Ward,+2348086061512,"Umuahia, Nigeria",SYN-D31AEFC2E183,Discharged,MV-00393
+Chinedu,Ezeani,29,Female,O-,Emergency,+2348074466074,"Onitsha, Nigeria",SYN-6E31108EF30A,Admitted,MV-00394
+Oluchi,Nwosu,60,Male,O+,Maternity,+2348041560294,"Abuja, Nigeria",SYN-8C8C68AE4FBA,Discharged,MV-00395
+Daniel,Anyanwu,43,Male,AB+,Outpatient Clinic,+2348084160636,"Owerri, Nigeria",SYN-4DAA868A4B8C,Outpatient,MV-00396
+Chiamaka,Okeke,32,Male,O+,Pediatrics,+2348012078936,"Awka, Nigeria",SYN-BF1E3A87FD07,Discharged,MV-00397
+Nneka,Eze,51,Male,B+,Outpatient Clinic,+2348095406854,"Owerri, Nigeria",SYN-8EAEBAF0C809,Outpatient,MV-00398
+Grace,Okafor,19,Male,A-,Outpatient Clinic,+2348078125167,"Abuja, Nigeria",SYN-A4292F5235E7,Outpatient,MV-00399
+Yusuf,Nwachukwu,43,Male,A+,ICU,+2348057478891,"Asaba, Nigeria",SYN-B751D0CCF667,Discharged,MV-00400
+Zainab,Ekwueme,55,Male,AB-,Emergency,+2348058690380,"Owerri, Nigeria",SYN-765F1E46A40D,Admitted,MV-00401
+Precious,Eze,25,Male,A+,ICU,+2348083060277,"Asaba, Nigeria",SYN-0A6592295CCC,Discharged,MV-00402
+Emeka,Ibekwe,19,Female,AB-,Surgical Ward,+2348095120400,"Umuahia, Nigeria",SYN-BB69B320411F,Discharged,MV-00403
+Ngozi,Iloabuchi,75,Female,O-,Outpatient Clinic,+2348090961836,"Asaba, Nigeria",SYN-10235F445621,Outpatient,MV-00404
+Chinedu,Okeke,54,Female,A-,Outpatient Clinic,+2348071175520,"Enugu, Nigeria",SYN-8FEAD18940CD,Outpatient,MV-00405
+Victor,Anyanwu,46,Female,B+,Outpatient Clinic,+2348042706298,"Asaba, Nigeria",SYN-72555F027C93,Discharged,MV-00406
+Ifeoma,Ezeh,17,Male,A+,Outpatient Clinic,+2348062418706,"Enugu, Nigeria",SYN-C1853DA64019,Discharged,MV-00407
+Ikenna,Agu,29,Male,O-,Surgical Ward,+2348081276406,"Awka, Nigeria",SYN-C0EEEC9F39EA,Discharged,MV-00408
+Ngozi,Onyeka,28,Female,O+,ICU,+2348021368548,"Enugu, Nigeria",SYN-44EF38B24D0D,Admitted,MV-00409
+Obinna,Madu,69,Female,A+,Outpatient Clinic,+2348037454029,"Abuja, Nigeria",SYN-1691A33BC125,Outpatient,MV-00410
+Vivian,Umeh,29,Female,O+,Emergency,+2348068002461,"Awka, Nigeria",SYN-1AFD22ED81F7,Admitted,MV-00411
+Esther,Iloabuchi,58,Male,O-,Outpatient Clinic,+2348098003725,"Nsukka, Nigeria",SYN-EB6AF4ADC704,Outpatient,MV-00412
+David,Ekwueme,3,Female,A-,Outpatient Clinic,+2348029391246,"Onitsha, Nigeria",SYN-5214641DC830,Outpatient,MV-00413
+Chiamaka,Okeke,8,Female,AB-,Pediatrics,+2348030662206,"Asaba, Nigeria",SYN-D65680CF8028,Discharged,MV-00414
+Favour,Umeh,15,Female,A+,Outpatient Clinic,+2348090627390,"Enugu, Nigeria",SYN-4E83AED3E351,Outpatient,MV-00415
+Chiamaka,Madu,65,Female,O+,Pediatrics,+2348085755347,"Enugu, Nigeria",SYN-4000B7AD4AEB,Admitted,MV-00416
+Ngozi,Madu,78,Female,O+,ICU,+2348057397018,"Nsukka, Nigeria",SYN-4A49FF097FFA,Admitted,MV-00417
+Kelechi,Chukwu,78,Female,O-,Pediatrics,+2348077238724,"Nsukka, Nigeria",SYN-C7D1A6B51F05,Admitted,MV-00418
+Oluchi,Nwosu,72,Male,A+,Outpatient Clinic,+2348074857000,"Awka, Nigeria",SYN-F1A9630804E0,Outpatient,MV-00419
+Ifeoma,Ojukwu,50,Female,O-,Outpatient Clinic,+2348013413306,"Enugu, Nigeria",SYN-B62F1E90D58B,Outpatient,MV-00420
+Ada,Ibekwe,5,Male,AB+,Emergency,+2348058208897,"Enugu, Nigeria",SYN-36CAEE9D1B04,Discharged,MV-00421
+Uche,Nwachukwu,38,Female,A+,Emergency,+2348098316722,"Enugu, Nigeria",SYN-232B8C19F5A2,Admitted,MV-00422
+Daniel,Ojukwu,4,Female,B+,Outpatient Clinic,+2348087711630,"Umuahia, Nigeria",SYN-192E03008B29,Outpatient,MV-00423
+Emeka,Okeke,86,Male,O-,Outpatient Clinic,+2348087533995,"Asaba, Nigeria",SYN-CD4D82886204,Outpatient,MV-00424
+Nneka,Agu,61,Female,B+,Outpatient Clinic,+2348088194998,"Onitsha, Nigeria",SYN-58C8EA3B0C62,Discharged,MV-00425
+Nneka,Okeke,39,Male,A+,Outpatient Clinic,+2348014186130,"Umuahia, Nigeria",SYN-EB189F4F40B3,Outpatient,MV-00426
+Peter,Obi,82,Male,A-,Outpatient Clinic,+2348058843220,"Asaba, Nigeria",SYN-17271713310F,Discharged,MV-00427
+Ada,Ezeani,34,Female,A+,ICU,+2348011084682,"Enugu, Nigeria",SYN-0F74134DB78F,Discharged,MV-00428
+Ada,Nwosu,88,Female,A-,Outpatient Clinic,+2348013935450,"Onitsha, Nigeria",SYN-65A6AE1EB1EE,Outpatient,MV-00429
+Obinna,Ezeh,81,Female,A-,Medical Ward,+2348099295487,"Umuahia, Nigeria",SYN-BC0D7C20A2DF,Admitted,MV-00430
+Joy,Umeh,47,Male,AB+,Outpatient Clinic,+2348014610948,"Umuahia, Nigeria",SYN-5E91C8B62F80,Outpatient,MV-00431
+Peter,Chukwu,22,Male,A+,ICU,+2348061108678,"Awka, Nigeria",SYN-B62DC8F422B9,Discharged,MV-00432
+Somtochukwu,Nnamani,62,Female,O+,Outpatient Clinic,+2348029437185,"Awka, Nigeria",SYN-88C1D05AB93A,Outpatient,MV-00433
+Gabriel,Onyeka,19,Female,AB-,Pediatrics,+2348088076217,"Onitsha, Nigeria",SYN-6E8F0ABA9334,Admitted,MV-00434
+Peter,Umeh,51,Male,B-,Medical Ward,+2348013136270,"Abuja, Nigeria",SYN-11D0A33EA71A,Discharged,MV-00435
+Sarah,Ekwueme,58,Male,AB+,Medical Ward,+2348066054868,"Onitsha, Nigeria",SYN-9D616C143B19,Discharged,MV-00436
+Precious,Okafor,56,Female,AB-,Outpatient Clinic,+2348074176964,"Abuja, Nigeria",SYN-7AEB1D952C6C,Outpatient,MV-00437
+Favour,Iloabuchi,44,Male,AB+,Pediatrics,+2348098287138,"Awka, Nigeria",SYN-4F8932BC8759,Discharged,MV-00438
+Gabriel,Iloabuchi,20,Female,AB+,Medical Ward,+2348058098573,"Asaba, Nigeria",SYN-D15F39884A13,Admitted,MV-00439
+Zainab,Nnamani,64,Female,A+,Outpatient Clinic,+2348037949711,"Enugu, Nigeria",SYN-01C787BD6C38,Outpatient,MV-00440
+Favour,Onyeka,82,Male,AB+,Surgical Ward,+2348045405923,"Awka, Nigeria",SYN-A2C411C6BF16,Admitted,MV-00441
+Daniel,Ezeh,35,Male,O-,Outpatient Clinic,+2348026386857,"Umuahia, Nigeria",SYN-F7CBB8A274C1,Outpatient,MV-00442
+Emeka,Anyanwu,55,Female,A-,Outpatient Clinic,+2348044307669,"Umuahia, Nigeria",SYN-3EADC92FEBBF,Outpatient,MV-00443
+Gabriel,Ibekwe,70,Female,O+,Outpatient Clinic,+2348028319912,"Asaba, Nigeria",SYN-C54D0076B56D,Outpatient,MV-00444
+Daniel,Madu,53,Male,B-,Emergency,+2348030504273,"Asaba, Nigeria",SYN-29077D6E1685,Discharged,MV-00445
+Amaka,Ezeh,12,Male,O+,Outpatient Clinic,+2348084313149,"Awka, Nigeria",SYN-5E86153E6081,Admitted,MV-00446
+Precious,Anyanwu,18,Female,A+,Pediatrics,+2348051285859,"Abuja, Nigeria",SYN-7458BE191A19,Discharged,MV-00447
+Esther,Onyeka,32,Female,A+,Surgical Ward,+2348041645503,"Onitsha, Nigeria",SYN-47FA92D8FEF9,Discharged,MV-00448
+Ikenna,Chukwu,18,Female,O-,Emergency,+2348048549083,"Umuahia, Nigeria",SYN-04C32947D146,Discharged,MV-00449
+Samuel,Madu,28,Female,AB+,Surgical Ward,+2348051089185,"Owerri, Nigeria",SYN-E1CCCB8B0B1A,Discharged,MV-00450
+Daniel,Ezeani,61,Female,A-,Pediatrics,+2348087656133,"Nsukka, Nigeria",SYN-C80DC83C80E3,Admitted,MV-00451
+Yusuf,Nnamani,3,Female,O+,Outpatient Clinic,+2348041906453,"Owerri, Nigeria",SYN-637F84724666,Outpatient,MV-00452
+David,Chukwu,45,Female,B-,Outpatient Clinic,+2348073416227,"Umuahia, Nigeria",SYN-21636A8E3052,Outpatient,MV-00453
+Michael,Nnamani,81,Female,B-,Outpatient Clinic,+2348088315626,"Asaba, Nigeria",SYN-BF92C32EA068,Outpatient,MV-00454
+Ikenna,Ibekwe,88,Female,O-,Outpatient Clinic,+2348021654129,"Owerri, Nigeria",SYN-0D64DA642C39,Outpatient,MV-00455
+Favour,Nwosu,1,Male,AB+,Outpatient Clinic,+2348038727264,"Umuahia, Nigeria",SYN-79A89B502C61,Discharged,MV-00456
+Somtochukwu,Chukwu,35,Female,O-,Outpatient Clinic,+2348083362313,"Abuja, Nigeria",SYN-029AFFEA4286,Outpatient,MV-00457
+Joy,Opara,60,Female,O-,Pediatrics,+2348093931164,"Asaba, Nigeria",SYN-8D3F129250BB,Discharged,MV-00458
+Nneka,Ezeani,8,Female,AB-,Outpatient Clinic,+2348053139289,"Onitsha, Nigeria",SYN-5E64502F1864,Outpatient,MV-00459
+Daniel,Agu,62,Male,O+,Outpatient Clinic,+2348082720137,"Owerri, Nigeria",SYN-43F00419F864,Outpatient,MV-00460
+Ikenna,Ezeani,61,Male,AB+,Outpatient Clinic,+2348094058724,"Awka, Nigeria",SYN-14F8BD27D226,Outpatient,MV-00461
+Victor,Ezeani,29,Female,O-,Medical Ward,+2348074110014,"Onitsha, Nigeria",SYN-D0D1F1D9612A,Admitted,MV-00462
+Amaka,Okeke,78,Female,B+,Maternity,+2348064092719,"Asaba, Nigeria",SYN-55D5C41481EA,Discharged,MV-00463
+Michael,Nnamani,8,Male,A+,Emergency,+2348067970304,"Umuahia, Nigeria",SYN-8967E6A75A83,Discharged,MV-00464
+Precious,Eze,74,Female,O-,Outpatient Clinic,+2348029278726,"Enugu, Nigeria",SYN-3BB7C6ECBA90,Outpatient,MV-00465
+Favour,Ezeh,2,Female,B-,Emergency,+2348077815613,"Asaba, Nigeria",SYN-298ED86908CA,Discharged,MV-00466
+Uche,Nnamani,11,Female,O+,Outpatient Clinic,+2348044120721,"Abuja, Nigeria",SYN-F31B1925D8F8,Outpatient,MV-00467
+Daniel,Opara,29,Male,B+,Outpatient Clinic,+2348073786914,"Onitsha, Nigeria",SYN-C6CF18B33BBC,Outpatient,MV-00468
+David,Nnamani,74,Female,AB+,Outpatient Clinic,+2348078775403,"Enugu, Nigeria",SYN-D1A97D70A800,Outpatient,MV-00469
+Sarah,Okafor,62,Female,B+,Outpatient Clinic,+2348011366383,"Owerri, Nigeria",SYN-577D519D15DB,Admitted,MV-00470
+Esther,Agu,14,Male,B-,Outpatient Clinic,+2348052514323,"Nsukka, Nigeria",SYN-48095F28CAA5,Outpatient,MV-00471
+Ifeoma,Eze,60,Female,A+,Maternity,+2348082277725,"Awka, Nigeria",SYN-DB7A8E875905,Discharged,MV-00472
+Daniel,Madu,71,Female,A-,Outpatient Clinic,+2348079744049,"Asaba, Nigeria",SYN-5FCBC9E1EE7D,Outpatient,MV-00473
+Uche,Chukwu,71,Male,B-,Maternity,+2348081492511,"Onitsha, Nigeria",SYN-41C3E52D2169,Admitted,MV-00474
+David,Nnamani,86,Female,B-,Outpatient Clinic,+2348050429458,"Umuahia, Nigeria",SYN-CEA22016C271,Discharged,MV-00475
+Oluchi,Anyanwu,19,Male,O+,Outpatient Clinic,+2348087433839,"Umuahia, Nigeria",SYN-A814C968DB5F,Discharged,MV-00476
+Obinna,Madu,55,Female,B-,Pediatrics,+2348083120682,"Asaba, Nigeria",SYN-174BC88C5D7D,Discharged,MV-00477
+Peter,Chukwu,85,Male,AB+,Outpatient Clinic,+2348068879843,"Nsukka, Nigeria",SYN-05141BF052D2,Outpatient,MV-00478
+Nneka,Opara,54,Male,AB-,Outpatient Clinic,+2348015985119,"Asaba, Nigeria",SYN-E0F27A7F3D73,Outpatient,MV-00479
+Uche,Okafor,3,Female,AB-,General Ward,+2348012652150,"Onitsha, Nigeria",SYN-EE66283DC81F,Discharged,MV-00480
+Kelechi,Okeke,82,Male,O+,Maternity,+2348018942117,"Umuahia, Nigeria",SYN-3B3F8778371B,Discharged,MV-00481
+Emeka,Ojukwu,55,Female,A-,Outpatient Clinic,+2348038967768,"Umuahia, Nigeria",SYN-3C74F2277E86,Outpatient,MV-00482
+Ikenna,Nwachukwu,40,Female,AB+,Outpatient Clinic,+2348047725477,"Awka, Nigeria",SYN-BD2C26190AE8,Outpatient,MV-00483
+Yusuf,Madu,90,Male,O+,Medical Ward,+2348099110138,"Owerri, Nigeria",SYN-7F0CFFB63B8C,Discharged,MV-00484
+Gabriel,Umeh,75,Male,AB-,Medical Ward,+2348071983937,"Asaba, Nigeria",SYN-815647E64490,Admitted,MV-00485
+Samuel,Ezeani,51,Male,AB-,Surgical Ward,+2348068398884,"Enugu, Nigeria",SYN-859C2CC026F9,Discharged,MV-00486
+Grace,Eze,35,Female,A+,Outpatient Clinic,+2348042918763,"Awka, Nigeria",SYN-D8233758F359,Outpatient,MV-00487
+Chinedu,Okeke,65,Female,AB-,Outpatient Clinic,+2348029152140,"Onitsha, Nigeria",SYN-373FD087C2E1,Outpatient,MV-00488
+Sarah,Ekwueme,22,Male,AB+,Outpatient Clinic,+2348067411634,"Owerri, Nigeria",SYN-FDFE123B10F9,Discharged,MV-00489
+Amaka,Agu,25,Male,AB+,Pediatrics,+2348054664405,"Enugu, Nigeria",SYN-6ACBDB58E574,Discharged,MV-00490
+Obinna,Okeke,29,Female,B+,Outpatient Clinic,+2348089643296,"Onitsha, Nigeria",SYN-EE2999012C67,Outpatient,MV-00491
+Ifeoma,Chukwu,62,Male,A+,Outpatient Clinic,+2348037269403,"Asaba, Nigeria",SYN-C29609DD6723,Outpatient,MV-00492
+David,Iloabuchi,87,Female,O-,Outpatient Clinic,+2348090234960,"Awka, Nigeria",SYN-10232A72EE43,Outpatient,MV-00493
+Michael,Anyanwu,28,Female,O-,Emergency,+2348079030231,"Nsukka, Nigeria",SYN-822CB46D1300,Discharged,MV-00494
+Chinedu,Anyanwu,20,Male,B-,Outpatient Clinic,+2348090676034,"Owerri, Nigeria",SYN-3A2E37A5F7FF,Outpatient,MV-00495
+Esther,Madu,63,Male,AB+,Outpatient Clinic,+2348062764735,"Awka, Nigeria",SYN-6653707BD757,Outpatient,MV-00496
+Victor,Ezeani,46,Male,B+,ICU,+2348076765753,"Awka, Nigeria",SYN-924C89E7413C,Discharged,MV-00497
+Chiamaka,Nwosu,32,Male,AB+,Outpatient Clinic,+2348047227588,"Asaba, Nigeria",SYN-3DEFF9FE88C2,Outpatient,MV-00498
+Victor,Eze,23,Female,A-,Outpatient Clinic,+2348091001866,"Awka, Nigeria",SYN-DE4DAB2DB207,Outpatient,MV-00499
+Ada,Okeke,80,Male,O-,Outpatient Clinic,+2348016691344,"Umuahia, Nigeria",SYN-6352E58849E9,Outpatient,MV-00500
