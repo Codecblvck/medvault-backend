@@ -10,10 +10,10 @@
 set -e
 
 echo "Installing dependencies..."
-#pip install -r requirements.txt
+pip install -r requirements.txt
 
 echo "Running database migrations..."
-#flask db upgrade
+flask db upgrade
 
 echo "Seeding roles..."
 python db_seed/seed_roles.py
