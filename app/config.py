@@ -6,7 +6,7 @@ load_dotenv()
 
 
 class Config:
-    MAX_CONTENT_LENGTH = 20 * 1024 * 1024  # 20 MB, hard cap on any request body
+    MAX_CONTENT_LENGTH = 20 * 1024 * 1024  # 20 MB
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
@@ -20,19 +20,17 @@ class Config:
     S3_SECRET_KEY = os.environ.get("S3_SECRET_KEY")
     S3_BUCKET_NAME = os.environ.get("S3_BUCKET_NAME")
 
-    # Production Defaults
-    EMAIL_CHECK_DELIVERABILITY = True
-    EMAIL_ALLOW_TEST_DOMAINS = False
+    # Email validation
+    # Accept real domains and .test simulator domains.
+    # DNS deliverability is intentionally disabled because
+    # simulator accounts do not need to receive email.
+    EMAIL_CHECK_DELIVERABILITY = False
+    EMAIL_ALLOW_TEST_DOMAINS = True
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    # Bypasses internet check and allows @hospital.test locally
-    EMAIL_CHECK_DELIVERABILITY = False
-    EMAIL_ALLOW_TEST_DOMAINS = True
 
 
 class TestingConfig(Config):
     TESTING = True
-    EMAIL_CHECK_DELIVERABILITY = False
-    EMAIL_ALLOW_TEST_DOMAINS = True
