@@ -24,7 +24,7 @@ ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png", ".dcm", ".doc", ".docx"}
 @core.permission_required(core.PermissionAction.view_records)
 def read_records():
     page = max(request.args.get("page", default=1, type=int), 1)
-    limit = min(max(request.args.get("limit", default=10, type=int), 1), 100)
+    limit = min(max(request.args.get("limit", default=50, type=int), 1), 100)
     offset = (page - 1) * limit
 
     # Eager load relationships to eliminate N+1 queries

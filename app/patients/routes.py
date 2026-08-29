@@ -317,7 +317,7 @@ def list_patients():
         )
 
     page = max(request.args.get("page", 1, type=int), 1)
-    limit = min(max(request.args.get("limit", 20, type=int), 1), 100)
+    limit = min(max(request.args.get("limit", 50, type=int), 1), 100)
 
     stmt = (
         stmt.order_by(Patient.created_at.desc()).limit(limit).offset((page - 1) * limit)

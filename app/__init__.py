@@ -22,13 +22,13 @@ def create_app():
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     ma.init_app(app)
+    limiter.init_app(app)
     cors.init_app(
         app,
         resources={
             "/*": {"origins": ["https://medvault-two.vercel.app", "http://localhost:5173"]}
         },
     )
-    limiter.init_app(app)
 
     from app.model_registry import (
         auth_models,

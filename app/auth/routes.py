@@ -350,6 +350,7 @@ def read_staff():
                 "page": page,
                 "limit": limit,
                 "has_more": has_more,
+                "pages": (total_users + limit - 1) // limit if total_users else 1,
                 "users": [user.to_dict() for user in staff_users],
             }
         ),
