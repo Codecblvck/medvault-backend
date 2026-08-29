@@ -31,6 +31,8 @@ python db_seed/seed_staff.py
 
 echo "Assigning doctors to patients..."
 python db_seed/assign_doctors.py     
-#   python db_seed/seed_records.py       (after patients and staff)
+
+echo "Seeding records..."
+python db_seed/seed_records.py       
 
 echo "Build complete."
