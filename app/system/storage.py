@@ -7,6 +7,7 @@ changing only the config values, not this file.
 """
 
 import boto3
+from botocore.config import Config as BotoConfig
 from botocore.exceptions import (
     ClientError,
     EndpointConnectionError,
@@ -28,6 +29,8 @@ def get_s3_client():
         endpoint_url=Config.S3_ENDPOINT,
         aws_access_key_id=Config.S3_ACCESS_KEY,
         aws_secret_access_key=Config.S3_SECRET_KEY,
+        region_name="auto",
+        config=BotoConfig(signature_version="s3v4"),
     )
 
 
